@@ -17,7 +17,7 @@ public class MainController {
 
     public void run(){
         view.write("\t\t\t\t\t\t\t\tВас приветствует приложение SqlCMD");
-        view.write("Пожалуйста, введите данные для подключения к базе данных в формате: connect|database|username|password");
+        view.write("Пожалуйста, введите данные для подключения к базе данных в формате: connect|username|password");
 
     }
 

@@ -1,21 +1,24 @@
 package ua.com.juja.sqlcmd.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Solyk on 29.01.2017.
  */
 public class History {
 
-    private String cache;
+    private ArrayList<String> cache;
 
     public History(){
-        this.cache = "";
+        this.cache = new ArrayList<>();
     }
 
     public void historyAdd(String text){
-        cache += text;
+        cache.add(text);
     }
 
-    public String getCache() {
+    public ArrayList<String> getCache() {
         return cache;
     }
 }
