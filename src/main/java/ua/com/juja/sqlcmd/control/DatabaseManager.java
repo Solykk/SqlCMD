@@ -9,14 +9,17 @@ import java.util.List;
 public interface DatabaseManager {
 
     boolean  connect(String userName, String dbPassword);
+
     ArrayList<String> getAllTableNames();
     ArrayList<String> getAllColumnNamesFromTable(String tableName);
+    ArrayList<String> getDataTypeColumnFromTable(String tableName, String columnName);
+    ArrayList<String[]> getDataTypeAllColumnsFromTable(String tableName);
+
+    boolean createTable(String tableName, ArrayList<String[]> settings, boolean keySeq);
 
     //    Long create(Client client);
 //    Client read(Long id);
 //    boolean update(Client client);
-
-
 //    boolean delete(Client client);
 
 

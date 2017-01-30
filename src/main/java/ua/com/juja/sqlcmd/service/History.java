@@ -1,5 +1,6 @@
 package ua.com.juja.sqlcmd.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,17 +9,13 @@ import java.util.List;
  */
 public class History {
 
-    private ArrayList<String> cache;
+    public static ArrayList<String> cache = new ArrayList<>();
 
-    public History(){
-        this.cache = new ArrayList<>();
-    }
+    public static String getDate(){
 
-    public void historyAdd(String text){
-        cache.add(text);
-    }
+        long millis = System.currentTimeMillis();
+        java.sql.Date date = new java.sql.Date(millis);
 
-    public ArrayList<String> getCache() {
-        return cache;
+        return new SimpleDateFormat("yyyy,MM,dd_(HH:mm:ss)").format(date);
     }
 }

@@ -4,6 +4,7 @@ import ua.com.juja.sqlcmd.service.History;
 import ua.com.juja.sqlcmd.view.Console;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -15,12 +16,6 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
     private Connection connection;
     private final String url = "jdbc:oracle:thin:/@localhost:1521:XE";
-
-    public History getHistory() {
-        return history;
-    }
-
-    private History history;
     private Console consoleJDBC;
 
 
@@ -28,7 +23,6 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     public JDBCDatabaseManager(){
         Locale.setDefault(Locale.ENGLISH);
         this.connection = null;
-        this.history = new History();
         this.consoleJDBC = new Console();
     }
 
@@ -49,14 +43,14 @@ public class  JDBCDatabaseManager implements DatabaseManager{
             consoleJDBC.write("\t\t\t\t\t\t\t\tУспех, вы подключились к базе ");
             consoleJDBC.write(connection.getMetaData().getDatabaseProductVersion());
 
-            history.historyAdd("Вы подключились к базе");
+            History.cache.add(History.getDate() + " " + "Вы подключились к базе");
 
             return true;
 
         } catch (SQLException e){
 
             connection = null;
-            new Console().write("Неудача, не удалось подключиться к базе ");
+            new Console().write(History.getDate() + " " + "Неудача, не удалось подключиться к базе ");
 
             return false;
         }
@@ -80,11 +74,11 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
             }
 
-            history.historyAdd("Вывод всех таблиц");
+            History.cache.add(History.getDate() + " " + "Вывод всех таблиц");
 
         } catch (SQLException | NullPointerException e){
 
-            history.historyAdd("Ошибка. Не могу осуществить вывод всех таблиц");
+            History.cache.add(History.getDate() + " " + "Ошибка. Не могу осуществить вывод всех таблиц" + "  " + e.getMessage());
 
             return null;
         }
@@ -105,22 +99,148 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
 
             while (resultSet.next()){
+
                 String string = resultSet.getString("COLUMN_NAME");
                 dateFromTable .add(string);
 
             }
 
-            history.historyAdd("Вывод содержимого таблицы: " + tableName);
+            History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName);
 
         } catch (SQLException e ){
 
-            history.historyAdd("Ошибка. Не могу осуществить вывод содержимого таблицы " + tableName);
+            History.cache.add(History.getDate() + " " + "Ошибка. Не могу осуществить вывод содержимого таблицы " + tableName + "  " + e.getMessage());
 
             return null;
         }
 
 
         return dateFromTable ;
+    }
+
+    @Override
+    public ArrayList<String> getDataTypeColumnFromTable(String tableName, String columnName) {
+
+        ArrayList<String> columnVCtype = new ArrayList<>();
+        columnVCtype.add(tableName);
+
+        String columnVCtypeQuery = "SELECT COLUMN_NAME , data_type FROM all_tab_columns WHERE TABLE_NAME = "
+                + "'" + tableName+ "' AND COLUMN_NAME = " + "'" + columnName + "'";
+
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(columnVCtypeQuery))
+        {
+
+
+            while (resultSet.next()){
+
+                String stringName = resultSet.getString("COLUMN_NAME");
+                columnVCtype .add(stringName);
+                String stringType = resultSet.getString("data_type");
+                columnVCtype .add(stringType);
+
+            }
+
+
+            History.cache.add(History.getDate() + " " + "Определен тип данных содержащийся в таблице: " + tableName + " у колонки " + columnName);
+
+        } catch (SQLException e ){
+
+            History.cache.add(History.getDate() + " " + "Ошибка. Не могу определить тип данных в таблице: " + tableName + " у колонки " + columnName  + "  " + e.getMessage());
+
+            return null;
+        }
+
+
+        return columnVCtype;
+
+    }
+
+
+    @Override
+    public ArrayList<String[]> getDataTypeAllColumnsFromTable(String tableName) {
+
+        ArrayList<String[]> columnVCtypeAll = new ArrayList<>();
+
+
+        String columnVCtypeQueryAll = "SELECT COLUMN_NAME , data_type FROM all_tab_columns WHERE TABLE_NAME = "
+                + "'" + tableName+ "'";
+
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(columnVCtypeQueryAll))
+        {
+
+
+            while (resultSet.next()){
+
+                String[] columnAndtType = new String[2];
+
+                String stringName = resultSet.getString("COLUMN_NAME");
+                String stringType = resultSet.getString("data_type");
+
+                columnAndtType[0] = stringName;
+                columnAndtType[1] = stringType;
+
+                columnVCtypeAll.add(columnAndtType);
+
+            }
+
+            History.cache.add(History.getDate() + " " + "Определен тип данных содержащийся в таблице: " + tableName);
+
+        } catch (SQLException e ){
+
+            History.cache.add(History.getDate() + " " + "Ошибка. Не могу определить тип данных в таблице: " + tableName + "  " + e.getMessage());
+
+            return null;
+        }
+
+
+        return columnVCtypeAll ;
+    }
+
+    @Override
+    public boolean createTable(String tableName, ArrayList<String[]> settings, boolean keySeq) {
+
+        String url = "INSERT INTO SERT (ID, DESCRIPTION) VALUES (SERT_SEQ.nextval , 'Hello')";
+
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(url))
+
+
+        {
+
+            return true;
+
+        }  catch (SQLException | NullPointerException e){
+
+            History.cache.add(History.getDate() + " " + "Ошибка. Не могу определить тип данных в таблице: " + tableName + "  " + e.getMessage());
+
+            return false;
+        }
+  //
+
+
+//        CREATE TABLE departments (
+//                ID           NUMBER(10)    NOT NULL,
+//                DESCRIPTION  VARCHAR2(50)  NOT NULL);
+//
+//        ALTER TABLE departments ADD (
+//                CONSTRAINT dept_pk PRIMARY KEY (ID));
+//
+//        CREATE SEQUENCE dept_seq START WITH 1;
+//
+//
+//        create table MYTABLE(
+//                ID                 VARCHAR2(4 BYTE)         NOT NULL,
+//                First_Name         VARCHAR2(10 BYTE),
+//                Last_Name          VARCHAR2(10 BYTE),
+//                Start_Date         DATE,
+//                End_Date           DATE,
+//                Salary             Number(8,2),
+//                City               VARCHAR2(10 BYTE),
+//                Description        VARCHAR2(15 BYTE)
+//        )
+
     }
 
 
