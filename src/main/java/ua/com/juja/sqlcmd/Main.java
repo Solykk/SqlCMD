@@ -68,6 +68,36 @@ public class Main {
 
         printTable(manager.readTable("EMPLOYEES"));
 
+        System.out.println();
+
+        String [] first = new String[]{"SALARY", "17000"};
+        String [] second = new String[]{"DEPARTMENT_ID", "90"};
+        String [] third = new String[]{"JOB_ID", "'AD_VP'"};
+
+        ArrayList<String[]> uyt = new ArrayList<>();
+
+        uyt.add(first);
+        uyt.add(second);
+        uyt.add(third);
+
+        printTable(manager.read("EMPLOYEES", uyt));
+
+        System.out.println();
+
+        String [] first1 = new String[]{"ID", "2"};
+        String [] second1 = new String[]{"DESCRIPTION", "'RRRR'"};
+        String [] third1 = new String[]{"ID", "34"};
+        String [] forth1 = new String[]{"DESCRIPTION", "'TTTT'"};
+
+        ArrayList<String[]> uyt1 = new ArrayList<>();
+        uyt1.add(first1);
+        uyt1.add(second1);
+        ArrayList<String[]> uyt2 = new ArrayList<>();
+        uyt2.add(third1);
+        uyt2.add(forth1);
+
+        System.out.println(manager.update("SERTE",uyt2,uyt1));
+
         ArrayList<String[]> testCreat = new ArrayList<>();
         testCreat.add(new String[]{"ID", "45"});
         testCreat.add(new String[]{"DESCRIPTION", "'TEST'"});
@@ -108,16 +138,17 @@ public class Main {
     }
 
     private static void stepPrint(String step) {
+
         char [] rezz = step.toCharArray();
 
         for (int i = 0; i < rezz.length; i++){
-//        if(rezz[i] != ' ') {
+
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-//        }
+
             System.out.print(rezz[i]);
 
         }

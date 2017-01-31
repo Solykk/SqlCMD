@@ -25,6 +25,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         this.consoleJDBC = new Console();
     }
 
+    @Override
     public boolean connect(String userName, String dbPassword){
         try {
 
@@ -155,7 +156,6 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
     }
 
-
     @Override
     public ArrayList<String[]> getDataTypeAllColumnsFromTable(String tableName) {
 
@@ -237,7 +237,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         {
             statement.executeUpdate(urlTableCreate);
 
-            History.cache.add(History.getDate() + " " + "Cоздал таблицу: " + tableName);
+            History.cache.add(History.getDate() + " " + "Создал таблицу: " + tableName);
 
             return true;
 
@@ -292,7 +292,9 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
         {
             statement.executeUpdate(url);
+
             History.cache.add(History.getDate() + " " + "Вы успешно добавили данные в таблицу: " + tableName);
+
             return true;
 
         } catch (SQLException | NullPointerException e) {
@@ -307,15 +309,156 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     @Override
     public Table readTable(String tableName) {
 
-        ArrayList<ColumnDate> columnDates = new ArrayList<>();
-        ArrayList<String> columnNamesFromTable = getAllColumnNamesFromTable(tableName);
-
-        for (int i = 0; i < columnNamesFromTable.size(); i++) {
-            ColumnDate temp = new ColumnDate(columnNamesFromTable.get(i), new ArrayList<String>());
-            columnDates.add(temp);
-        }
+        ArrayList<ColumnDate> columnDates = getColumnDates(tableName);
 
         String query = "SELECT * FROM " + tableName;
+
+        return getTableHelper(tableName, columnDates, query);
+
+    }
+
+    @Override
+    public Table read(String tableName, ArrayList<String[]> settings) {
+
+        ArrayList<ColumnDate> columnDates = getColumnDates(tableName);
+
+        String queryPost = generateQueryAndString(settings);
+
+        String query = "SELECT * FROM " + tableName +  " WHERE " + queryPost;
+
+        return getTableHelper(tableName, columnDates, query);
+
+    }
+
+    @Override
+    public boolean update(String tableName, ArrayList<String[]> settingsForUpdate, ArrayList<String[]> settingsHowUpdate) {
+
+        String ulrPrePost = generateQueryComaString(settingsForUpdate);
+        String ulrPost = generateQueryAndString(settingsHowUpdate);
+
+        String ulr  = "UPDATE " + tableName +  " SET " + ulrPrePost + " WHERE " + ulrPost;
+
+        try (Statement statement = connection.createStatement())
+
+        {
+            statement.executeUpdate(ulr);
+
+            History.cache.add(History.getDate() + " " + "Вы успешно обновили данные в таблицу: " + tableName);
+
+            return true;
+
+        } catch (SQLException | NullPointerException e) {
+
+            History.cache.add(History.getDate() + " " + "Ошибка. Не получилось обновить данные в таблице: " + tableName + "  " + e.getMessage());
+
+            return false;
+
+        }
+
+    }
+
+    @Override
+    public boolean drop(String tableName) {
+
+        try (Statement statement = connection.createStatement())
+
+        {
+            statement.executeUpdate("DROP TABLE " + tableName);
+
+            History.cache.add(History.getDate() + " " + "Вы успешно удалии таблицу: " + tableName);
+
+            return true;
+
+        } catch (SQLException | NullPointerException e) {
+
+            History.cache.add(History.getDate() + " " + "Ошибка. Не получилось удолить таблицу: " + tableName + "  " + e.getMessage());
+
+            return false;
+
+        }
+
+    }
+
+    @Override
+    public boolean delete(String tableName, ArrayList<String[]> settings) {
+
+        String sqlPost = generateQueryAndString(settings);
+
+        String sqlQuery = "DELETE FROM " +  tableName + " WHERE " + sqlPost;
+
+        try (Statement statement = connection.createStatement())
+
+        {
+            statement.executeUpdate(sqlQuery);
+
+
+            History.cache.add(History.getDate() + " " + "Вы успешно удалили запись в таблице: " + tableName);
+
+            return true;
+
+        } catch (SQLException | NullPointerException e) {
+
+            History.cache.add(History.getDate() + " " + "Ошибка. Не получилось удалить запись из таблицы: " + tableName + "  " + e.getMessage());
+
+            return false;
+
+        }
+
+
+    }
+
+    @Override
+    public boolean deleteAll(String tableName) {
+
+        try (Statement statement = connection.createStatement())
+
+        {
+            statement.executeUpdate("DELETE " + tableName);
+
+
+            History.cache.add(History.getDate() + " " + "Вы успешно Очистили таблицу: " + tableName);
+
+            return true;
+
+        } catch (SQLException | NullPointerException e) {
+
+            History.cache.add(History.getDate() + " " + "Ошибка. Не получилось очистить таблицу: " + tableName + "  " + e.getMessage());
+
+            return false;
+
+        }
+
+    }
+
+    private String generateQueryComaString(ArrayList<String[]> settingsForUpdate) {
+
+        String ulrPost = "";
+
+        for (int i = 0; i < settingsForUpdate.size() ; i++) {
+            ulrPost += settingsForUpdate.get(i)[0] + " = " + settingsForUpdate.get(i)[1];
+
+            if (i < settingsForUpdate.size() - 1){
+                ulrPost += ", ";
+            }
+        }
+        return ulrPost;
+    }
+
+    private String generateQueryAndString(ArrayList<String[]> settings) {
+
+        String queryPost = "";
+
+        for (int i = 0; i < settings.size() ; i++) {
+            queryPost += settings.get(i)[0] + " = " + settings.get(i)[1];
+
+            if (i < settings.size() - 1){
+                queryPost += " AND ";
+            }
+        }
+        return queryPost;
+    }
+
+    private Table getTableHelper(String tableName, ArrayList<ColumnDate> columnDates, String query) {
 
         try(Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query))
@@ -337,24 +480,22 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         } catch (SQLException | NullPointerException e){
 
             History.cache.add(History.getDate() + " " + "Ошибка. Не получилось прочесть таблицу: " + tableName + "  " + e.getMessage());
+
             return null;
+
         }
-
     }
 
-    @Override
-    public Table read(String tableName, ArrayList<String[]> settings) {
-        return null;
-    }
+    private ArrayList<ColumnDate> getColumnDates(String tableName) {
 
-    @Override
-    public boolean update(String tableName, ArrayList<String[]> settings) {
-        return false;
-    }
+        ArrayList<ColumnDate> columnDates = new ArrayList<>();
+        ArrayList<String> columnNamesFromTable = getAllColumnNamesFromTable(tableName);
 
-    @Override
-    public boolean delete(String tableName, ArrayList<String[]> settings) {
-        return false;
+        for (int i = 0; i < columnNamesFromTable.size(); i++) {
+            ColumnDate temp = new ColumnDate(columnNamesFromTable.get(i), new ArrayList<String>());
+            columnDates.add(temp);
+        }
+        return columnDates;
     }
 
 }

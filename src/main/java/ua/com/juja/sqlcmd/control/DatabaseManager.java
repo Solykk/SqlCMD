@@ -18,12 +18,16 @@ public interface DatabaseManager {
 
     boolean createTableWithPK(String tableName, ArrayList<String[]> settings, String columnNamePK, Long startWith);
     boolean createTableWithoutPK(String tableName, ArrayList<String[]> settings);
-
     boolean createData(String tableName, ArrayList<String[]> columnNameVSdata, boolean isKey);
+
     Table readTable(String tableName);
     Table read(String tableName, ArrayList<String[]> settings);
-    boolean update(String tableName, ArrayList<String[]> settings);
+
+    boolean update(String tableName, ArrayList<String[]> settings,ArrayList<String[]> settingsHowUpdate);
+
+    boolean drop(String tableName);
     boolean delete(String tableName, ArrayList<String[]> settings);
+    boolean deleteAll(String tableName);
 
 
 
