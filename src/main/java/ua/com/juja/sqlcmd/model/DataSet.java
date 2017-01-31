@@ -1,5 +1,6 @@
 package ua.com.juja.sqlcmd.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,13 +8,13 @@ import java.util.List;
  */
 public class DataSet {
 
-    private List<Table> tables;
+    private ArrayList<Table> tables;
 
-    public DataSet(List<Table> tables){
+    public DataSet(ArrayList<Table> tables){
         this.tables = tables;
     }
 
-    public List<Table> getTables() {
+    public ArrayList<Table> getTables() {
         return tables;
     }
 

@@ -1,6 +1,7 @@
 package ua.com.juja.sqlcmd.model;
 
-import java.util.List;
+import java.util.ArrayList;
+
 
 /**
  * Created by Solyk on 26.01.2017.
@@ -8,10 +9,10 @@ import java.util.List;
 public class ColumnDate {
 
     private String columnName;
-    private List<String> value;
+    private ArrayList<String> value;
 
 
-    public ColumnDate (String columnName, List<String> value){
+    public ColumnDate (String columnName, ArrayList<String> value){
         this.columnName = columnName;
         this.value = value;
     }
@@ -20,7 +21,7 @@ public class ColumnDate {
         return columnName;
     }
 
-    public List<String> getValue(){
+    public ArrayList<String> getValue(){
         return value;
     }
 }

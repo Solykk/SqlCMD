@@ -2,6 +2,7 @@ package ua.com.juja.sqlcmd;
 
 import ua.com.juja.sqlcmd.control.JDBCDatabaseManager;
 import ua.com.juja.sqlcmd.control.MainController;
+import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.service.History;
 import ua.com.juja.sqlcmd.view.Console;
 import ua.com.juja.sqlcmd.view.View;
@@ -36,6 +37,12 @@ public class Main {
         }
         System.out.println();
 
+        String step = "Вы подключились к базе данных. Поздравляю )";
+
+        stepPrint(step);
+
+
+
         ArrayList<String> tables3 = manager.getDataTypeColumnFromTable("EMPLOYEES", "EMPLOYEE_ID");
 
         for (int i = 0; i < tables3.size(); i++){
@@ -50,21 +57,69 @@ public class Main {
         }
         System.out.println();
 
-        boolean g = manager.createTable("dd",tables4, false);
+      //  boolean g = manager.createTable("SERT",tables4, false);
 
-        System.out.println(g);
+//        System.out.println(g);
 
         for (int i = 0; i < tables4.size(); i++){
             System.out.println(tables4.get(i)[0] + " " + tables4.get(i)[1]);
         }
         System.out.println();
 
+        printTable(manager.readTable("EMPLOYEES"));
+
+        ArrayList<String[]> testCreat = new ArrayList<>();
+        testCreat.add(new String[]{"ID", "45"});
+        testCreat.add(new String[]{"DESCRIPTION", "'TEST'"});
+
+//       Long id =  manager.create("SERT", testCreat, true);
+//        System.out.println(id);
+
 
         for (int i = 0; i < History.cache.size(); i++){
-            System.out.println(History.cache.get(i));
+            stepPrint(History.cache.get(i));
+            System.out.println();
         }
         System.out.println();
 
 
+    }
+
+
+    private static void printTable(Table table){
+
+        System.out.println(table.getTableDate().get(0).getValue().size());
+
+        for (int i = 0; i < table.getTableDate().size(); i++){
+            System.out.print(table.getTableDate().get(i).columnName() + "  ");
+
+        }
+
+        System.out.println();
+        for (int i = 0; i < table.getTableDate().get(0).getValue().size(); i++){
+             for (int j = 0; j < table.getTableDate().size(); j++) {
+                 System.out.print(table.getTableDate().get(j).getValue().get(i) + " ");
+             }
+            System.out.println();
+        }
+
+
+
+    }
+
+    private static void stepPrint(String step) {
+        char [] rezz = step.toCharArray();
+
+        for (int i = 0; i < rezz.length; i++){
+//        if(rezz[i] != ' ') {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+//        }
+            System.out.print(rezz[i]);
+
+        }
     }
 }

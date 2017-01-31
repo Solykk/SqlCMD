@@ -1,12 +1,11 @@
 package ua.com.juja.sqlcmd.control;
 
+import ua.com.juja.sqlcmd.model.ColumnDate;
+import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.service.History;
 import ua.com.juja.sqlcmd.view.Console;
-
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -199,50 +198,164 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public boolean createTable(String tableName, ArrayList<String[]> settings, boolean keySeq) {
+    public boolean createTableWithPK (String tableName, ArrayList<String[]> settings, String columnNamePK, Long startWith) {
 
-        String url = "INSERT INTO SERT (ID, DESCRIPTION) VALUES (SERT_SEQ.nextval , 'Hello')";
+        createTableWithoutPK(tableName, settings);
 
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(url))
+        String primaryKey = "ALTER TABLE " + tableName + " ADD (CONSTRAINT " +  tableName + "_pk PRIMARY KEY (" + columnNamePK + "))";
 
+        String sequence = "CREATE SEQUENCE " + tableName + "_seq START WITH " + startWith;
+
+        try (Statement statement = connection.createStatement())
 
         {
+
+            statement.executeUpdate(primaryKey);
+            statement.executeUpdate(sequence);
+
+            History.cache.add(History.getDate() + " " + "Cоздал таблицу: " + tableName);
 
             return true;
 
         }  catch (SQLException | NullPointerException e){
 
-            History.cache.add(History.getDate() + " " + "Ошибка. Не могу определить тип данных в таблице: " + tableName + "  " + e.getMessage());
+            History.cache.add(History.getDate() + " " + "Ошибка. Не могу создать таблицу: " + tableName + "  " + e.getMessage());
 
             return false;
         }
-  //
 
-
-//        CREATE TABLE departments (
-//                ID           NUMBER(10)    NOT NULL,
-//                DESCRIPTION  VARCHAR2(50)  NOT NULL);
-//
-//        ALTER TABLE departments ADD (
-//                CONSTRAINT dept_pk PRIMARY KEY (ID));
-//
-//        CREATE SEQUENCE dept_seq START WITH 1;
-//
-//
-//        create table MYTABLE(
-//                ID                 VARCHAR2(4 BYTE)         NOT NULL,
-//                First_Name         VARCHAR2(10 BYTE),
-//                Last_Name          VARCHAR2(10 BYTE),
-//                Start_Date         DATE,
-//                End_Date           DATE,
-//                Salary             Number(8,2),
-//                City               VARCHAR2(10 BYTE),
-//                Description        VARCHAR2(15 BYTE)
-//        )
 
     }
 
+    @Override
+    public boolean createTableWithoutPK(String tableName, ArrayList<String[]> settings) {
+
+        String urlTableCreate = "CREATE TABLE departments (ID NUMBER(10) NOT NULL, DESCRIPTION  VARCHAR2(50)  NOT NULL)";
+
+        try (Statement statement = connection.createStatement())
+
+        {
+            statement.executeUpdate(urlTableCreate);
+
+            History.cache.add(History.getDate() + " " + "Cоздал таблицу: " + tableName);
+
+            return true;
+
+        }  catch (SQLException | NullPointerException e){
+
+            History.cache.add(History.getDate() + " " + "Ошибка. Не могу создать таблицу: " + tableName + "  " + e.getMessage());
+
+            return false;
+        }
+    }
+
+    @Override
+    public boolean createData(String tableName, ArrayList<String[]> columnNameVSdata, boolean idKey) {
+
+        String columnNames = "";
+        String datas =  "";
+
+        for (int index = 0; index < columnNameVSdata.size(); index++){
+            columnNames += columnNameVSdata.get(index)[0];
+            if(index != columnNameVSdata.size() - 1){
+                columnNames += ", ";
+            }
+        }
+
+        if(idKey) {
+            for (int index = 0; index < columnNameVSdata.size(); index++) {
+                if (index == 0) {
+                    datas += tableName + "_SEQ.nextval, ";
+                } else {
+                    if (index != 0 && index != columnNameVSdata.size() - 1) {
+                        datas += "', '";
+                    }
+
+                    datas += columnNameVSdata.get(index)[1];
+                }
+            }
+        }
+            if (!idKey) {
+            for (int j = 0; j < columnNameVSdata.size(); j++){
+                datas += columnNameVSdata.get(j)[1];
+
+                if (j != columnNameVSdata.size() - 1) {
+                    datas += ", ";
+                }
+
+            }
+        }
+
+        String url = "INSERT INTO " + tableName + "( " + columnNames + ") VALUES ( " + datas + " )";
+
+        try (Statement statement = connection.createStatement())
+
+        {
+            statement.executeUpdate(url);
+            History.cache.add(History.getDate() + " " + "Вы успешно добавили данные в таблицу: " + tableName);
+            return true;
+
+        } catch (SQLException | NullPointerException e) {
+
+            History.cache.add(History.getDate() + " " + "Ошибка. Не получилось добавить данные в таблицу: " + tableName + "  " + e.getMessage());
+
+            return false;
+
+        }
+    }
+
+    @Override
+    public Table readTable(String tableName) {
+
+        ArrayList<ColumnDate> columnDates = new ArrayList<>();
+        ArrayList<String> columnNamesFromTable = getAllColumnNamesFromTable(tableName);
+
+        for (int i = 0; i < columnNamesFromTable.size(); i++) {
+            ColumnDate temp = new ColumnDate(columnNamesFromTable.get(i), new ArrayList<String>());
+            columnDates.add(temp);
+        }
+
+        String query = "SELECT * FROM " + tableName;
+
+        try(Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query))
+        {
+            while (resultSet.next()){
+
+                for(int index = 0; index < columnDates.size(); index++){
+
+                    String columnName = columnDates.get(index).columnName();
+                    String temp = resultSet.getString(columnName);
+
+                    columnDates.get(index).getValue().add(temp);
+                }
+
+            }
+
+            return new Table(tableName, columnDates);
+
+        } catch (SQLException | NullPointerException e){
+
+            History.cache.add(History.getDate() + " " + "Ошибка. Не получилось прочесть таблицу: " + tableName + "  " + e.getMessage());
+            return null;
+        }
+
+    }
+
+    @Override
+    public Table read(String tableName, ArrayList<String[]> settings) {
+        return null;
+    }
+
+    @Override
+    public boolean update(String tableName, ArrayList<String[]> settings) {
+        return false;
+    }
+
+    @Override
+    public boolean delete(String tableName, ArrayList<String[]> settings) {
+        return false;
+    }
 
 }
 

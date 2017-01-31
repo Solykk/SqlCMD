@@ -1,5 +1,6 @@
 package ua.com.juja.sqlcmd.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,10 +10,10 @@ public class Table {
 
 
     private String tableName;
-    private List<ColumnDate>  tableDate ;
+    private ArrayList<ColumnDate> tableDate ;
 
 
-    public  Table (String tableName, List<ColumnDate> tableDate){
+    public  Table (String tableName, ArrayList<ColumnDate> tableDate){
         this.tableName = tableName;
         this.tableDate = tableDate;
     }
@@ -21,7 +22,7 @@ public class Table {
         return tableName;
     }
 
-    public List<ColumnDate> getTableDate() {
+    public ArrayList<ColumnDate> getTableDate() {
         return tableDate;
     }
 
