@@ -17,6 +17,9 @@ public class MainController {
         this.view = view;
         this.commands = new ArrayList<>();
         commands.add(new Connect(manager, view));
+        commands.add(new IsConnect(manager, view));
+        commands.add(new Help(view));
+        commands.add(new Exit(view));
         commands.add(new Tables(manager, view));
         commands.add(new Columns(manager, view));
         commands.add(new TableType(manager, view));
@@ -31,8 +34,6 @@ public class MainController {
         commands.add(new Update(manager, view));
         commands.add(new Query(manager, view));
         commands.add(new History(view));
-        commands.add(new Help(view));
-        commands.add(new Exit(view));
         commands.add(new Unsupported(view));
     }
 

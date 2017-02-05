@@ -18,4 +18,6 @@ public interface View {
         String yellowText(String text);
         String blueText(String text);
 
+        String requestTab(String string);
+
 }

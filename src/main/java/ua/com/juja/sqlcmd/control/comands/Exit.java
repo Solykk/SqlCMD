@@ -20,8 +20,7 @@ public class Exit implements Command {
 
     @Override
     public void process(String command) {
-
-        System.exit(0);
+      System.exit(0);
     }
 
 }

@@ -45,6 +45,12 @@ public class Console implements View {
     public String yellowText(String text){return yellow + text + bre;}
     @Override
     public String blueText(String text){return blue + text + bre;}
+
+    @Override
+    public String requestTab(String string) {
+        return "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + string;
+    }
+
     @Override
     public  void stepPrint(String step) {
 

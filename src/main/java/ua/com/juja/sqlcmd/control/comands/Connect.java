@@ -24,27 +24,28 @@ public class Connect implements Command {
     @Override
     public void process(String command) {
 
-        while (true) {
-            try {
-                String string = view.read();
-                String[] data = string.split("\\|");
-                if (data.length != 2) {
-                    throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', ожидается 2, но есть: " + data.length);
+        History.cache.add(History.getDate() + " " + "Попытка подключиться к базе данных "  + view.requestTab(TableType.class.getSimpleName().toLowerCase()));
+
+        try {
+
+                String[] data = command.split("\\|");
+                if (data.length != 3) {
+                    throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', ожидается 3, но есть: " + data.length);
                 }
-                String userName = data[0];
-                String password = data[1];
+                String userName = data[1];
+                String password = data[2];
 
                 manager.connect(userName, password);
-                break;
-            } catch (Exception e) {
-                view.write(History.getDate() + " " + "Не удалось подключиться к базе данных " + e.getMessage());
-                History.cache.add(History.getDate() + " " + "Не удалось подключиться к базе данных " + e.getMessage());
-            }
+
+            History.cache.add(view.requestTab(view.blueText("Успех")));
+
+            view.write(view.requestTab(view.blueText("Успех, вы подключились к базе данных:")));
+            view.write(view.blueText("Oracle Database 10g Express Edition Release 10.2.0.1.0 - Production"));
+
+        } catch (Exception e) {
+            view.write(History.getDate() + " " + "Не удалось подключиться к базе данных " + view.redText(e.getMessage()));
+            History.cache.add(History.getDate() + " " + "Не удалось подключиться к базе данных " + view.redText(e.getMessage()));
         }
 
-        view.write("\t\t\t\t\t\t\t\tУспех, вы подключились к базе данных:");
-        view.write("Oracle Database 10g Express Edition Release 10.2.0.1.0 - Production");
-
-        History.cache.add(History.getDate() + " " + "Вы подключились к базе данных: Oracle Database 10g Express Edition Release 10.2.0.1.0 - Production");
     }
 }

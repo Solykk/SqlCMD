@@ -26,13 +26,10 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public boolean connect(String userName, String dbPassword){
+    public boolean connect(String userName, String dbPassword) throws SQLException{
         try {
-
             Class.forName("oracle.jdbc.driver.OracleDriver");
-
         } catch (ClassNotFoundException e) {
-
             throw new RuntimeException("Please add jdbc jar to project.", e);
         }
 
@@ -40,25 +37,20 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
             connection = DriverManager.getConnection(url, userName, dbPassword);
 
-            consoleJDBC.write("\t\t\t\t\t\t\t\tУспех, вы подключились к базе ");
-            consoleJDBC.write(connection.getMetaData().getDatabaseProductVersion());
-
             History.cache.add(History.getDate() + " " + "Вы подключились к базе");
 
             return true;
 
         } catch (SQLException e){
-
             connection = null;
-            new Console().write(History.getDate() + " " + "Неудача, не удалось подключиться к базе ");
-
+            e.printStackTrace();
             return false;
         }
 
     }
 
     @Override
-    public Table getAllTableNames() {
+    public Table getAllTableNames() throws SQLException, NullPointerException{
 
         ArrayList<ColumnDate> columnDatas = new ArrayList<>();
         columnDatas.add(new ColumnDate("TABLE_NAME", new ArrayList<String>()));
@@ -74,14 +66,10 @@ public class  JDBCDatabaseManager implements DatabaseManager{
                 columnDatas.get(0).getValue().add(string);
             }
 
-            History.cache.add(History.getDate() + " " + "Вывод всех таблиц");
-
             return new Table("ALL_TABLES", columnDatas);
 
         } catch (SQLException | NullPointerException e){
-
-            History.cache.add(History.getDate() + " " + "Ошибка. Не могу осуществить вывод всех таблиц" + "  " + e.getMessage());
-
+            e.printStackTrace();
             return null;
         }
 
@@ -90,7 +78,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public Table getAllColumnNamesFromTable(String tableName) {
+    public Table getAllColumnNamesFromTable(String tableName) throws SQLException, NullPointerException {
 
         ArrayList<ColumnDate> columnDates = new ArrayList<>();
         columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<String>()));
@@ -108,53 +96,17 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
             }
 
-            History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName);
-
             return new Table(tableName, columnDates);
 
         } catch (SQLException | NullPointerException e ){
-
-            History.cache.add(History.getDate() + " " + "Ошибка. Не могу осуществить вывод содержимого таблицы " + tableName + "  " + e.getMessage());
-
+            e.printStackTrace();
             return null;
         }
-
 
     }
 
     @Override
-    public Table getDataTypeColumnFromTable(String tableName, String columnName) {
-
-        ArrayList<ColumnDate> columnDates = new ArrayList<>();
-        columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<String>()));
-        columnDates.add(new ColumnDate("DATA_TYPE", new ArrayList<String>()));
-        columnDates.add(new ColumnDate("NULLABLE", new ArrayList<String>()));
-
-        String columnVCtypeQuery = "SELECT COLUMN_NAME , data_type, DATA_LENGTH, NULLABLE FROM all_tab_columns WHERE TABLE_NAME = "
-                + "'" + tableName+ "' AND COLUMN_NAME = " + "'" + columnName + "'";
-
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(columnVCtypeQuery))
-        {
-
-            resultSetGetHelper(columnDates, resultSet);
-
-            History.cache.add(History.getDate() + " " + "Определен тип данных содержащийся в таблице: " + tableName + " у колонки " + columnName);
-            return new Table(tableName, columnDates);
-        } catch (SQLException | NullPointerException e ){
-
-            History.cache.add(History.getDate() + " " + "Ошибка. Не могу определить тип данных в таблице: " + tableName + " у колонки " + columnName  + "  " + e.getMessage());
-
-            return null;
-        }
-
-
-
-
-    }
-
-    @Override
-    public Table getDataTypeAllColumnsFromTable(String tableName) {
+    public Table getDataTypeAllColumnsFromTable(String tableName) throws SQLException, NullPointerException{
 
         ArrayList<ColumnDate> columnDates = new ArrayList<>();
         columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<String>()));
@@ -173,11 +125,42 @@ public class  JDBCDatabaseManager implements DatabaseManager{
             History.cache.add(History.getDate() + " " + "Определен тип данных содержащийся в таблице: " + tableName);
             return new Table(tableName, columnDates) ;
         } catch (SQLException | NullPointerException e ){
-
+            e.printStackTrace();
             History.cache.add(History.getDate() + " " + "Ошибка. Не могу определить тип данных в таблице: " + tableName + "  " + e.getMessage());
 
             return null;
         }
+
+
+
+    }
+
+    @Override
+    public Table getDataTypeColumnFromTable(String tableName, String columnName) throws SQLException, NullPointerException {
+
+        ArrayList<ColumnDate> columnDates = new ArrayList<>();
+        columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<String>()));
+        columnDates.add(new ColumnDate("DATA_TYPE", new ArrayList<String>()));
+        columnDates.add(new ColumnDate("NULLABLE", new ArrayList<String>()));
+
+        String columnVCtypeQuery = "SELECT COLUMN_NAME , data_type, DATA_LENGTH, NULLABLE FROM all_tab_columns WHERE TABLE_NAME = "
+                + "'" + tableName+ "' AND COLUMN_NAME = " + "'" + columnName + "'";
+
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(columnVCtypeQuery))
+        {
+
+            resultSetGetHelper(columnDates, resultSet);
+
+            History.cache.add(History.getDate() + " " + "Определен тип данных содержащийся в таблице: " + tableName + " у колонки " + columnName);
+            return new Table(tableName, columnDates);
+        } catch (SQLException | NullPointerException e ){
+            e.printStackTrace();
+            History.cache.add(History.getDate() + " " + "Ошибка. Не могу определить тип данных в таблице: " + tableName + " у колонки " + columnName  + "  " + e.getMessage());
+
+            return null;
+        }
+
 
 
 
@@ -301,7 +284,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public Table readTable(String tableName) {
+    public Table readTable(String tableName) throws SQLException, NullPointerException {
 
         ArrayList<ColumnDate> columnDates = getColumnDates(tableName);
 
@@ -312,7 +295,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public Table read(String tableName, ArrayList<String[]> settings) {
+    public Table read(String tableName, ArrayList<String[]> settings) throws SQLException, NullPointerException {
 
         ArrayList<ColumnDate> columnDates = getColumnDates(tableName);
 
@@ -352,29 +335,19 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public boolean drop(String tableName) {
+    public boolean drop(String tableName) throws SQLException, NullPointerException{
 
         try (Statement statement = connection.createStatement())
-
         {
             statement.executeUpdate("DROP TABLE " + tableName);
-
-            History.cache.add(History.getDate() + " " + "Вы успешно удалии таблицу: " + tableName);
-
             return true;
-
         } catch (SQLException | NullPointerException e) {
-
-            History.cache.add(History.getDate() + " " + "Ошибка. Не получилось удолить таблицу: " + tableName + "  " + e.getMessage());
-
             return false;
-
         }
-
     }
 
     @Override
-    public boolean delete(String tableName, ArrayList<String[]> settings) {
+    public boolean delete(String tableName, ArrayList<String[]> settings)  throws SQLException, NullPointerException{
 
         String sqlPost = generateQueryAndString(settings);
 
@@ -467,6 +440,11 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
     }
 
+    @Override
+    public boolean isConnected() {
+        return connection != null;
+    }
+
     private String generateQueryComaString(ArrayList<String[]> settingsForUpdate) {
 
         String ulrPost = "";
@@ -543,7 +521,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         }
     }
 
-    private ArrayList<ColumnDate> getColumnDates(String tableName) {
+    private ArrayList<ColumnDate> getColumnDates(String tableName) throws SQLException, NullPointerException {
 
         ArrayList<ColumnDate> columnDates = new ArrayList<>();
         ArrayList<String> columnNamesFromTable = getAllColumnNamesFromTable(tableName).getTableDate().get(0).getValue();
