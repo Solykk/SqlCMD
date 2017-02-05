@@ -11,24 +11,24 @@ public interface DatabaseManager {
 
     boolean  connect(String userName, String dbPassword);
 
-    ArrayList<String> getAllTableNames();
-    ArrayList<String> getAllColumnNamesFromTable(String tableName);
-    ArrayList<String> getDataTypeColumnFromTable(String tableName, String columnName);
-    ArrayList<String[]> getDataTypeAllColumnsFromTable(String tableName);
+    Table getAllTableNames();
+    Table getAllColumnNamesFromTable(String tableName);
+    Table getDataTypeAllColumnsFromTable(String tableName);
+    Table getDataTypeColumnFromTable(String tableName, String columnName);
 
-    boolean createTableWithPK(String tableName, ArrayList<String[]> settings, String columnNamePK, Long startWith);
-    boolean createTableWithoutPK(String tableName, ArrayList<String[]> settings);
-    boolean createData(String tableName, ArrayList<String[]> columnNameVSdata, boolean isKey);
+    boolean createTableWithPK(String tableName, ArrayList<String> settings, String columnNamePK, Long startWith);
+    boolean createTableWithoutPK(String tableName, ArrayList<String> settings);
 
     Table readTable(String tableName);
     Table read(String tableName, ArrayList<String[]> settings);
 
+    boolean insert(String tableName, ArrayList<String[]> columnNameVSdata, boolean isKey);
     boolean update(String tableName, ArrayList<String[]> settings,ArrayList<String[]> settingsHowUpdate);
-
     boolean drop(String tableName);
     boolean delete(String tableName, ArrayList<String[]> settings);
-    boolean deleteAll(String tableName);
+    boolean clear(String tableName);
 
-
+    boolean cudQuery(String query);
+    Table readQuery(String query);
 
 }

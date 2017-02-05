@@ -21,15 +21,15 @@ public class Main {
         MainController controller = new MainController(view, manager);
         controller.run();
 
-        manager.connect("hr", "hr");
+        manager.connect("notebook", "notebook");
 
-        ArrayList<String> tables = manager.getAllTableNames();
-
-        for (int i = 0; i < tables.size(); i++){
-            System.out.println(tables.get(i));
-        }
-        System.out.println();
+//        ArrayList<String> tables = manager.getAllTableNames();
 //
+//        for (int i = 0; i < tables.size(); i++){
+//            System.out.println(tables.get(i));
+//        }
+//        System.out.println();
+
 //        ArrayList<String> tables2 = manager.getAllColumnNamesFromTable("COUNTRIES");
 //
 //        for (int i = 0; i < tables2.size(); i++){
@@ -39,99 +39,99 @@ public class Main {
 
         String step = "Вы подключились к базе данных. Поздравляю )";
 
-        stepPrint(step);
+//        stepPrint(step);
         System.out.println();
 //
-//
-//
+//        printTable(manager.readQuery("SELECT * FROM USER_TAB_COLUMNS"));
+//        System.out.println();
+        printTable(manager.getAllTableNames());
+        System.out.println();
+        printTable(manager.getAllColumnNamesFromTable("EMPLOYEES"));
+//        System.out.println();
+//        printTable(manager.getDataTypeColumnFromTable("JOBS", "JOB_ID"));
+//        System.out.println();
+
+
 //        ArrayList<String> tables3 = manager.getDataTypeColumnFromTable("EMPLOYEES", "EMPLOYEE_ID");
 //
 //        for (int i = 0; i < tables3.size(); i++){
 //            System.out.println(tables3.get(i));
 //        }
 //        System.out.println();
-//
-//        ArrayList<String[]> tables4 = manager.getDataTypeAllColumnsFromTable("EMPLOYEES");
-//
-//        for (int i = 0; i < tables4.size(); i++){
-//            System.out.println(tables4.get(i)[0] + " " + tables4.get(i)[1]);
-//        }
+
+//        printTable(manager.getDataTypeAllColumnsFromTable("EMPLOYEES"));
 //        System.out.println();
 //
-//      //  boolean g = manager.createTable("SERT",tables4, false);
-//
-////        System.out.println(g);
-//
-//        for (int i = 0; i < tables4.size(); i++){
-//            System.out.println(tables4.get(i)[0] + " " + tables4.get(i)[1]);
-//        }
 //        System.out.println();
 
-        printTable(manager.readTable("REGIONS"));
-        System.out.println();
-        printTable(manager.readTable("LOCATIONS"));
-        System.out.println();
-        printTable(manager.readTable("DEPARTMENTS"));
-        System.out.println();
-        printTable(manager.readTable("JOBS"));
-        System.out.println();
-        printTable(manager.readTable("EMPLOYEES"));
-        System.out.println();
-        printTable(manager.readTable("JOB_HISTORY"));
-        System.out.println();
-        printTable(manager.readTable("SERTEE"));
-        System.out.println();
-        printTable(manager.readTable("MYTABLE"));
-        System.out.println();
-        printTable(manager.readTable("SERTE"));
-        System.out.println();
-        printTable(manager.readTable("COUNTRIES"));
+//        printTable(manager.readTable("REGIONS"));
+//        System.out.println();
+//        printTable(manager.readTable("LOCATIONS"));
+//        System.out.println();
+//        printTable(manager.readTable("DEPARTMENTS"));
+//        System.out.println();
+//        printTable(manager.readTable("JOBS"));
+//        System.out.println();
+//        printTable(manager.readTable("EMPLOYEES"));
+//        System.out.println();
+//        printTable(manager.readTable("JOB_HISTORY"));
+//        System.out.println();
+//        printTable(manager.readTable("SERTEE"));
+//        System.out.println();
+//        printTable(manager.readTable("MYTABLE"));
+//        System.out.println();
+//        printTable(manager.readTable("SERTE"));
+//        System.out.println();
+//        printTable(manager.readTable("COUNTRIES"));
 
 
 
-        String [] first = new String[]{"SALARY", "17000"};
-        String [] second = new String[]{"DEPARTMENT_ID", "90"};
-        String [] third = new String[]{"JOB_ID", "'AD_VP'"};
-
-        ArrayList<String[]> uyt = new ArrayList<>();
-
-        uyt.add(first);
-        uyt.add(second);
-        uyt.add(third);
-
-        printTable(manager.read("EMPLOYEES", uyt));
-
-        System.out.println();
-
-        String [] first1 = new String[]{"ID", "2"};
-        String [] second1 = new String[]{"DESCRIPTION", "'RRRR'"};
-        String [] third1 = new String[]{"ID", "34"};
-        String [] forth1 = new String[]{"DESCRIPTION", "'TTTT'"};
-
-        ArrayList<String[]> uyt1 = new ArrayList<>();
-        uyt1.add(first1);
-        uyt1.add(second1);
-        ArrayList<String[]> uyt2 = new ArrayList<>();
-        uyt2.add(third1);
-        uyt2.add(forth1);
-
-        System.out.println(manager.update("SERTE",uyt2,uyt1));
-
-        ArrayList<String[]> testCreat = new ArrayList<>();
-        testCreat.add(new String[]{"ID", "45"});
-        testCreat.add(new String[]{"DESCRIPTION", "'TEST'"});
+//        String [] first = new String[]{"SALARY", "17000"};
+//        String [] second = new String[]{"DEPARTMENT_ID", "90"};
+//        String [] third = new String[]{"JOB_ID", "'AD_VP'"};
+//
+//        ArrayList<String[]> uyt = new ArrayList<>();
+//
+//        uyt.add(first);
+//        uyt.add(second);
+//        uyt.add(third);
+//
+////        printTable(manager.read("EMPLOYEES", uyt));
+//
+//        System.out.println();
+//
+//        String [] first1 = new String[]{"ID", "2"};
+//        String [] second1 = new String[]{"DESCRIPTION", "'RRRR'"};
+//        String [] third1 = new String[]{"ID", "34"};
+//        String [] forth1 = new String[]{"DESCRIPTION", "'TTTT'"};
+//
+//        ArrayList<String[]> uyt1 = new ArrayList<>();
+//        uyt1.add(first1);
+//        uyt1.add(second1);
+//        ArrayList<String[]> uyt2 = new ArrayList<>();
+//        uyt2.add(third1);
+//        uyt2.add(forth1);
+//
+//        System.out.println(manager.update("SERTE",uyt2,uyt1));
+//
+//        ArrayList<String[]> testCreat = new ArrayList<>();
+//        testCreat.add(new String[]{"ID", "45"});
+//        testCreat.add(new String[]{"DESCRIPTION", "'TEST'"});
 
 //       Long id =  manager.create("SERT", testCreat, true);
 //        System.out.println(id);
 
+//
+        printHistory();
 
+
+    }
+//
+    private static void printHistory() {
         for (int i = 0; i < History.cache.size(); i++){
             System.out.println(History.cache.get(i));
-            System.out.println();
+
         }
-        System.out.println();
-
-
     }
 
 
@@ -201,11 +201,14 @@ public class Main {
                 reBildName [j] = ' ';
             }
 
-        int fromToName = (reBildName.length - strReBildName.length)/2;
-
-        for (int j = fromToName, m = 0; m < strReBildName.length; j++, m++) {
+        if(strReBildName.length > reBildName.length){
+            reBildName = strReBildName;
+        } else {
+            int fromToName = (reBildName.length - strReBildName.length) / 2;
+            for (int j = fromToName, m = 0; m < strReBildName.length; j++, m++) {
                 reBildName[j] = strReBildName[m];
             }
+        }
 
         System.out.println(new String(line));
         System.out.print('|' + new String(reBildName) + '|');
@@ -283,6 +286,7 @@ public class Main {
     }
 
     private static void sleeper(int time) {
+
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {

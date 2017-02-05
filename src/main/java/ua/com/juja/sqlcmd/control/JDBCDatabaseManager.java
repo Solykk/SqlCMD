@@ -6,7 +6,9 @@ import ua.com.juja.sqlcmd.service.History;
 import ua.com.juja.sqlcmd.view.Console;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.Scanner;
 
 /**
  * Created by Solyk on 26.01.2017.
@@ -58,23 +60,25 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public ArrayList<String> getAllTableNames() {
+    public Table getAllTableNames() {
 
-        ArrayList<String> allTableNames = new ArrayList<>();
+        ArrayList<ColumnDate> columnDatas = new ArrayList<>();
+        columnDatas.add(new ColumnDate("TABLE_NAME", new ArrayList<String>()));
+
         String findAllTables = "SELECT TABLE_NAME FROM user_tables";
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(findAllTables))
         {
 
-
             while (resultSet.next()){
                 String string = resultSet.getString("TABLE_NAME");
-                allTableNames.add(string);
-
+                columnDatas.get(0).getValue().add(string);
             }
 
             History.cache.add(History.getDate() + " " + "Вывод всех таблиц");
+
+            return new Table("ALL_TABLES", columnDatas);
 
         } catch (SQLException | NullPointerException e){
 
@@ -84,30 +88,33 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         }
 
 
-        return allTableNames;
+
     }
 
     @Override
-    public ArrayList<String> getAllColumnNamesFromTable(String tableName) {
+    public Table getAllColumnNamesFromTable(String tableName) {
 
-        ArrayList<String> dateFromTable = new ArrayList<>();
+        ArrayList<ColumnDate> columnDates = new ArrayList<>();
+        columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<String>()));
+
         String dateTables = "SELECT COLUMN_NAME FROM USER_TAB_COLUMNS WHERE TABLE_NAME = " + "'" + tableName + "'";
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(dateTables))
         {
 
-
             while (resultSet.next()){
 
                 String string = resultSet.getString("COLUMN_NAME");
-                dateFromTable .add(string);
+                columnDates.get(0).getValue().add(string);
 
             }
 
             History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName);
 
-        } catch (SQLException e ){
+            return new Table(tableName, columnDates);
+
+        } catch (SQLException | NullPointerException e ){
 
             History.cache.add(History.getDate() + " " + "Ошибка. Не могу осуществить вывод содержимого таблицы " + tableName + "  " + e.getMessage());
 
@@ -115,36 +122,28 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         }
 
 
-        return dateFromTable ;
     }
 
     @Override
-    public ArrayList<String> getDataTypeColumnFromTable(String tableName, String columnName) {
+    public Table getDataTypeColumnFromTable(String tableName, String columnName) {
 
-        ArrayList<String> columnVCtype = new ArrayList<>();
-        columnVCtype.add(tableName);
+        ArrayList<ColumnDate> columnDates = new ArrayList<>();
+        columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<String>()));
+        columnDates.add(new ColumnDate("DATA_TYPE", new ArrayList<String>()));
+        columnDates.add(new ColumnDate("NULLABLE", new ArrayList<String>()));
 
-        String columnVCtypeQuery = "SELECT COLUMN_NAME , data_type FROM all_tab_columns WHERE TABLE_NAME = "
+        String columnVCtypeQuery = "SELECT COLUMN_NAME , data_type, DATA_LENGTH, NULLABLE FROM all_tab_columns WHERE TABLE_NAME = "
                 + "'" + tableName+ "' AND COLUMN_NAME = " + "'" + columnName + "'";
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(columnVCtypeQuery))
         {
 
-
-            while (resultSet.next()){
-
-                String stringName = resultSet.getString("COLUMN_NAME");
-                columnVCtype .add(stringName);
-                String stringType = resultSet.getString("data_type");
-                columnVCtype .add(stringType);
-
-            }
-
+            resultSetGetHelper(columnDates, resultSet);
 
             History.cache.add(History.getDate() + " " + "Определен тип данных содержащийся в таблице: " + tableName + " у колонки " + columnName);
-
-        } catch (SQLException e ){
+            return new Table(tableName, columnDates);
+        } catch (SQLException | NullPointerException e ){
 
             History.cache.add(History.getDate() + " " + "Ошибка. Не могу определить тип данных в таблице: " + tableName + " у колонки " + columnName  + "  " + e.getMessage());
 
@@ -152,41 +151,30 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         }
 
 
-        return columnVCtype;
+
 
     }
 
     @Override
-    public ArrayList<String[]> getDataTypeAllColumnsFromTable(String tableName) {
+    public Table getDataTypeAllColumnsFromTable(String tableName) {
 
-        ArrayList<String[]> columnVCtypeAll = new ArrayList<>();
+        ArrayList<ColumnDate> columnDates = new ArrayList<>();
+        columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<String>()));
+        columnDates.add(new ColumnDate("DATA_TYPE", new ArrayList<String>()));
+        columnDates.add(new ColumnDate("NULLABLE", new ArrayList<String>()));
 
-
-        String columnVCtypeQueryAll = "SELECT COLUMN_NAME , data_type FROM all_tab_columns WHERE TABLE_NAME = "
+        String columnVCtypeQueryAll = "SELECT COLUMN_NAME , data_type, DATA_LENGTH, NULLABLE FROM all_tab_columns WHERE TABLE_NAME = "
                 + "'" + tableName+ "'";
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(columnVCtypeQueryAll))
         {
 
-
-            while (resultSet.next()){
-
-                String[] columnAndtType = new String[2];
-
-                String stringName = resultSet.getString("COLUMN_NAME");
-                String stringType = resultSet.getString("data_type");
-
-                columnAndtType[0] = stringName;
-                columnAndtType[1] = stringType;
-
-                columnVCtypeAll.add(columnAndtType);
-
-            }
+            resultSetGetHelper(columnDates, resultSet);
 
             History.cache.add(History.getDate() + " " + "Определен тип данных содержащийся в таблице: " + tableName);
-
-        } catch (SQLException e ){
+            return new Table(tableName, columnDates) ;
+        } catch (SQLException | NullPointerException e ){
 
             History.cache.add(History.getDate() + " " + "Ошибка. Не могу определить тип данных в таблице: " + tableName + "  " + e.getMessage());
 
@@ -194,11 +182,11 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         }
 
 
-        return columnVCtypeAll ;
+
     }
 
     @Override
-    public boolean createTableWithPK (String tableName, ArrayList<String[]> settings, String columnNamePK, Long startWith) {
+    public boolean createTableWithPK (String tableName, ArrayList<String> settings, String columnNamePK, Long startWith) {
 
         createTableWithoutPK(tableName, settings);
 
@@ -228,9 +216,17 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public boolean createTableWithoutPK(String tableName, ArrayList<String[]> settings) {
+    public boolean createTableWithoutPK(String tableName, ArrayList<String> settings) {
 
-        String urlTableCreate = "CREATE TABLE departments (ID NUMBER(10) NOT NULL, DESCRIPTION  VARCHAR2(50)  NOT NULL)";
+        String ulrSettings = "";
+        for (int i = 0; i < settings.size() ; i++) {
+            if(i == settings.size() - 1) {
+                ulrSettings += settings.get(i);
+            } else {
+                ulrSettings += settings.get(i) + ", ";
+            }
+        }
+        String urlTableCreate = "CREATE TABLE " + tableName + " (" + ulrSettings + " )";
 
         try (Statement statement = connection.createStatement())
 
@@ -250,7 +246,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public boolean createData(String tableName, ArrayList<String[]> columnNameVSdata, boolean idKey) {
+    public boolean insert(String tableName, ArrayList<String[]> columnNameVSdata, boolean idKey) {
 
         String columnNames = "";
         String datas =  "";
@@ -391,7 +387,6 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         {
             statement.executeUpdate(sqlQuery);
 
-
             History.cache.add(History.getDate() + " " + "Вы успешно удалили запись в таблице: " + tableName);
 
             return true;
@@ -408,7 +403,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public boolean deleteAll(String tableName) {
+    public boolean clear(String tableName) {
 
         try (Statement statement = connection.createStatement())
 
@@ -426,6 +421,50 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
             return false;
 
+        }
+
+    }
+
+    @Override
+    public boolean cudQuery(String query) {
+
+        try (Statement statement =  connection.createStatement())
+        {
+            statement.executeUpdate(query);
+            System.out.println("Успех");
+            return true;
+        } catch (SQLException | NullPointerException e) {
+            System.out.println("Неудача");
+            return false;
+        }
+
+    }
+
+    @Override
+    public Table readQuery(String query) {
+
+
+        try (Statement statement =  connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query))
+        {
+
+            ArrayList<ColumnDate> columnDates = new ArrayList<>();
+            ResultSetMetaData rsMetaData = resultSet.getMetaData();
+            int lengthOfCol = rsMetaData.getColumnCount();
+
+            for (int i = 0; i < lengthOfCol; i++) {
+                String columnName = rsMetaData.getColumnName(i + 1);
+                columnDates.add(new ColumnDate(columnName, new ArrayList<String>()));
+            }
+
+            columnSortHelper(columnDates, resultSet);
+
+            System.out.println("Успех");
+            return new Table( "Your Query", columnDates);
+
+        } catch (SQLException | NullPointerException e) {
+            System.out.println("Неудача + " + e.getMessage());
+            return null;
         }
 
     }
@@ -463,17 +502,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         try(Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query))
         {
-            while (resultSet.next()){
-
-                for(int index = 0; index < columnDates.size(); index++){
-
-                    String columnName = columnDates.get(index).columnName();
-                    String temp = resultSet.getString(columnName);
-
-                    columnDates.get(index).getValue().add(temp);
-                }
-
-            }
+            columnSortHelper(columnDates, resultSet);
 
             return new Table(tableName, columnDates);
 
@@ -486,10 +515,40 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         }
     }
 
+    private void columnSortHelper(ArrayList<ColumnDate> columnDates, ResultSet resultSet) throws SQLException, NullPointerException {
+
+        while (resultSet.next()){
+
+            for(int index = 0; index < columnDates.size(); index++){
+
+                String columnName = columnDates.get(index).columnName();
+                String temp = resultSet.getString(columnName);
+
+                columnDates.get(index).getValue().add(temp);
+            }
+
+        }
+    }
+
+    private void resultSetGetHelper(ArrayList<ColumnDate> columnDates, ResultSet resultSet) throws SQLException, NullPointerException {
+        while (resultSet.next()){
+
+            String stringName = resultSet.getString("COLUMN_NAME");
+            columnDates.get(0).getValue().add(stringName);
+            String stringType = resultSet.getString("DATA_TYPE");
+            String stringLength = resultSet.getString("DATA_LENGTH");
+            String cotcat = stringType + "(" + stringLength + ")";
+            columnDates.get(1).getValue().add(cotcat);
+            String stringNullable = resultSet.getString("NULLABLE");
+            columnDates.get(2).getValue().add(stringNullable);
+
+        }
+    }
+
     private ArrayList<ColumnDate> getColumnDates(String tableName) {
 
         ArrayList<ColumnDate> columnDates = new ArrayList<>();
-        ArrayList<String> columnNamesFromTable = getAllColumnNamesFromTable(tableName);
+        ArrayList<String> columnNamesFromTable = getAllColumnNamesFromTable(tableName).getTableDate().get(0).getValue();
 
         for (int i = 0; i < columnNamesFromTable.size(); i++) {
             ColumnDate temp = new ColumnDate(columnNamesFromTable.get(i), new ArrayList<String>());

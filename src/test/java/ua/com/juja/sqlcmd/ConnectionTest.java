@@ -35,49 +35,49 @@ public class ConnectionTest {
         }
 
 
-       @Test
-       public void getAllTableNames(){
-           manager.connect("hr", "hr");
-        ArrayList<String> expectedResult =  new ArrayList<>();
+//       @Test
+//       public void getAllTableNames(){
+//           manager.connect("hr", "hr");
+//        ArrayList<String> expectedResult =  new ArrayList<>();
+//
+//           expectedResult.add("REGIONS");
+//           expectedResult.add("LOCATIONS");
+//           expectedResult.add("DEPARTMENTS");
+//           expectedResult.add("JOBS");
+//           expectedResult.add("EMPLOYEES");
+//           expectedResult.add("JOB_HISTORY");
+//           expectedResult.add("COUNTRIES");
+//
+//           ArrayList<String> result = manager.getAllTableNames();
+//
+//        Assert.assertTrue(result.equals(expectedResult));
+//
+//        }
 
-           expectedResult.add("REGIONS");
-           expectedResult.add("LOCATIONS");
-           expectedResult.add("DEPARTMENTS");
-           expectedResult.add("JOBS");
-           expectedResult.add("EMPLOYEES");
-           expectedResult.add("JOB_HISTORY");
-           expectedResult.add("COUNTRIES");
+//    @Test
+//    public void getAllTableNames_fail(){
+//        manager.connect("hr", "hr");
+//        ArrayList<String> expectedResult =  new ArrayList<>();
+//
+//        expectedResult.add("REGIONS");
+//        expectedResult.add("LOCATIONS");
+//        expectedResult.add("DEPARTMENTS");
+//        expectedResult.add("JOBS");
+//        expectedResult.add("COUNTRIES");
+//
+//        ArrayList<String> result = manager.getAllTableNames();
+//
+//       Assert.assertFalse(result.equals(expectedResult));
+//
+//    }
 
-           ArrayList<String> result = manager.getAllTableNames();
-
-        Assert.assertTrue(result.equals(expectedResult));
-
-        }
-
-    @Test
-    public void getAllTableNames_fail(){
-        manager.connect("hr", "hr");
-        ArrayList<String> expectedResult =  new ArrayList<>();
-
-        expectedResult.add("REGIONS");
-        expectedResult.add("LOCATIONS");
-        expectedResult.add("DEPARTMENTS");
-        expectedResult.add("JOBS");
-        expectedResult.add("COUNTRIES");
-
-        ArrayList<String> result = manager.getAllTableNames();
-
-       Assert.assertFalse(result.equals(expectedResult));
-
-    }
-
-    @Test
-    public void connection_null(){
-
-        ArrayList<String> result = manager.getAllTableNames();
-
-        Assert.assertNull(result);
-
-    }
+//    @Test
+//    public void connection_null(){
+//
+//        ArrayList<String> result = manager.getAllTableNames();
+//
+//        Assert.assertNull(result);
+//
+//    }
 
 }

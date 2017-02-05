@@ -9,4 +9,6 @@ public interface View {
 
         String read();
 
+        void printHistory();
+
 }
