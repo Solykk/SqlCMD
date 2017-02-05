@@ -1,8 +1,7 @@
 package ua.com.juja.sqlcmd.view;
 
-import com.sun.xml.internal.ws.api.ha.HaInfo;
 import ua.com.juja.sqlcmd.model.Table;
-import ua.com.juja.sqlcmd.service.History;
+import ua.com.juja.sqlcmd.control.comands.History;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,6 +11,12 @@ import java.util.Scanner;
  */
 public class Console implements View {
 
+    private String red = "\033[31;1m";
+    private String green = "\033[32;1m";
+    private String yellow = "\033[33;1m";
+    private String blue = "\033[34;1m";
+
+    private String bre = "\033[39;49m";
 
     @Override
     public void write(String massege) {
@@ -23,15 +28,8 @@ public class Console implements View {
         Scanner scanner =  new Scanner(System.in);
         return scanner.nextLine();
     }
-
     @Override
-    public void printHistory() {
-        for(String string: History.cache){
-            System.out.println(string);
-        }
-    }
-
-    private  void sleeper(int time) {
+    public   void sleeper(int time) {
 
         try {
             Thread.sleep(time);
@@ -39,8 +37,16 @@ public class Console implements View {
             e.printStackTrace();
         }
     }
-
-    private  void stepPrint(String step) {
+    @Override
+    public String redText(String text){return red + text + bre;}
+    @Override
+    public String greenText(String text){return green + text + bre;}
+    @Override
+    public String yellowText(String text){return yellow + text + bre;}
+    @Override
+    public String blueText(String text){return blue + text + bre;}
+    @Override
+    public  void stepPrint(String step) {
 
         char [] result = step.toCharArray();
 
@@ -49,8 +55,8 @@ public class Console implements View {
             System.out.print(result[i]);
         }
     }
-
-    private  void printTable(Table table){
+    @Override
+    public  void printTable(Table table){
 
         if(table == null){
             write("BREAK");

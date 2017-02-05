@@ -2,13 +2,11 @@ package ua.com.juja.sqlcmd.control;
 
 import ua.com.juja.sqlcmd.model.ColumnDate;
 import ua.com.juja.sqlcmd.model.Table;
-import ua.com.juja.sqlcmd.service.History;
+import ua.com.juja.sqlcmd.control.comands.History;
 import ua.com.juja.sqlcmd.view.Console;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Locale;
-import java.util.Scanner;
 
 /**
  * Created by Solyk on 26.01.2017.
