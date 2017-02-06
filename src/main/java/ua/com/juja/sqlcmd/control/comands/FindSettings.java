@@ -51,7 +51,7 @@ public class FindSettings implements Command {
             Table request = manager.read(tableName, settings);
             view.printTable(request);
             History.cache.add(view.requestTab(view.blueText("Успех")));
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
             view.write(view.redText("Ошибка. Не удалось по критериям вывести таблицу ( " + tableName + " ( " + view.redText(e.getMessage()) + " )"));
         }

@@ -39,7 +39,7 @@ public class TableType implements Command {
             Table request = manager.getDataTypeAllColumnsFromTable(tableName);
             view.printTable(request);
             History.cache.add(view.requestTab(view.blueText("Успех")));
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
             view.write(view.redText("Ошибка. Не удалось определить тип данных колонок в таблице ( " + tableName + " ( " + view.redText(e.getMessage()) + " )"));
         }

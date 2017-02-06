@@ -32,7 +32,8 @@ public class MainController {
         commands.add(new Drop(manager, view));
         commands.add(new Insert(manager, view));
         commands.add(new Update(manager, view));
-        commands.add(new Query(manager, view));
+        commands.add(new ReadQuery(manager, view));
+        commands.add(new CudQuery(manager, view));
         commands.add(new History(view));
         commands.add(new Unsupported(view));
     }

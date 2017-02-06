@@ -15,14 +15,10 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
     private Connection connection;
     private final String url = "jdbc:oracle:thin:/@localhost:1521:XE";
-    private Console consoleJDBC;
-
-
 
     public JDBCDatabaseManager(){
         Locale.setDefault(Locale.ENGLISH);
         this.connection = null;
-        this.consoleJDBC = new Console();
     }
 
     @Override
@@ -36,17 +32,12 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         try {
 
             connection = DriverManager.getConnection(url, userName, dbPassword);
-
-            History.cache.add(History.getDate() + " " + "Вы подключились к базе");
-
             return true;
-
         } catch (SQLException e){
             connection = null;
             e.printStackTrace();
             return false;
         }
-
     }
 
     @Override
@@ -166,30 +157,17 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
     }
 
-    @Override
-    public boolean createTableWithPK (String tableName, ArrayList<String> settings, String columnNamePK, Long startWith) {
 
-        createTableWithoutPK(tableName, settings);
+    @Override
+    public boolean createTableCreatePK (String tableName, String columnNamePK) throws SQLException, NullPointerException {
 
         String primaryKey = "ALTER TABLE " + tableName + " ADD (CONSTRAINT " +  tableName + "_pk PRIMARY KEY (" + columnNamePK + "))";
 
-        String sequence = "CREATE SEQUENCE " + tableName + "_seq START WITH " + startWith;
-
         try (Statement statement = connection.createStatement())
-
         {
-
             statement.executeUpdate(primaryKey);
-            statement.executeUpdate(sequence);
-
-            History.cache.add(History.getDate() + " " + "Cоздал таблицу: " + tableName);
-
             return true;
-
         }  catch (SQLException | NullPointerException e){
-
-            History.cache.add(History.getDate() + " " + "Ошибка. Не могу создать таблицу: " + tableName + "  " + e.getMessage());
-
             return false;
         }
 
@@ -197,7 +175,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public boolean createTableWithoutPK(String tableName, ArrayList<String> settings) {
+    public boolean createTableWithoutPK(String tableName, ArrayList<String> settings) throws SQLException, NullPointerException{
 
         String ulrSettings = "";
         for (int i = 0; i < settings.size() ; i++) {
@@ -210,24 +188,30 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         String urlTableCreate = "CREATE TABLE " + tableName + " (" + ulrSettings + " )";
 
         try (Statement statement = connection.createStatement())
-
         {
             statement.executeUpdate(urlTableCreate);
-
-            History.cache.add(History.getDate() + " " + "Создал таблицу: " + tableName);
-
-            return true;
-
+             return true;
         }  catch (SQLException | NullPointerException e){
+             return false;
+        }
+    }
 
-            History.cache.add(History.getDate() + " " + "Ошибка. Не могу создать таблицу: " + tableName + "  " + e.getMessage());
+    @Override
+    public boolean createTableSequenceForPK(String tableName, Long startWith) throws SQLException, NullPointerException{
 
+        String sequence = "CREATE SEQUENCE " + tableName + "_seq START WITH " + startWith;
+
+        try (Statement statement = connection.createStatement())
+        {
+            statement.executeUpdate(sequence);
+            return true;
+        }  catch (SQLException | NullPointerException e){
             return false;
         }
     }
 
     @Override
-    public boolean insert(String tableName, ArrayList<String[]> columnNameVSdata, boolean idKey) {
+    public boolean insert(String tableName, ArrayList<String[]> columnNameVSdata, boolean idKey) throws SQLException, NullPointerException{
 
         String columnNames = "";
         String datas =  "";
@@ -265,22 +249,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
         String url = "INSERT INTO " + tableName + "( " + columnNames + ") VALUES ( " + datas + " )";
 
-        try (Statement statement = connection.createStatement())
-
-        {
-            statement.executeUpdate(url);
-
-            History.cache.add(History.getDate() + " " + "Вы успешно добавили данные в таблицу: " + tableName);
-
-            return true;
-
-        } catch (SQLException | NullPointerException e) {
-
-            History.cache.add(History.getDate() + " " + "Ошибка. Не получилось добавить данные в таблицу: " + tableName + "  " + e.getMessage());
-
-            return false;
-
-        }
+       return statExecUpdate(url);
     }
 
     @Override
@@ -308,42 +277,21 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public boolean update(String tableName, ArrayList<String[]> settingsForUpdate, ArrayList<String[]> settingsHowUpdate) {
+    public boolean update(String tableName, ArrayList<String[]> settingsForUpdate, ArrayList<String[]> settingsHowUpdate)throws SQLException, NullPointerException {
 
         String ulrPrePost = generateQueryComaString(settingsForUpdate);
         String ulrPost = generateQueryAndString(settingsHowUpdate);
 
         String ulr  = "UPDATE " + tableName +  " SET " + ulrPrePost + " WHERE " + ulrPost;
 
-        try (Statement statement = connection.createStatement())
-
-        {
-            statement.executeUpdate(ulr);
-
-            History.cache.add(History.getDate() + " " + "Вы успешно обновили данные в таблицу: " + tableName);
-
-            return true;
-
-        } catch (SQLException | NullPointerException e) {
-
-            History.cache.add(History.getDate() + " " + "Ошибка. Не получилось обновить данные в таблице: " + tableName + "  " + e.getMessage());
-
-            return false;
-
-        }
+        return statExecUpdate(ulr);
 
     }
 
     @Override
     public boolean drop(String tableName) throws SQLException, NullPointerException{
 
-        try (Statement statement = connection.createStatement())
-        {
-            statement.executeUpdate("DROP TABLE " + tableName);
-            return true;
-        } catch (SQLException | NullPointerException e) {
-            return false;
-        }
+        return statExecUpdate("DROP TABLE " + tableName);
     }
 
     @Override
@@ -353,66 +301,36 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
         String sqlQuery = "DELETE FROM " +  tableName + " WHERE " + sqlPost;
 
-        try (Statement statement = connection.createStatement())
+        return statExecUpdate(sqlQuery);
+    }
 
-        {
-            statement.executeUpdate(sqlQuery);
+    @Override
+    public boolean clear(String tableName) throws SQLException, NullPointerException {
 
-            History.cache.add(History.getDate() + " " + "Вы успешно удалили запись в таблице: " + tableName);
-
-            return true;
-
-        } catch (SQLException | NullPointerException e) {
-
-            History.cache.add(History.getDate() + " " + "Ошибка. Не получилось удалить запись из таблицы: " + tableName + "  " + e.getMessage());
-
-            return false;
-
-        }
-
+        return statExecUpdate("DELETE " + tableName);
 
     }
 
     @Override
-    public boolean clear(String tableName) {
+    public boolean cudQuery(String query) throws SQLException, NullPointerException{
 
-        try (Statement statement = connection.createStatement())
-
-        {
-            statement.executeUpdate("DELETE " + tableName);
-
-
-            History.cache.add(History.getDate() + " " + "Вы успешно Очистили таблицу: " + tableName);
-
-            return true;
-
-        } catch (SQLException | NullPointerException e) {
-
-            History.cache.add(History.getDate() + " " + "Ошибка. Не получилось очистить таблицу: " + tableName + "  " + e.getMessage());
-
-            return false;
-
-        }
+        return statExecUpdate(query);
 
     }
 
-    @Override
-    public boolean cudQuery(String query) {
-
+    private boolean statExecUpdate(String query) throws SQLException, NullPointerException{
         try (Statement statement =  connection.createStatement())
         {
             statement.executeUpdate(query);
-            System.out.println("Успех");
             return true;
         } catch (SQLException | NullPointerException e) {
-            System.out.println("Неудача");
+            e.printStackTrace();
             return false;
         }
-
     }
 
     @Override
-    public Table readQuery(String query) {
+    public Table readQuery(String query) throws SQLException, NullPointerException {
 
 
         try (Statement statement =  connection.createStatement();
@@ -430,11 +348,10 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
             columnSortHelper(columnDates, resultSet);
 
-            System.out.println("Успех");
             return new Table( "Your Query", columnDates);
 
         } catch (SQLException | NullPointerException e) {
-            System.out.println("Неудача + " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
 

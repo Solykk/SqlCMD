@@ -125,12 +125,15 @@ public class Help implements Command {
                 "\t" + view.greenText("column") + " - имя столбца записи которое проверяется\n" +
                 "\t" + view.greenText("value") + " - значение которому должен соответствовать столбец column1 для удаляемой записи\n" +
                 "\tФормат вывода: табличный, как при find со старыми значениями удаляемых записей.";
-         String query = view.redText("query") + "\n" +
-                "\tКоманда для ввода SQL запроса\n" +
-                "\tФормат команды: " + view.greenText("readQuery|SQLQuery " + view.redText("(Только чтение из БД)")) + "\n" +
-                "\t\t\t\tФормат вывода: " +view.blueText("табличка в консольном формате")+ "\n" +
-                "\t\t\t" + view.greenText("cudQuery|SQLQuery (Для внесения изменений в таблицу)") + "\n" +
-                "\t\t\t\tФормат вывода: " + view.blueText("текстовое сообщение с результатом выполнения операции");
+         String readQuery = view.redText("readQuery") + "\n" +
+                 "\tКоманда для ввода SQL запроса\n" +
+                 "\tФормат команды: " + view.greenText("readQuery|SQLQuery") + view.redText("(Только чтение из БД)") +  "\n" +
+                 "\tгде: SQLQuery - ваш SQL запрос\n" +
+                 "\tФормат вывода: " + view.blueText("табличка в консольном формате");
+         String cudQuery = view.redText("cudQuery") + "\n" +
+                 "\tФормат команды: " + view.greenText("cudQuery|SQLQuery") + " (Для внесения изменений в таблицу)\n" +
+                 "\tгде: " + view.greenText("SQLQuery") + " - ваш SQL запрос\n" +
+                 "\tФормат вывода: " + view.blueText("текстовое сообщение с результатом выполнения операции");
          String history = view.redText("history") + "\n" +
                 "\tКоманда для получения истории работы с приложением\n" +
                  "\tФормат команды: " + view.greenText("history") + "\n" +
@@ -157,7 +160,8 @@ public class Help implements Command {
         view.write(insert);
         view.write(update);
         view.write(delete);
-        view.write(query);
+        view.write(readQuery);
+        view.write(cudQuery);
         view.write(history);
         view.write(help);
         view.write(exit);
