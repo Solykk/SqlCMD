@@ -57,7 +57,7 @@ public class Update implements Command {
             indexHowUpdate += 2;
         }
 
-        History.cache.add(History.getDate() + " " + "Обновление содержимого таблицы: " + tableName + " по критериям " + command + " "+ view.requestTab(TableType.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Обновление содержимого таблицы: " + tableName + " по критериям " + command + " "+ Update.class.getSimpleName().toLowerCase());
 
         try {
             manager.update(tableName, settingsForUpdate, settingsHowUpdate);

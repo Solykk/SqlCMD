@@ -26,7 +26,7 @@ public class Tables implements Command {
 
     @Override
     public void process(String command) {
-        History.cache.add(History.getDate() + " " + "Вывод имен всех пользовательских таблиц " + view.requestTab(Command.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Вывод имен всех пользовательских таблиц " + Tables.class.getSimpleName().toLowerCase());
         try {
             Table request = manager.getAllTableNames();
             view.printTable(request);

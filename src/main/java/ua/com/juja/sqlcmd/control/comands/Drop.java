@@ -34,7 +34,7 @@ public class Drop implements Command {
         }
         String tableName = data[1];
 
-        History.cache.add(History.getDate() + " " + "Попытка удалить таблицу: " + tableName + " " + view.requestTab(TableType.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Попытка удалить таблицу: " + tableName + " " + Delete.class.getSimpleName().toLowerCase());
 
         try {
             manager.drop(tableName);

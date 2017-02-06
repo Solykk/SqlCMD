@@ -33,7 +33,7 @@ public class Clear implements Command {
 
         String tableName = data[1];
 
-        History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName + " " + view.requestTab(TableType.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName + " " + Clear.class.getSimpleName().toLowerCase());
 
         try {
             manager.clear(tableName);

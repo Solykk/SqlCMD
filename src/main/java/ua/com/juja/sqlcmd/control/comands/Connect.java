@@ -3,6 +3,9 @@ package ua.com.juja.sqlcmd.control.comands;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
+import java.sql.SQLClientInfoException;
+import java.sql.SQLException;
+
 /**
  * Created by Solyk on 05.02.2017.
  */
@@ -24,7 +27,7 @@ public class Connect implements Command {
     @Override
     public void process(String command) {
 
-        History.cache.add(History.getDate() + " " + "Попытка подключиться к базе данных "  + view.requestTab(TableType.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Попытка подключиться к базе данных "  + Connect.class.getSimpleName().toLowerCase());
 
         try {
 
@@ -39,10 +42,10 @@ public class Connect implements Command {
 
             History.cache.add(view.requestTab(view.blueText("Успех")));
 
-            view.write(view.requestTab(view.blueText("Успех, вы подключились к базе данных:")));
+            view.write("\t\t\t\t\t\t\t\t" + view.blueText("Успех, вы подключились к базе данных:"));
             view.write(view.blueText("Oracle Database 10g Express Edition Release 10.2.0.1.0 - Production"));
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             view.write(History.getDate() + " " + "Не удалось подключиться к базе данных " + view.redText(e.getMessage()));
             History.cache.add(History.getDate() + " " + "Не удалось подключиться к базе данных " + view.redText(e.getMessage()));
         }

@@ -3,7 +3,6 @@ package ua.com.juja.sqlcmd.control;
 import ua.com.juja.sqlcmd.model.ColumnDate;
 import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.control.comands.History;
-import ua.com.juja.sqlcmd.view.Console;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -22,22 +21,19 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public boolean connect(String userName, String dbPassword) throws SQLException{
+    public void connect(String userName, String dbPassword) throws SQLException{
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Please add jdbc jar to project.", e);
         }
 
-        try {
-
-            connection = DriverManager.getConnection(url, userName, dbPassword);
-            return true;
-        } catch (SQLException e){
-            connection = null;
-            e.printStackTrace();
-            return false;
-        }
+            try {
+                connection = DriverManager.getConnection(url, userName, dbPassword);
+            } catch (SQLException e) {
+                connection = null;
+                throw e;
+            }
     }
 
     @Override
@@ -60,25 +56,21 @@ public class  JDBCDatabaseManager implements DatabaseManager{
             return new Table("ALL_TABLES", columnDatas);
 
         } catch (SQLException | NullPointerException e){
-            e.printStackTrace();
-            return null;
+            throw e;
         }
-
-
-
     }
 
     @Override
     public Table getAllColumnNamesFromTable(String tableName) throws SQLException, NullPointerException {
-
-        ArrayList<ColumnDate> columnDates = new ArrayList<>();
-        columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<String>()));
 
         String dateTables = "SELECT COLUMN_NAME FROM USER_TAB_COLUMNS WHERE TABLE_NAME = " + "'" + tableName + "'";
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(dateTables))
         {
+
+            ArrayList<ColumnDate> columnDates = new ArrayList<>();
+            columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<String>()));
 
             while (resultSet.next()){
 
@@ -90,8 +82,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
             return new Table(tableName, columnDates);
 
         } catch (SQLException | NullPointerException e ){
-            e.printStackTrace();
-            return null;
+            throw e;
         }
 
     }
@@ -110,16 +101,10 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(columnVCtypeQueryAll))
         {
-
             resultSetGetHelper(columnDates, resultSet);
-
-            History.cache.add(History.getDate() + " " + "Определен тип данных содержащийся в таблице: " + tableName);
             return new Table(tableName, columnDates) ;
         } catch (SQLException | NullPointerException e ){
-            e.printStackTrace();
-            History.cache.add(History.getDate() + " " + "Ошибка. Не могу определить тип данных в таблице: " + tableName + "  " + e.getMessage());
-
-            return null;
+            throw e;
         }
 
 
@@ -142,40 +127,27 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         {
 
             resultSetGetHelper(columnDates, resultSet);
-
-            History.cache.add(History.getDate() + " " + "Определен тип данных содержащийся в таблице: " + tableName + " у колонки " + columnName);
             return new Table(tableName, columnDates);
+
         } catch (SQLException | NullPointerException e ){
-            e.printStackTrace();
-            History.cache.add(History.getDate() + " " + "Ошибка. Не могу определить тип данных в таблице: " + tableName + " у колонки " + columnName  + "  " + e.getMessage());
-
-            return null;
+            throw e;
         }
-
-
-
-
     }
 
 
     @Override
-    public boolean createTableCreatePK (String tableName, String columnNamePK) throws SQLException, NullPointerException {
+    public void createTableCreatePK (String tableName, String columnNamePK) throws SQLException, NullPointerException {
 
         String primaryKey = "ALTER TABLE " + tableName + " ADD (CONSTRAINT " +  tableName + "_pk PRIMARY KEY (" + columnNamePK + "))";
 
         try (Statement statement = connection.createStatement())
         {
             statement.executeUpdate(primaryKey);
-            return true;
-        }  catch (SQLException | NullPointerException e){
-            return false;
         }
-
-
     }
 
     @Override
-    public boolean createTableWithoutPK(String tableName, ArrayList<String> settings) throws SQLException, NullPointerException{
+    public void createTableWithoutPK(String tableName, ArrayList<String> settings) throws SQLException, NullPointerException{
 
         String ulrSettings = "";
         for (int i = 0; i < settings.size() ; i++) {
@@ -190,28 +162,22 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         try (Statement statement = connection.createStatement())
         {
             statement.executeUpdate(urlTableCreate);
-             return true;
-        }  catch (SQLException | NullPointerException e){
-             return false;
         }
     }
 
     @Override
-    public boolean createTableSequenceForPK(String tableName, Long startWith) throws SQLException, NullPointerException{
+    public void createTableSequenceForPK(String tableName, Long startWith) throws SQLException, NullPointerException{
 
         String sequence = "CREATE SEQUENCE " + tableName + "_seq START WITH " + startWith;
 
         try (Statement statement = connection.createStatement())
         {
             statement.executeUpdate(sequence);
-            return true;
-        }  catch (SQLException | NullPointerException e){
-            return false;
         }
     }
 
     @Override
-    public boolean insert(String tableName, ArrayList<String[]> columnNameVSdata, boolean idKey) throws SQLException, NullPointerException{
+    public void insert(String tableName, ArrayList<String[]> columnNameVSdata, boolean idKey) throws SQLException, NullPointerException{
 
         String columnNames = "";
         String datas =  "";
@@ -249,17 +215,19 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
         String url = "INSERT INTO " + tableName + "( " + columnNames + ") VALUES ( " + datas + " )";
 
-       return statExecUpdate(url);
+        statExecUpdate(url);
     }
 
     @Override
     public Table readTable(String tableName) throws SQLException, NullPointerException {
 
-        ArrayList<ColumnDate> columnDates = getColumnDates(tableName);
-
-        String query = "SELECT * FROM " + tableName;
-
-        return getTableHelper(tableName, columnDates, query);
+        try {
+            ArrayList<ColumnDate> columnDates = getColumnDates(tableName);
+            String query = "SELECT * FROM " + tableName;
+            return getTableHelper(tableName, columnDates, query);
+        } catch (SQLException | NullPointerException e){
+            throw e;
+        }
 
     }
 
@@ -277,55 +245,43 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public boolean update(String tableName, ArrayList<String[]> settingsForUpdate, ArrayList<String[]> settingsHowUpdate)throws SQLException, NullPointerException {
+    public void update(String tableName, ArrayList<String[]> settingsForUpdate, ArrayList<String[]> settingsHowUpdate)throws SQLException, NullPointerException {
 
         String ulrPrePost = generateQueryComaString(settingsForUpdate);
         String ulrPost = generateQueryAndString(settingsHowUpdate);
 
         String ulr  = "UPDATE " + tableName +  " SET " + ulrPrePost + " WHERE " + ulrPost;
 
-        return statExecUpdate(ulr);
-
+        statExecUpdate(ulr);
     }
 
     @Override
-    public boolean drop(String tableName) throws SQLException, NullPointerException{
-
-        return statExecUpdate("DROP TABLE " + tableName);
+    public void drop(String tableName) throws SQLException, NullPointerException{
+        statExecUpdate("DROP TABLE " + tableName);
     }
 
     @Override
-    public boolean delete(String tableName, ArrayList<String[]> settings)  throws SQLException, NullPointerException{
+    public void delete(String tableName, ArrayList<String[]> settings)  throws SQLException, NullPointerException{
 
         String sqlPost = generateQueryAndString(settings);
-
         String sqlQuery = "DELETE FROM " +  tableName + " WHERE " + sqlPost;
-
-        return statExecUpdate(sqlQuery);
+        statExecUpdate(sqlQuery);
     }
 
     @Override
-    public boolean clear(String tableName) throws SQLException, NullPointerException {
-
-        return statExecUpdate("DELETE " + tableName);
-
+    public void clear(String tableName) throws SQLException, NullPointerException {
+        statExecUpdate("DELETE " + tableName);
     }
 
     @Override
-    public boolean cudQuery(String query) throws SQLException, NullPointerException{
-
-        return statExecUpdate(query);
-
+    public void cudQuery(String query) throws SQLException, NullPointerException{
+        statExecUpdate(query);
     }
 
-    private boolean statExecUpdate(String query) throws SQLException, NullPointerException{
+    private void statExecUpdate(String query) throws SQLException, NullPointerException{
         try (Statement statement =  connection.createStatement())
         {
             statement.executeUpdate(query);
-            return true;
-        } catch (SQLException | NullPointerException e) {
-            e.printStackTrace();
-            return false;
         }
     }
 
@@ -349,10 +305,6 @@ public class  JDBCDatabaseManager implements DatabaseManager{
             columnSortHelper(columnDates, resultSet);
 
             return new Table( "Your Query", columnDates);
-
-        } catch (SQLException | NullPointerException e) {
-            e.printStackTrace();
-            return null;
         }
 
     }
@@ -390,21 +342,15 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         return queryPost;
     }
 
-    private Table getTableHelper(String tableName, ArrayList<ColumnDate> columnDates, String query) {
+    private Table getTableHelper(String tableName, ArrayList<ColumnDate> columnDates, String query) throws SQLException, NullPointerException{
 
         try(Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query))
         {
             columnSortHelper(columnDates, resultSet);
-
             return new Table(tableName, columnDates);
-
         } catch (SQLException | NullPointerException e){
-
-            History.cache.add(History.getDate() + " " + "Ошибка. Не получилось прочесть таблицу: " + tableName + "  " + e.getMessage());
-
-            return null;
-
+            throw e;
         }
     }
 
@@ -440,14 +386,17 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
     private ArrayList<ColumnDate> getColumnDates(String tableName) throws SQLException, NullPointerException {
 
-        ArrayList<ColumnDate> columnDates = new ArrayList<>();
-        ArrayList<String> columnNamesFromTable = getAllColumnNamesFromTable(tableName).getTableDate().get(0).getValue();
-
-        for (int i = 0; i < columnNamesFromTable.size(); i++) {
-            ColumnDate temp = new ColumnDate(columnNamesFromTable.get(i), new ArrayList<String>());
-            columnDates.add(temp);
+        try {
+            ArrayList<String> columnNamesFromTable = getAllColumnNamesFromTable(tableName).getTableDate().get(0).getValue();
+            ArrayList<ColumnDate> columnDates = new ArrayList<>();
+            for (int i = 0; i < columnNamesFromTable.size(); i++) {
+                ColumnDate temp = new ColumnDate(columnNamesFromTable.get(i), new ArrayList<String>());
+                columnDates.add(temp);
+            }
+            return columnDates;
+        } catch (SQLException | NullPointerException e){
+            throw e;
         }
-        return columnDates;
     }
 
 }

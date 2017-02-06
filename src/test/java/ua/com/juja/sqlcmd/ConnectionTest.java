@@ -14,25 +14,25 @@ import java.util.ArrayList;
  */
 public class ConnectionTest {
 
-    private JDBCDatabaseManager manager;
-
-        @Before
-        public void start(){
-            manager = new JDBCDatabaseManager();
-        }
-
-
-
-        @Test
-        public void connection(){
-            Assert.assertTrue(manager.connect("hr", "hr"));
-
-
-        }
-        @Test
-        public void fail_connection(){
-            Assert.assertFalse(manager.connect("sqlcmdd", "sqlcmd"));
-        }
+//    private JDBCDatabaseManager manager;
+//
+//        @Before
+//        public void start(){
+//            manager = new JDBCDatabaseManager();
+//        }
+//
+//
+//
+//        @Test
+//        public void connection(){
+//            Assert.assertTrue(manager.connect("hr", "hr"));
+//
+//
+//        }
+//        @Test
+//        public void fail_connection(){
+//            Assert.assertFalse(manager.connect("sqlcmdd", "sqlcmd"));
+//        }
 
 
 //       @Test

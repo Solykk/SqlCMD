@@ -33,7 +33,7 @@ public class TableType implements Command {
 
         String tableName = data[1];
 
-        History.cache.add(History.getDate() + " " + "Определение типа данных содержащийся в таблице: " + tableName + " " + view.requestTab(TableType.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Определение типа данных содержащийся в таблице: " + tableName + " " + TableType.class.getSimpleName().toLowerCase());
 
         try {
             Table request = manager.getDataTypeAllColumnsFromTable(tableName);

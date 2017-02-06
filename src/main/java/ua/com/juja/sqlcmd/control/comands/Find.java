@@ -33,16 +33,15 @@ public class Find implements Command {
 
         String tableName = data[1];
 
-        History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName + " " + view.requestTab(TableType.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName + " " + Find.class.getSimpleName().toLowerCase());
 
         try {
             Table request = manager.readTable(tableName);
             view.printTable(request);
             History.cache.add(view.requestTab(view.blueText("Успех")));
-        } catch (SQLException | NullPointerException e) {
+        } catch (Exception e) {
             History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось вывести таблицу ( " + tableName + " ( " + view.redText(e.getMessage()) + " )"));
+            view.write(view.redText("Ошибка. Не удалось вывести таблицу ( " + tableName + " ) " + view.redText(e.getMessage())));
         }
-
     }
 }

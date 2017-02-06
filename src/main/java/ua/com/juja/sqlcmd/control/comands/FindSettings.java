@@ -45,7 +45,7 @@ public class FindSettings implements Command {
             index += 2;
         }
 
-        History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName + " по критериям " + command + " "+ view.requestTab(TableType.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName + " по критериям " + command + " "+ FindSettings.class.getSimpleName().toLowerCase());
 
         try {
             Table request = manager.read(tableName, settings);

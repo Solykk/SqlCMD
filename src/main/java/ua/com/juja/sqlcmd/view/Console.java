@@ -11,12 +11,34 @@ import java.util.Scanner;
  */
 public class Console implements View {
 
-    private String red = "\033[31;1m";
-    private String green = "\033[32;1m";
-    private String yellow = "\033[33;1m";
-    private String blue = "\033[34;1m";
+    private String red;
+    {
+        red = "\033[31;1m";
+    }
 
-    private String bre = "\033[39;49m";
+    private String green;
+
+    {
+        green = "\033[32;1m";
+    }
+
+    private String yellow;
+
+    {
+        yellow = "\033[33;1m";
+    }
+
+    private String blue;
+
+    {
+        blue = "\033[34;1m";
+    }
+
+    private String bre;
+
+    {
+        bre = "\033[39;49m";
+    }
 
     @Override
     public void write(String massege) {
@@ -132,7 +154,7 @@ public class Console implements View {
         }
 
         write(new String(line));
-        write('|' + new String(reBildName) + '|' + "\n");
+        write('|' + new String(reBildName) + '|');
         write(new String(line));
 
         sleeper(5);
@@ -162,9 +184,8 @@ public class Console implements View {
 
             sleeper(5);
 
-
         }
-        write("\n");
+        write("");
         write(new String(line));
 
         for (int i = 0; i < table.getTableDate().get(0).getValue().size(); i++){
@@ -199,7 +220,7 @@ public class Console implements View {
                 sleeper(5);
 
             }
-            write("\n");
+            write("");
         }
 
         write(new String(line));

@@ -28,8 +28,8 @@ public class Insert implements Command {
     public void process(String command) {
 
         String [] data = command.split("\\|");
-        if(data.length < 6){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', ожидается минимум 6, но есть: " + data.length);
+        if(data.length < 4){
+            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', ожидается минимум 4, но есть: " + data.length);
         } else if(data.length%2 != 0){
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', ожидается четное количество аргументов, но есть: " + data.length);
         }
@@ -56,7 +56,7 @@ public class Insert implements Command {
             index += 2;
         }
 
-        History.cache.add(History.getDate() + " " + "Добавление данных в таблицу: " + tableName + " по критериям " + command + " "+ view.requestTab(TableType.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Добавление данных в таблицу: " + tableName + " по критериям " + command + " "+ Insert.class.getSimpleName().toLowerCase());
 
         try {
             manager.insert(tableName, settings, isKey);

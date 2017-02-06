@@ -33,7 +33,7 @@ public class CudQuery implements Command {
 
         String query = data[1];
 
-        History.cache.add(History.getDate() + " " + "Вывод SQL запроса: " + query + " " + view.requestTab(TableType.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Вывод SQL запроса: " + query + " " + CudQuery.class.getSimpleName().toLowerCase());
 
         try {
             manager.cudQuery(query);

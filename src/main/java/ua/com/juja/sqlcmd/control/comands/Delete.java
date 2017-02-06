@@ -46,7 +46,7 @@ public class Delete implements Command {
             index += 2;
         }
 
-        History.cache.add(History.getDate() + " " + "Попытка удалить , по критериям,запись в таблице: " + tableName + " " + view.requestTab(TableType.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Попытка удалить , по критериям,запись в таблице: " + tableName + " " + Delete.class.getSimpleName().toLowerCase());
 
         try {
             manager.delete(tableName,settings);

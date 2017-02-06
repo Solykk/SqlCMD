@@ -33,7 +33,7 @@ public class ColumnType implements Command {
         String tableName = data[1];
         String columnName = data[2];
 
-        History.cache.add(History.getDate() + " " + "Определение типа данных содержащийся в таблице: " + tableName + " у колонки " + columnName + " " + view.requestTab(TableType.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Определение типа данных содержащийся в таблице: " + tableName + " у колонки " + columnName + " " + ColumnType.class.getSimpleName().toLowerCase());
 
         try {
             Table request = manager.getDataTypeColumnFromTable(tableName, columnName);

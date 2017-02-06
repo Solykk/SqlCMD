@@ -42,7 +42,7 @@ public class Create implements Command {
             index++;
         }
 
-        History.cache.add(History.getDate() + " " + "Создание таблицы: " + tableName + " по критериям " + command + " "+ view.requestTab(Create.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Создание таблицы: " + tableName + " по критериям " + command + " "+ Create.class.getSimpleName().toLowerCase());
 
         try {
             manager.createTableWithoutPK(tableName, settings);
@@ -58,7 +58,7 @@ public class Create implements Command {
         if (key.equals("y")) {
             view.write(view.blueText("Введите название колонки, которой хотите присвоить ключ "));
             String columnName = view.read();
-            History.cache.add(History.getDate() + " " + "Создание первичного ключа для таблицы: " + tableName + " по критериям " + columnName + " "+ view.requestTab(Create.class.getSimpleName().toLowerCase()));
+            History.cache.add(History.getDate() + " " + "Создание первичного ключа для таблицы: " + tableName + " по критериям " + columnName + " "+ Create.class.getSimpleName().toLowerCase());
 
             try {
                 manager.createTableCreatePK(tableName, columnName);
@@ -74,7 +74,7 @@ public class Create implements Command {
 
             String seq = view.read();
             if(seq.equals("y")){
-                History.cache.add(History.getDate() + " " + "Создание Sequence генератора для таблицы: " + tableName + " по критериям " + columnName + " "+ view.requestTab(Create.class.getSimpleName().toLowerCase()));
+                History.cache.add(History.getDate() + " " + "Создание Sequence генератора для таблицы: " + tableName + " по критериям " + columnName + " "+ Create.class.getSimpleName().toLowerCase());
                 view.write(view.blueText("Введите значени с которого будет начинаться отсчет "));
 
                 Long startWith = Long.valueOf(view.read());

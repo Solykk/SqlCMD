@@ -43,16 +43,21 @@ public class MainController {
     }
 
     private void doWork() {
-        view.stepPrint("\t\t\t\t\t\t\t\t" + view.redText("Вас приветствует приложение SqlCMD"));
-        view.stepPrint("Пожалуйста, введите данные для подключения к базе данных в формате: " + view.greenText("username|password"));
+
+        view.write("\t\t\t\t\t\t\t\tВас приветствует приложение SqlCMD");
+        view.write("Пожалуйста, введите данные для подключения к базе данных в формате: connect|username|password");
 
         while (true) {
             String input = view.read();
 
             for (Command command : commands) {
                     if (command.isProcessed(input)) {
-                        command.process(input);
-                        break;
+                        try {
+                            command.process(input);
+                            break;
+                        } catch (Exception e){
+                            view.write(view.redText("Ошибка ") + e.getMessage());
+                        }
                     }
             }
             view.write("Введи команду (или " + view.redText("help") + " для помощи):");

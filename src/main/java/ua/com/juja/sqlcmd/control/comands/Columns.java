@@ -32,7 +32,7 @@ public class Columns implements Command {
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', ожидается 2, но есть: " + data.length);
         }
         String tableName = data[1];
-        History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName + " " + view.requestTab(Columns.class.getSimpleName().toLowerCase()));
+        History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName + " " + Columns.class.getSimpleName().toLowerCase());
 
         try {
             Table request = manager.getAllColumnNamesFromTable(tableName);
