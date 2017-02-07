@@ -200,18 +200,20 @@ public class  JDBCDatabaseManager implements DatabaseManager{
                     datas += columnNameVSdata.get(index)[1];
                 }
             }
-        }
-            if (!idKey) {
-            for (int j = 0; j < columnNameVSdata.size(); j++){
+        } else {
+            int startFrom = 0;
+            if (idKey) {
+                startFrom = 1;
+            }
+
+            for (int j = startFrom; j < columnNameVSdata.size(); j++) {
                 datas += columnNameVSdata.get(j)[1];
 
                 if (j != columnNameVSdata.size() - 1) {
                     datas += ", ";
                 }
-
             }
         }
-
         String url = "INSERT INTO " + tableName + "( " + columnNames + ") VALUES ( " + datas + " )";
 
         statExecUpdate(url);

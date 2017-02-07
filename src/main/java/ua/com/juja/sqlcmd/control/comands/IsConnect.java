@@ -23,7 +23,7 @@ public class IsConnect implements Command {
 
     @Override
     public void process(String command) {
-        view.write("Вы не можете пользоваться командой " + view.redText(command) + " пока " +
+        view.write("Вы не можете пользоваться командами, пока " +
                 "не подключитесь с помощью комманды " +
                 view.greenText("connect|username|password"));
     }

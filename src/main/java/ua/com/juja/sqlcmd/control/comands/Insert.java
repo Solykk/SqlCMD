@@ -36,17 +36,20 @@ public class Insert implements Command {
                     "ожидается четное количество аргументов, но есть: " + data.length);
         }
 
+        ArrayList<String[]> settings = new ArrayList<>();
         boolean isKey;
         view.write(view.blueText("Добавить Seq генератор, если такой имеется? Если да, введите " + view.greenText("y")));
         String key = view.read();
         if (key.equals("y")) {
             isKey = true;
+            view.write(view.blueText("Введите название колонки: "));
+            String seqName = view.read();
+            settings.add(new String[]{seqName,""});
         } else {
             isKey = false;
         }
 
         String tableName = data[1];
-        ArrayList<String[]> settings = new ArrayList<>();
 
         int index = 2;
         while (index != data.length) {

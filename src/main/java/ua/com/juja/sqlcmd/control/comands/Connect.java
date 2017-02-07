@@ -25,7 +25,8 @@ public class Connect implements Command {
     @Override
     public void process(String command) {
 
-        History.cache.add(History.getDate() + " " + "Попытка подключиться к базе данных "  + Connect.class.getSimpleName().toLowerCase());
+        History.cache.add(History.getDate() + " " + "Попытка подключиться к базе данных "
+                + view.yellowText(Connect.class.getSimpleName().toLowerCase()));
 
         try {
 
@@ -42,7 +43,7 @@ public class Connect implements Command {
             History.cache.add(view.requestTab(view.blueText("Успех")));
 
             view.write("\t\t\t\t\t\t\t\t" + view.blueText("Успех, вы подключились к базе данных:"));
-            view.write(view.blueText("Oracle Database 10g Express Edition Release 10.2.0.1.0 - Production"));
+            view.write(view.blueText("Oracle Database - Production"));
 
         } catch (SQLException e) {
             view.write(History.getDate() + " " + "Не удалось подключиться к базе данных " + view.redText(e.getMessage()));

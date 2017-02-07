@@ -1,6 +1,7 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -51,6 +52,8 @@ public class Delete implements Command {
             manager.delete(tableName,settings);
             History.cache.add(view.requestTab(view.blueText("Успех")));
             view.write(view.blueText("Успех! запись была удалена"));
+            Table deletedTable = manager.readTable(tableName);
+            view.printTable(deletedTable);
         } catch (SQLException | NullPointerException e) {
             History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
             view.write(view.redText("Ошибка. Не удалось удалить запись в таблице ( " + tableName + " ) "

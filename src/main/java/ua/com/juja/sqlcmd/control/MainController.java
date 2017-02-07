@@ -42,9 +42,10 @@ public class MainController {
     }
 
     private void doWork() {
-
-        view.write("\t\t\t\t\t\t\t\tВас приветствует приложение SqlCMD");
-        view.write("Пожалуйста, введите данные для подключения к базе данных в формате: connect|username|password");
+        view.stepPrint("\t\t\t\t\t\t\t\tВас приветствует приложение ");
+        view.write(view.blueText("SqlCMD"));
+        view.stepPrint("Пожалуйста, введите данные для подключения к базе данных в формате: ");
+        view.write(view.greenText("connect|username|password"));
 
         while (true) {
             String input = view.read();

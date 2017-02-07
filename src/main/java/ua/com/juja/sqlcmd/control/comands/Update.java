@@ -1,6 +1,7 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class Update implements Command {
         ArrayList<String[]> settingsHowUpdate = new ArrayList<>();
 
         int indexForUpdate = 2;
-        int indexHowUpdate = (data.length - 2)/2;
+        int indexHowUpdate = data.length - (data.length - 2)/2;
 
         while (indexForUpdate != indexHowUpdate){
             SettingsHelper.toSettings(data, settingsForUpdate, indexForUpdate);
@@ -58,6 +59,8 @@ public class Update implements Command {
             manager.update(tableName, settingsForUpdate, settingsHowUpdate);
             view.write(view.blueText("Успех! Данные обновлены"));
             History.cache.add(view.requestTab(view.blueText("Успех")));
+            Table updatedTable = manager.readTable(tableName);
+            view.printTable(updatedTable);
         } catch (SQLException | NullPointerException e) {
             History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
             view.write(view.redText("Ошибка. Не удалось обновить таблицу ( " + tableName + " ) "

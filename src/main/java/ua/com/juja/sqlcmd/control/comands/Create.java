@@ -55,7 +55,7 @@ public class Create implements Command {
                     + view.redText(e.getMessage())));
         }
 
-        view.write(view.blueText("Присвоить колонке первичный ключ, если такой имеется? Если да, введите " + view.greenText("y")));
+        view.write("Присвоить колонке первичный ключ, если такой имеется? Если да, введите " + view.greenText("y"));
         String key = view.read();
         if (key.equals("y")) {
             view.write(view.blueText("Введите название колонки, которой хотите присвоить ключ "));
