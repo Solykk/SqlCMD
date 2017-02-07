@@ -65,19 +65,17 @@ public class Console implements View {
     public String yellowText(String text){return yellow + text + bre;}
     @Override
     public String blueText(String text){return blue + text + bre;}
-
     @Override
     public String requestTab(String string) {
         return "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + string;
     }
-
     @Override
     public  void stepPrint(String step) {
 
         char [] result = step.toCharArray();
 
         for (int i = 0; i < result.length; i++){
-            sleeper(100);
+            sleeper(10);
             System.out.print(result[i]);
         }
     }
@@ -85,104 +83,97 @@ public class Console implements View {
     public  void printTable(Table table){
 
         if(table == null){
-            write("BREAK");
+            write("Table = null");
             return;
         }
 
         ArrayList<Integer> maxLengthCharsOfColumn = new ArrayList<>();
         int sumOfLength = 0;
 
-
         for (int j = 0; j < table.getTableDate().size(); j++) {
-
-            String obj;
+            String tempDataObject;
             if(table.getTableDate().get(j).getValue().size() == 0){
-                obj = "";
+                tempDataObject = "";
             } else {
-                obj = table.getTableDate().get(j).getValue().get(0);
-                if (obj == null){
-                    obj = "null";
+                tempDataObject = table.getTableDate().get(j).getValue().get(0);
+                if (tempDataObject == null){
+                    tempDataObject = "null";
                 }
             }
 
-
-
-            Integer tmp = obj.length();
-            Integer tmpCol = table.getTableDate().get(j).columnName().length();
+            Integer dataLength = tempDataObject.length();
+            Integer columnNameLength = table.getTableDate().get(j).columnName().length();
 
             for (int i = 0; i < table.getTableDate().get(j).getValue().size(); i++) {
-
                 String tempObj = table.getTableDate().get(j).getValue().get(i);
                 if (tempObj == null){
                     tempObj = "null";
                 }
 
                 Integer tempIns = tempObj.length();
-                if (tmp < tempIns) {
-                    tmp = tempIns;
+                if (dataLength < tempIns) {
+                    dataLength = tempIns;
                 }
             }
 
-            if(tmpCol > tmp){
-                tmp = tmpCol;
+            if(columnNameLength > dataLength){
+                dataLength = columnNameLength;
             }
 
-            maxLengthCharsOfColumn.add(tmp);
-
-            sumOfLength += tmp + 3;
+            maxLengthCharsOfColumn.add(dataLength);
+            sumOfLength += dataLength + 3;
         }
-
 
         char [] line = new char[sumOfLength + 1];
         for (int q = 0; q < line.length; q++) {
             line[q] = '-';
         }
 
-        char [] reBildName = new char[sumOfLength];
-        char [] strReBildName = table.getTableName().toCharArray();
+        char [] containerForReBuildTableName = new char[sumOfLength];
+        char [] reBuildingTableName = table.getTableName().toCharArray();
 
-        for (int j = 0; j < reBildName.length - 1; j++) {
-            reBildName [j] = ' ';
+        for (int k = 0; k < containerForReBuildTableName.length - 1; k++) {
+            containerForReBuildTableName [k] = ' ';
         }
 
-        int fromToName = (reBildName.length - strReBildName.length)/2;
+        int fromToName = (containerForReBuildTableName.length - reBuildingTableName.length)/2;
 
-        for (int j = fromToName, m = 0; m < strReBildName.length; j++, m++) {
-            reBildName[j] = strReBildName[m];
+        for (int j = fromToName, m = 0; m < reBuildingTableName.length; j++, m++) {
+            containerForReBuildTableName[j] = reBuildingTableName[m];
         }
 
         write(new String(line));
-        write('|' + new String(reBildName) + '|');
+        write('|' + new String(containerForReBuildTableName) + '|');
         write(new String(line));
 
         sleeper(5);
 
         for (int i = 0; i < table.getTableDate().size(); i++){
 
-            String bil = table.getTableDate().get(i).columnName();
-            char [] reBild = new char[maxLengthCharsOfColumn.get(i) + 2];
-            char [] strReBild = bil.toCharArray();
+            String columnName = table.getTableDate().get(i).columnName();
+            char [] containerForReBuildColName = new char[maxLengthCharsOfColumn.get(i) + 2];
+            char [] reBuildingColName = columnName.toCharArray();
 
-            for (int j = 0; j < reBild.length; j++) {
-                reBild [j] = ' ';
+            for (int k = 0; k < containerForReBuildColName.length; k++) {
+                containerForReBuildColName [k] = ' ';
             }
 
-            int fromTo = (reBild.length - strReBild.length)/2;
+            int subStrFromTo = (containerForReBuildColName.length - reBuildingColName.length)/2;
 
-            for (int j = fromTo, m = 0; m < strReBild.length; j++, m++) {
-                reBild[j] = strReBild[m];
+            for (int j = subStrFromTo, m = 0; m < reBuildingColName.length; j++, m++) {
+                containerForReBuildColName[j] = reBuildingColName[m];
             }
 
             if(i == table.getTableDate().size() - 1){
-                System.out.print('|' + new String(reBild) + '|');
+                System.out.print('|' + new String(containerForReBuildColName) + '|');
             } else {
-                System.out.print('|' + new String(reBild));
+                System.out.print('|' + new String(containerForReBuildColName));
             }
-
 
             sleeper(5);
 
         }
+
         write("");
         write(new String(line));
 
@@ -190,34 +181,35 @@ public class Console implements View {
 
             for (int j = 0; j < table.getTableDate().size(); j++) {
 
-                String bil = table.getTableDate().get(j).getValue().get(i);
+                String dataValue = table.getTableDate().get(j).getValue().get(i);
 
-                if(bil == null){
-                    bil = "null";
+                if(dataValue == null){
+                    dataValue = "null";
                 }
 
-                char [] reBild = new char[maxLengthCharsOfColumn.get(j) + 2];
-                char [] strReBild = bil.toCharArray();
+                char [] containerForReBuildDataValue = new char[maxLengthCharsOfColumn.get(j) + 2];
+                char [] reBuildingDataValue = dataValue.toCharArray();
 
-                for (int w = 0; w < reBild.length; w++) {
-                    reBild [w] = ' ';
+                for (int k = 0; k < containerForReBuildDataValue.length; k++) {
+                    containerForReBuildDataValue [k] = ' ';
                 }
 
-                int fromTo = (reBild.length - strReBild.length)/2;
+                int fromTo = (containerForReBuildDataValue.length - reBuildingDataValue.length)/2;
 
-                for (int f = fromTo, m = 0; m < strReBild.length; f++, m++) {
-                    reBild[f] = strReBild[m];
+                for (int f = fromTo, m = 0; m < reBuildingDataValue.length; f++, m++) {
+                    containerForReBuildDataValue[f] = reBuildingDataValue[m];
                 }
 
                 if(j == table.getTableDate().size() - 1){
-                    System.out.print('|' + new String(reBild) + '|');
+                    System.out.print('|' + new String(containerForReBuildDataValue) + '|');
                 } else{
-                    System.out.print('|' + new String(reBild));
+                    System.out.print('|' + new String(containerForReBuildDataValue));
                 }
 
                 sleeper(5);
 
             }
+
             write("");
         }
 
