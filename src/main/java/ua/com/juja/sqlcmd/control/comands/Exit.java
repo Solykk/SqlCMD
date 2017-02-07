@@ -20,7 +20,7 @@ public class Exit implements Command {
 
     @Override
     public void process(String command) {
-        view.blueText("До встречи!");
+        view.write(view.blueText("До встречи!"));
         System.exit(0);
     }
 
