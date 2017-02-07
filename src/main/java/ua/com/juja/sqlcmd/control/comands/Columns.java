@@ -3,7 +3,6 @@ package ua.com.juja.sqlcmd.control.comands;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.view.View;
-
 import java.sql.SQLException;
 
 /**
@@ -29,10 +28,12 @@ public class Columns implements Command {
 
         String [] data = command.split("\\|");
         if(data.length != 2){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', ожидается 2, но есть: " + data.length);
+            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
+                    "ожидается 2, но есть: " + data.length);
         }
         String tableName = data[1];
-        History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName + " " + Columns.class.getSimpleName().toLowerCase());
+        History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName + " "
+                + view.yellowText(Columns.class.getSimpleName().toLowerCase()));
 
         try {
             Table request = manager.getAllColumnNamesFromTable(tableName);
@@ -40,7 +41,8 @@ public class Columns implements Command {
             History.cache.add(view.requestTab(view.blueText("Успех")));
         } catch (SQLException | NullPointerException e) {
             History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не могу осуществить вывод всех колонок таблицы " + tableName + " ( " + view.redText(e.getMessage()) + " )"));
+            view.write(view.redText("Ошибка. Не могу осуществить вывод всех колонок таблицы ( " + tableName + " ) "
+                    + view.redText(e.getMessage())));
         }
     }
 }

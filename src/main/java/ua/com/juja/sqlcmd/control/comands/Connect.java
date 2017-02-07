@@ -2,8 +2,6 @@ package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
-
-import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 
 /**
@@ -33,7 +31,8 @@ public class Connect implements Command {
 
                 String[] data = command.split("\\|");
                 if (data.length != 3) {
-                    throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', ожидается 3, но есть: " + data.length);
+                    throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
+                            "ожидается 3, но есть: " + data.length);
                 }
                 String userName = data[1];
                 String password = data[2];

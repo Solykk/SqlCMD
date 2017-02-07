@@ -2,7 +2,6 @@ package ua.com.juja.sqlcmd.control;
 
 import ua.com.juja.sqlcmd.control.comands.*;
 import ua.com.juja.sqlcmd.view.View;
-
 import java.util.ArrayList;
 
 /**
@@ -17,9 +16,9 @@ public class MainController {
         this.view = view;
         this.commands = new ArrayList<>();
         commands.add(new Connect(manager, view));
-        commands.add(new IsConnect(manager, view));
         commands.add(new Help(view));
         commands.add(new Exit(view));
+        commands.add(new IsConnect(manager, view));
         commands.add(new Tables(manager, view));
         commands.add(new Columns(manager, view));
         commands.add(new TableType(manager, view));

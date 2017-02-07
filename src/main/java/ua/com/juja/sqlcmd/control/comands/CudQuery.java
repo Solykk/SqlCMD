@@ -1,9 +1,7 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
-import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.view.View;
-
 import java.sql.SQLException;
 
 /**
@@ -28,12 +26,14 @@ public class CudQuery implements Command {
     public void process(String command) {
         String [] data = command.split("\\|");
         if(data.length != 2){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', ожидается минимум 2, но есть: " + data.length);
+            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
+                    "ожидается минимум 2, но есть: " + data.length);
         }
 
         String query = data[1];
 
-        History.cache.add(History.getDate() + " " + "Вывод SQL запроса: " + query + " " + CudQuery.class.getSimpleName().toLowerCase());
+        History.cache.add(History.getDate() + " " + "Вывод SQL запроса: " + query + " "
+                + view.yellowText(CudQuery.class.getSimpleName().toLowerCase()));
 
         try {
             manager.cudQuery(query);
@@ -41,7 +41,8 @@ public class CudQuery implements Command {
             view.write(view.blueText("Успех! Запрос выполнен"));
         } catch (SQLException | NullPointerException e) {
             History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось выполнить ваш запрос ( " + query + " ( " + view.redText(e.getMessage()) + " )"));
+            view.write(view.redText("Ошибка. Не удалось выполнить ваш запрос ( " + query + " ) "
+                    + view.redText(e.getMessage())));
         }
     }
 }

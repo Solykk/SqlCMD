@@ -2,7 +2,6 @@ package ua.com.juja.sqlcmd.model;
 
 import java.util.ArrayList;
 
-
 /**
  * Created by Solyk on 26.01.2017.
  */

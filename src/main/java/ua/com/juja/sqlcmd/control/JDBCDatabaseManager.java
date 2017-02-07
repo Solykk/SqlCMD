@@ -2,7 +2,6 @@ package ua.com.juja.sqlcmd.control;
 
 import ua.com.juja.sqlcmd.model.ColumnDate;
 import ua.com.juja.sqlcmd.model.Table;
-import ua.com.juja.sqlcmd.control.comands.History;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -222,9 +221,22 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     public Table readTable(String tableName) throws SQLException, NullPointerException {
 
         try {
-            ArrayList<ColumnDate> columnDates = getColumnDates(tableName);
-            String query = "SELECT * FROM " + tableName;
-            return getTableHelper(tableName, columnDates, query);
+
+            Table containts = getAllTableNames();
+            ArrayList<String> temp = new ArrayList<>();
+
+            for (int index = 0; index < containts.getTableDate().get(0).getValue().size(); index++) {
+                temp.add(containts.getTableDate().get(0).getValue().get(index));
+            }
+
+            if(temp.contains(tableName)){
+                ArrayList<ColumnDate> columnDates = getColumnDates(tableName);
+                String query = "SELECT * FROM " + tableName;
+                return getTableHelper(tableName, columnDates, query);
+            } else {
+                throw new SQLException("ORA-00942: table or view does not exist");
+            }
+
         } catch (SQLException | NullPointerException e){
             throw e;
         }

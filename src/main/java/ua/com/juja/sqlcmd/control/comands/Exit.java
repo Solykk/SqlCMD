@@ -20,7 +20,8 @@ public class Exit implements Command {
 
     @Override
     public void process(String command) {
-      System.exit(0);
+        view.blueText("До встречи!");
+        System.exit(0);
     }
 
 }

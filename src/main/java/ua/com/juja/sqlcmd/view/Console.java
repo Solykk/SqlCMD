@@ -1,8 +1,6 @@
 package ua.com.juja.sqlcmd.view;
 
 import ua.com.juja.sqlcmd.model.Table;
-import ua.com.juja.sqlcmd.control.comands.History;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 

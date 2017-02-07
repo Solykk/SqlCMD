@@ -2,7 +2,6 @@ package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -29,7 +28,8 @@ public class Create implements Command {
 
         String [] data = command.split("\\|");
         if(data.length < 3){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', ожидается минимум 3, но есть: " + data.length);
+            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
+                    "ожидается минимум 3, но есть: " + data.length);
         }
 
         String tableName = data[1];
@@ -42,7 +42,8 @@ public class Create implements Command {
             index++;
         }
 
-        History.cache.add(History.getDate() + " " + "Создание таблицы: " + tableName + " по критериям " + command + " "+ Create.class.getSimpleName().toLowerCase());
+        History.cache.add(History.getDate() + " " + "Создание таблицы: " + tableName + " по критериям "
+                + command + " " + view.yellowText(Create.class.getSimpleName().toLowerCase()));
 
         try {
             manager.createTableWithoutPK(tableName, settings);
@@ -50,7 +51,8 @@ public class Create implements Command {
             History.cache.add(view.requestTab(view.blueText("Успех")));
         } catch (SQLException | NullPointerException e) {
             History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось создать таблицу ( " + tableName + " ( " + view.redText(e.getMessage()) + " )"));
+            view.write(view.redText("Ошибка. Не удалось создать таблицу ( " + tableName + " ) "
+                    + view.redText(e.getMessage())));
         }
 
         view.write(view.blueText("Присвоить колонке первичный ключ, если такой имеется? Если да, введите " + view.greenText("y")));
@@ -58,7 +60,8 @@ public class Create implements Command {
         if (key.equals("y")) {
             view.write(view.blueText("Введите название колонки, которой хотите присвоить ключ "));
             String columnName = view.read();
-            History.cache.add(History.getDate() + " " + "Создание первичного ключа для таблицы: " + tableName + " по критериям " + columnName + " "+ Create.class.getSimpleName().toLowerCase());
+            History.cache.add(History.getDate() + " " + "Создание первичного ключа для таблицы: ( " + tableName + " ) по критериям ( "
+                    + columnName + " ) " + view.yellowText(Create.class.getSimpleName().toLowerCase()));
 
             try {
                 manager.createTableCreatePK(tableName, columnName);
@@ -66,7 +69,7 @@ public class Create implements Command {
                 History.cache.add(view.requestTab(view.blueText("Успех")));
             } catch (SQLException | NullPointerException e) {
                 History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-                view.write(view.redText("Ошибка. Не удалось создать первичный ключ ( " + tableName + " ( " + view.redText(e.getMessage()) + " )"));
+                view.write(view.redText("Ошибка. Не удалось создать первичный ключ ( " + tableName + " ) " + view.redText(e.getMessage())));
             }
 
             view.write(view.blueText("Если ваш первичный ключ - числовое значение, можно создать Sequence генератор для него. Хотите это сделать? "));
@@ -74,7 +77,8 @@ public class Create implements Command {
 
             String seq = view.read();
             if(seq.equals("y")){
-                History.cache.add(History.getDate() + " " + "Создание Sequence генератора для таблицы: " + tableName + " по критериям " + columnName + " "+ Create.class.getSimpleName().toLowerCase());
+                History.cache.add(History.getDate() + " " + "Создание Sequence генератора для таблицы: ( " + tableName + " ) по критериям ( "
+                        + columnName + " ) " + view.yellowText(Create.class.getSimpleName().toLowerCase()));
                 view.write(view.blueText("Введите значени с которого будет начинаться отсчет "));
 
                 Long startWith = Long.valueOf(view.read());
@@ -84,7 +88,8 @@ public class Create implements Command {
                     History.cache.add(view.requestTab(view.blueText("Успех")));
                 } catch (SQLException | NullPointerException e) {
                     History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-                    view.write(view.redText("Ошибка. Не удалось создать Sequence генератор ( " + tableName + " ( " + view.redText(e.getMessage()) + " )"));
+                    view.write(view.redText("Ошибка. Не удалось создать Sequence генератор ( " + tableName + " ) "
+                            + view.redText(e.getMessage())));
                 }
             }else {
                 return;

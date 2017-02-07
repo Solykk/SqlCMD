@@ -1,9 +1,7 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
-import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.view.View;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -30,9 +28,11 @@ public class Update implements Command {
 
         String [] data = command.split("\\|");
         if(data.length < 6){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', ожидается минимум 6, но есть: " + data.length);
+            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
+                    "ожидается минимум 6, но есть: " + data.length);
         } else if(data.length%2 != 0){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', ожидается четное количество аргументов, но есть: " + data.length);
+            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
+                    "ожидается четное количество аргументов, но есть: " + data.length);
         }
 
         String tableName = data[1];
@@ -43,21 +43,16 @@ public class Update implements Command {
         int indexHowUpdate = (data.length - 2)/2;
 
         while (indexForUpdate != indexHowUpdate){
-            String[] tmp = new String[2];
-            tmp[0] = data[indexForUpdate];
-            tmp[1] = data[indexForUpdate + 1];
-            settingsForUpdate.add(tmp);
+            SettingsHelper.toSettings(data, settingsForUpdate, indexForUpdate);
             indexForUpdate += 2;
         }
-        while (indexHowUpdate != data.length){
-            String[] tmp = new String[2];
-            tmp[0] = data[indexHowUpdate];
-            tmp[1] = data[indexHowUpdate + 1];
-            settingsHowUpdate.add(tmp);
+        while (indexHowUpdate  != data.length) {
+            SettingsHelper.toSettings(data, settingsHowUpdate, indexHowUpdate);
             indexHowUpdate += 2;
         }
 
-        History.cache.add(History.getDate() + " " + "Обновление содержимого таблицы: " + tableName + " по критериям " + command + " "+ Update.class.getSimpleName().toLowerCase());
+        History.cache.add(History.getDate() + " " + "Обновление содержимого таблицы: " + tableName +
+                " по критериям " + command + " " + view.yellowText(Update.class.getSimpleName().toLowerCase()));
 
         try {
             manager.update(tableName, settingsForUpdate, settingsHowUpdate);
@@ -65,7 +60,8 @@ public class Update implements Command {
             History.cache.add(view.requestTab(view.blueText("Успех")));
         } catch (SQLException | NullPointerException e) {
             History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось обновить таблицу ( " + tableName + " ( " + view.redText(e.getMessage()) + " )"));
+            view.write(view.redText("Ошибка. Не удалось обновить таблицу ( " + tableName + " ) "
+                    + view.redText(e.getMessage())));
         }
     }
 }

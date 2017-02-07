@@ -1,7 +1,6 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.view.View;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
