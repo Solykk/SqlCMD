@@ -69,6 +69,25 @@ public class FileTable implements Command{
     private void reNameWriter(String dataTable) throws IOException {
         view.write("Введите название файла: ");
         String name = view.read();
+        if(name.equals("")){
+            view.write("Название файла не мжет быть пустым! ");
+            reNameWriter(dataTable);
+        }
+
+        CharSequence [] taboo = new CharSequence[]{"/", "\\", "<", ">", "?",":", "|" , "*", "\""};
+        boolean isCont = false;
+
+        for (int i = 0; i < taboo.length; i++) {
+            if (name.contains(taboo[i])){
+                isCont = true;
+                break;
+            }
+        }
+        if(isCont){
+            view.write("Название файла не мжет содержать " + view.redText("/\\<>?:|*\""));
+            reNameWriter(dataTable);
+            return;
+        }
         File file = new File("src/main/resources", name + ".txt");
         fileExistChecker(dataTable, name, file);
     }
