@@ -13,4 +13,4 @@ public class SettingsHelper {
             tmp[1] = data[index + 1];
             settings.add(tmp);
         }
-}
+ }

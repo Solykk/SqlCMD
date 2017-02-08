@@ -24,6 +24,7 @@ public class MainController {
         commands.add(new TableType(manager, view));
         commands.add(new ColumnType(manager, view));
         commands.add(new Find(manager, view));
+        commands.add(new FileTable(manager, view));
         commands.add(new FindSettings(manager, view));
         commands.add(new Clear(manager, view));
         commands.add(new Create(manager, view));

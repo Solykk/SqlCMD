@@ -80,13 +80,13 @@ public class Console implements View {
         }
     }
     @Override
-    public  void printTable(Table table){
+    public  String  printTable(Table table){
 
         if(table == null){
             write("Table = null");
-            return;
+            return "";
         }
-
+        StringBuilder stringInString = new StringBuilder();
         ArrayList<Integer> maxLengthCharsOfColumn = new ArrayList<>();
         int sumOfLength = 0;
 
@@ -143,8 +143,11 @@ public class Console implements View {
         }
 
         write(new String(line));
+        stringInString.append(new String(line) + "\n");
         write('|' + new String(containerForReBuildTableName) + '|');
+        stringInString.append('|' + new String(containerForReBuildTableName) + '|' + "\n");
         write(new String(line));
+        stringInString.append(new String(line) + "\n");
 
         sleeper(5);
 
@@ -166,8 +169,10 @@ public class Console implements View {
 
             if(i == table.getTableDate().size() - 1){
                 System.out.print('|' + new String(containerForReBuildColName) + '|');
+                stringInString.append('|' + new String(containerForReBuildColName) + '|');
             } else {
                 System.out.print('|' + new String(containerForReBuildColName));
+                stringInString.append('|' + new String(containerForReBuildColName));
             }
 
             sleeper(5);
@@ -175,7 +180,9 @@ public class Console implements View {
         }
 
         write("");
+        stringInString.append("\n");
         write(new String(line));
+        stringInString.append(new String(line) + "\n");
 
         for (int i = 0; i < table.getTableDate().get(0).getValue().size(); i++){
 
@@ -202,8 +209,10 @@ public class Console implements View {
 
                 if(j == table.getTableDate().size() - 1){
                     System.out.print('|' + new String(containerForReBuildDataValue) + '|');
+                    stringInString.append('|' + new String(containerForReBuildDataValue) + '|');
                 } else{
                     System.out.print('|' + new String(containerForReBuildDataValue));
+                    stringInString.append('|' + new String(containerForReBuildDataValue));
                 }
 
                 sleeper(5);
@@ -211,8 +220,13 @@ public class Console implements View {
             }
 
             write("");
+            stringInString.append("\n");
         }
 
         write(new String(line));
+        stringInString.append(new String(line) + "\n");
+
+        return stringInString.toString();
     }
+
 }

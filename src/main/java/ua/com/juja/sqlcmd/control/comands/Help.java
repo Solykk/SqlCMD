@@ -85,6 +85,11 @@ public class Help implements Command {
                 "\tФормат команды: " + view.greenText("find|tableName") + "\n" +
                  "\tгде: " + view.greenText("tableName") + " - имя таблицы\n" +
                  "\tФормат вывода: " + view.blueText("табличка в консольном формате");
+        String filetable = view.redText("filetable") + "\n" +
+                "\tКоманда для сохранения содержимого указанной таблицы в файл\n" +
+                "\tФормат команды: " + view.greenText("find|tableName") + "\n" +
+                 "\tгде: " + view.greenText("tableName") + " - имя таблицы\n" +
+                 "\tФормат вывода: " + view.blueText("табличка в консольном формате + текстовое сообщение с результатом выполнения операции");
          String findsettings = view.redText("findsettings") + "\n" +
                 "\tКоманда для получения содержимого указанной таблицы по определенным критериям\n" +
                 "\tФормат команды: " + view.greenText("find|tableName|columnName|value|column2|value2|...|columnN|valueN") + "\n" +
@@ -157,6 +162,7 @@ public class Help implements Command {
         view.write(drop);
         view.write(create);
         view.write(find);
+        view.write(filetable);
         view.write(findsettings);
         view.write(insert);
         view.write(update);

@@ -11,7 +11,7 @@ public interface View {
         String read();
         void sleeper(int time);
         void stepPrint(String step);
-        void printTable(Table table);
+        String printTable(Table table);
 
         String redText(String text);
         String greenText(String text);
