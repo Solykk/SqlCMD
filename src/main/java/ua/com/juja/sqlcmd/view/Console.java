@@ -129,10 +129,10 @@ public class Console implements View {
             line[q] = '-';
         }
 
-        char [] containerForReBuildTableName = new char[sumOfLength];
+        char [] containerForReBuildTableName = new char[sumOfLength - 1];//without 1
         char [] reBuildingTableName = table.getTableName().toCharArray();
 
-        for (int k = 0; k < containerForReBuildTableName.length - 1; k++) {
+        for (int k = 0; k < containerForReBuildTableName.length; k++) {//with -1
             containerForReBuildTableName [k] = ' ';
         }
 
