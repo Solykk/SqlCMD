@@ -1,5 +1,6 @@
 package ua.com.juja.sqlcmd.control;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,13 +28,19 @@ public class JDBCDatabaseManagerTest {
             manager = new JDBCDatabaseManager();
             view = new Console();
         }
-
+    @After
+    public void discon(){
+        manager.disconnect();
+    }
     @Test
-    public void connection() throws SQLException {
+    public void connection(){
 
-                manager.connect("user", "pass");
-
-            Assert.assertTrue(manager.isConnected());
+        try {
+            manager.connect("user", "pass");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Assert.assertTrue(manager.isConnected());
         }
 
     @Test
@@ -42,7 +49,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void fail_connection() {
+    public void connection_fail() {
 
         try {
             manager.connect("ewe", "werer");
@@ -91,39 +98,6 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void createTable_actualInput() {
-        try {
-            manager.connect("user", "pass");
-        } catch (SQLException e) {
-
-        }
-           try {
-               ArrayList<String> settings = new ArrayList<String>();
-               settings.add("TEST VARCHAR2(20 BYTE) NOT NULL");
-               manager.createTableWithoutPK("FIRST", settings);
-               manager.drop("FIRST");
-               assertTrue(true);
-           } catch (SQLException e) {
-           assertTrue(false);
-        }
-    }
-
-    @Test
-    public void createTable_failInput() {
-        try {
-            manager.connect("user", "pass");
-        } catch (SQLException e) {
-
-        }
-           try {
-           manager.createTableWithoutPK("hs69", new ArrayList<String>());
-               assertTrue(false);
-           } catch (SQLException e) {
-               assertTrue(true);
-        }
-    }
-
-    @Test
     public void getAllColumnNamesFromTable_wrongInput() throws SQLException {
         try {
             manager.connect("user", "pass");
@@ -144,12 +118,25 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void getAllColumnNamesFromTable() throws SQLException {
-        manager.connect("user", "pass");
+    public void getAllColumnNamesFromTable()  {
+        try {
+            manager.connect("user", "pass");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         ArrayList<String> settings = new ArrayList<String>();
         settings.add("TEST VARCHAR2(20 BYTE) NOT NULL");
-        manager.createTableWithoutPK("FIRST", settings);
-        Table table = manager.getAllColumnNamesFromTable("FIRST");
+        try {
+            manager.createTableWithoutPK("FIRST", settings);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Table table = null;
+        try {
+            table = manager.getAllColumnNamesFromTable("FIRST");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         String result = view.printTable(table);
         String actualResult =
                 "---------------\n" +
@@ -159,7 +146,11 @@ public class JDBCDatabaseManagerTest {
                 "---------------\n" +
                 "|    TEST     |\n" +
                 "---------------\n";
-        manager.drop("FIRST");
+        try {
+            manager.drop("FIRST");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         assertEquals(actualResult, result);
 
@@ -214,4 +205,207 @@ public class JDBCDatabaseManagerTest {
                         "--------------------------------------\n",result);
     }
 
+    @Test
+    public void getDataTypeColumnFromTable() {
+
+        try {
+            manager.connect("user", "pass");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ArrayList<String> settings = new ArrayList<String>();
+        settings.add("TEST VARCHAR2(20 BYTE) NOT NULL");
+        settings.add("TEST1  NUMBER (10) NULL");
+        settings.add("TEST2 VARCHAR2(10 BYTE) NULL");
+        settings.add("TEST3 DATE NULL");
+        settings.add("TEST4 NUMBER(10) NOT NULL");
+        try {
+            manager.createTableWithoutPK("FIRST", settings);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Table table = null;
+        try {
+            table = manager.getDataTypeColumnFromTable("FIRST", "TEST1");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String result = view.printTable(table);
+        String actualResult =
+                        "---------------------------------------\n" +
+                        "|                FIRST                |\n" +
+                        "---------------------------------------\n" +
+                        "| COLUMN_NAME | DATA_TYPE  | NULLABLE |\n" +
+                        "---------------------------------------\n" +
+                        "|    TEST1    | NUMBER(22) |    Y     |\n" +
+                        "---------------------------------------\n";
+        try {
+            manager.drop("FIRST");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        assertEquals(actualResult, result);
+    }
+
+    @Test
+    public void getDataTypeColumnFromTable_wrongInput() throws SQLException {
+    try {
+
+        manager.connect("user", "pass");
+    } catch (SQLException e) {
+
+    }
+
+    Table  table = manager.getDataTypeColumnFromTable("CCC", "TAT");
+    String result = view.printTable(table);
+
+    assertEquals(
+            "--------------------------------------\n" +
+                    "|                CCC                 |\n" +
+                    "--------------------------------------\n" +
+                    "| COLUMN_NAME | DATA_TYPE | NULLABLE |\n" +
+                    "--------------------------------------\n" +
+                    "--------------------------------------\n",result);
+    }
+
+    @Test
+    public void createTableWithoutPK() {
+        try {
+
+            manager.connect("user", "pass");
+        } catch (SQLException e) {
+
+        }
+        try {
+            ArrayList<String> settings = new ArrayList<String>();
+            settings.add("TEST VARCHAR2(20 BYTE) NOT NULL");
+            manager.createTableWithoutPK("FIRST", settings);
+            manager.drop("FIRST");
+            assertTrue(true);
+        } catch (SQLException e) {
+            try {
+                manager.drop("FIRST");
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void createTableWithoutPK_wrongInput() {
+        try {
+
+            manager.connect("user", "pass");
+        } catch (SQLException e) {
+
+        }
+        try {
+            manager.createTableWithoutPK("hs69", new ArrayList<String>());
+            assertTrue(false);
+        } catch (SQLException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void createTableCreatePK() {
+        try {
+
+            manager.connect("user", "pass");
+        } catch (SQLException e) {
+
+        }
+        try {
+            ArrayList<String> settings = new ArrayList<String>();
+            settings.add("TEST VARCHAR2(20 BYTE) NOT NULL");
+            settings.add("TEST1  NUMBER(10) NULL");
+            manager.createTableWithoutPK("FIRSTT", settings);
+            manager.createTableCreatePK("FIRSTT", "TEST1");
+            manager.drop("FIRSTT");
+            assertTrue(true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void createTableCreatePK_wrongInput() {
+        try {
+            manager.connect("user", "pass");
+        } catch (SQLException e) {
+
+        }
+        try {
+            ArrayList<String> settings = new ArrayList<String>();
+            settings.add("TEST VARCHAR2(20 BYTE) NOT NULL");
+            settings.add("TEST1  NUMBER (10) NULL");
+            manager.createTableWithoutPK("FIRST", settings);
+            manager.createTableCreatePK("FIRST", "TEST23");
+            manager.drop("FIRST");
+            assertTrue(false);
+        } catch (SQLException e) {
+            try {
+                manager.drop("FIRST");
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void createTableSequenceForPK() {
+        try {
+
+            manager.connect("user", "pass");
+        } catch (SQLException e) {
+
+        }
+        try {
+            ArrayList<String> settings = new ArrayList<String>();
+            settings.add("TEST VARCHAR2(20 BYTE) NOT NULL");
+            settings.add("TEST1  NUMBER (10) NOT NULL");
+            settings.add("TEST2  VARCHAR2 (10 BYTE) NULL");
+            manager.createTableWithoutPK("FIRST", settings);
+            manager.createTableCreatePK("FIRST", "TEST1");
+            manager.createTableSequenceForPK("FIRST", new Long(1));
+            manager.drop("FIRST");
+            manager.cudQuery("DROP SEQUENCE FIRST_SEQ");
+            assertTrue(true);
+
+        } catch (SQLException e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void createTableSequenceForPK_wrongInput() {
+        try {
+
+            manager.connect("user", "pass");
+        } catch (SQLException e) {
+
+        }
+        try {
+            ArrayList<String> settings = new ArrayList<String>();
+            settings.add("TEST VARCHAR2(20 BYTE) NOT NULL");
+            settings.add("TEST1  NUMBER (10) NOT NULL");
+            settings.add("TEST2  VARCHAR2 (10 BYTE) NULL");
+            manager.createTableWithoutPK("FIRST", settings);
+            manager.createTableCreatePK("FIRST", "TEST2");
+            manager.createTableSequenceForPK("FIRST", null);
+            manager.drop("FIRST");
+            manager.cudQuery("DROP SEQUENCE FIRST_SEQ");
+            assertTrue(false);
+        } catch (SQLException e) {
+            try {
+                manager.drop("FIRST");
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            assertTrue(true);
+        }
+    }
 }

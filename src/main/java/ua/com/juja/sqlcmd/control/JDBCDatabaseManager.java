@@ -23,6 +23,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     public void connect(String userName, String dbPassword) throws SQLException{
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
+            
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Please add jdbc jar to project.", e);
         }
@@ -94,7 +95,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         columnDates.add(new ColumnDate("DATA_TYPE", new ArrayList<String>()));
         columnDates.add(new ColumnDate("NULLABLE", new ArrayList<String>()));
 
-        String columnVCtypeQueryAll = "SELECT COLUMN_NAME , data_type, DATA_LENGTH, NULLABLE FROM all_tab_columns WHERE TABLE_NAME = "
+        String columnVCtypeQueryAll = "SELECT COLUMN_NAME , DATA_TYPE, DATA_LENGTH, NULLABLE FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = "
                 + "'" + tableName+ "'";
 
         try (Statement statement = connection.createStatement();
@@ -133,18 +134,6 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         }
     }
 
-
-    @Override
-    public void createTableCreatePK (String tableName, String columnNamePK) throws SQLException, NullPointerException {
-
-        String primaryKey = "ALTER TABLE " + tableName + " ADD (CONSTRAINT " +  tableName + "_pk PRIMARY KEY (" + columnNamePK + "))";
-
-        try (Statement statement = connection.createStatement())
-        {
-            statement.executeUpdate(primaryKey);
-        }
-    }
-
     @Override
     public void createTableWithoutPK(String tableName, ArrayList<String> settings) throws SQLException, NullPointerException{
 
@@ -161,6 +150,17 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         try (Statement statement = connection.createStatement())
         {
             statement.executeUpdate(urlTableCreate);
+        }
+    }
+
+    @Override
+    public void createTableCreatePK (String tableName, String columnNamePK) throws SQLException, NullPointerException {
+
+        String primaryKey = "ALTER TABLE " + tableName + " ADD (CONSTRAINT " +  tableName + "_PK PRIMARY KEY (" + columnNamePK + "))";
+
+        try (Statement statement = connection.createStatement())
+        {
+            statement.executeUpdate(primaryKey);
         }
     }
 
@@ -326,6 +326,11 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     @Override
     public boolean isConnected() {
         return connection != null;
+    }
+
+    @Override
+    public void disconnect() {
+        connection = null;
     }
 
     private String generateQueryComaString(ArrayList<String[]> settingsForUpdate) {

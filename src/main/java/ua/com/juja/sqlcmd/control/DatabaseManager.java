@@ -33,5 +33,6 @@ public interface DatabaseManager {
     Table readQuery(String query)throws SQLException, NullPointerException;
 
     boolean isConnected();
+    void disconnect();
 
 }

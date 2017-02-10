@@ -49,8 +49,7 @@ public class Console implements View {
         return scanner.nextLine();
     }
     @Override
-    public   void sleeper(int time) {
-
+    public  void sleeper(int time) {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {
