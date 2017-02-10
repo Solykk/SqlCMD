@@ -45,7 +45,8 @@ drop
 	Формат вывода: текстовое сообщение с результатом выполнения операции
 create
 	Команда создает новую таблицу с заданными полями
-	Формат команды: create|tableName|column1(data type(data size)) nullable|column2(data type(data size)) nullable|...|columnN(data type(data size)) nullable
+	Формат команды: create|tableName|column1(data type(data size)) nullable|column2(data type(data size)) nullable|...
+	                                                                           |columnN(data type(data size)) nullable
 	где: tableName - имя таблицы
 	column1 - имя первого столбца записи
 		(data type(data size)) - (тип данных колонки(максимальный размер данных для колонки))

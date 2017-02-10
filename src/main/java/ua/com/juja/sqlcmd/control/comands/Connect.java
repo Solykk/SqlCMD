@@ -19,7 +19,7 @@ public class Connect implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.contains("connect|");
+        return command.startsWith("connect|");
     }
 
     @Override

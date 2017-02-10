@@ -87,7 +87,7 @@ public class Help implements Command {
                  "\tФормат вывода: " + view.blueText("табличка в консольном формате");
         String filetable = view.redText("filetable") + "\n" +
                 "\tКоманда для сохранения содержимого указанной таблицы в файл\n" +
-                "\tФормат команды: " + view.greenText("find|tableName") + "\n" +
+                "\tФормат команды: " + view.greenText("filetable|tableName") + "\n" +
                  "\tгде: " + view.greenText("tableName") + " - имя таблицы\n" +
                  "\tФормат вывода: " + view.blueText("табличка в консольном формате + текстовое сообщение с результатом выполнения операции");
          String findsettings = view.redText("findsettings") + "\n" +

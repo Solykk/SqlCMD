@@ -39,8 +39,8 @@ public class Console implements View {
     }
 
     @Override
-    public void write(String massege) {
-        System.out.println(massege);
+    public void write(String message) {
+        System.out.println(message);
     }
 
     @Override
