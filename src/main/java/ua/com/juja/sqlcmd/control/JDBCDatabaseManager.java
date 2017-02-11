@@ -23,7 +23,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     public void connect(String userName, String dbPassword) throws SQLException{
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-            
+
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Please add jdbc jar to project.", e);
         }
@@ -191,13 +191,14 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         if(idKey) {
             for (int index = 0; index < columnNameVSdata.size(); index++) {
                 if (index == 0) {
-                    datas += tableName + "_SEQ.nextval, ";
+                    datas += tableName + "_SEQ.nextval,";
                 } else {
-                    if (index != 0 && index != columnNameVSdata.size() - 1) {
-                        datas += "', '";
+                    datas += columnNameVSdata.get(index)[1];
+
+                    if (index != columnNameVSdata.size() - 1) {
+                        datas += ", ";
                     }
 
-                    datas += columnNameVSdata.get(index)[1];
                 }
             }
         } else {

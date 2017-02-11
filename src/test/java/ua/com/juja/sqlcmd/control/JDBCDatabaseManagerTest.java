@@ -1,9 +1,6 @@
 package ua.com.juja.sqlcmd.control;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.view.Console;
@@ -13,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -28,9 +26,14 @@ public class JDBCDatabaseManagerTest {
             manager = new JDBCDatabaseManager();
             view = new Console();
         }
+
     @After
-    public void disconnectDB(){
-        manager.disconnect();
+    public void purgeRecyclebin() throws SQLException {
+        if(manager.isConnected()) {
+            manager.cudQuery("PURGE RECYCLEBIN");
+        } else {
+            // do nothing
+        }
     }
 
     private void connectUserPass() {
@@ -89,6 +92,14 @@ public class JDBCDatabaseManagerTest {
     }
 
     private String getTableName(){return "FIRST";}
+
+    private ArrayList<String[]> getInsertFor3Col() {
+        ArrayList<String[]> insert = new ArrayList<>();
+        insert.add(new String[]{"TEST","'Hello'"});
+        insert.add(new String[]{"TEST1","21"});
+        insert.add(new String[]{"TEST2","'World'"});
+        return insert;
+    }
 
     @Test
     public void connection(){
@@ -360,6 +371,93 @@ public class JDBCDatabaseManagerTest {
         }
     }
 
+    @Test
+    public void connection_disconnect(){
+        connectUserPass();
+        manager.disconnect();
+        assertFalse(manager.isConnected());
+    }
+
+    @Test
+    public void clear() throws SQLException {
+        connectUserPass();
+        ArrayList<String> settings = getNewTable3col();
+        ArrayList<String[]> insert = getInsertFor3Col();
+        manager.createTableWithoutPK(getTableName(), settings);
+        manager.insert(getTableName(), insert, false);
+        manager.clear(getTableName());
+        Table table = manager.readTable(getTableName());
+        String result = view.printTable(table);
+        String actualResult =
+                "------------------------\n" +
+                "|        FIRST         |\n" +
+                "------------------------\n" +
+                "| TEST | TEST1 | TEST2 |\n" +
+                "------------------------\n" +
+                "------------------------\n";
+        dropTable();
+        assertEquals(actualResult, result);
+    }
+
+    @Test
+    public void clear_PK() throws SQLException {
+        connectUserPass();
+        ArrayList<String> settings = getNewTable3col();
+        ArrayList<String[]> insert = getInsertFor3Col();
+        manager.createTableWithoutPK(getTableName(), settings);
+        manager.createTableCreatePK(getTableName(), "TEST1");
+        manager.createTableSequenceForPK(getTableName(), new Long(2));
+        manager.insert(getTableName(), insert, true);
+        manager.clear(getTableName());
+        Table table = manager.readTable(getTableName());
+        String result = view.printTable(table);
+        String actualResult =
+                        "------------------------\n" +
+                        "|        FIRST         |\n" +
+                        "------------------------\n" +
+                        "| TEST | TEST1 | TEST2 |\n" +
+                        "------------------------\n" +
+                        "------------------------\n";
+        dropSEQ();
+        dropTable();
+        assertEquals(actualResult, result);
+    }
+
+    @Test
+    public void drop() throws SQLException {
+        connectUserPass();
+        ArrayList<String> settings = getNewTable3col();
+        manager.createTableWithoutPK(getTableName(), settings);
+        manager.createTableWithoutPK("SECOND", settings);
+        manager.drop("SECOND");
+        Table table = manager.getAllTableNames();
+        String result = view.printTable(table);
+        String actualResult =
+                "--------------\n" +
+                "| ALL_TABLES |\n" +
+                "--------------\n" +
+                "| TABLE_NAME |\n" +
+                "--------------\n" +
+                "|   FIRST    |\n" +
+                "--------------\n";
+        dropTable();
+        assertEquals(actualResult, result);
+    }
+
+    @Test
+    public void drop_wrongImport() throws SQLException {
+        connectUserPass();
+        ArrayList<String> settings = getNewTable3col();
+        manager.createTableWithoutPK(getTableName(), settings);
+        manager.createTableWithoutPK("SECOND", settings);
+        try {
+            manager.drop("Gdhd");
+        } catch (SQLException e){
+            manager.drop("SECOND");
+            dropTable();
+            Assert.assertTrue(true);
+        }
+    }
 
 
 }
