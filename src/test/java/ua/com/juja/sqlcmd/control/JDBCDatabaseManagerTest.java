@@ -93,6 +93,25 @@ public class JDBCDatabaseManagerTest {
 
     private String getTableName(){return "FIRST";}
 
+    private ArrayList<String[]> getInsertFor5Col() {
+        ArrayList<String[]> insert = new ArrayList<>();
+        insert.add(new String[]{"TEST","'Hello'"});
+        insert.add(new String[]{"TEST1","21"});
+        insert.add(new String[]{"TEST3","to_date('19960321','YYYYMMDD')"});
+        insert.add(new String[]{"TEST4","50"});
+        return insert;
+    }
+
+    private ArrayList<String[]> getInsertFor5ColOther() {
+        ArrayList<String[]> insert = new ArrayList<>();
+        insert.add(new String[]{"TEST","'Go'"});
+        insert.add(new String[]{"TEST1","5556"});
+        insert.add(new String[]{"TEST2","'Point'"});
+        insert.add(new String[]{"TEST3","to_date('20160501','YYYYMMDD')"});
+        insert.add(new String[]{"TEST4","59"});
+        return insert;
+    }
+
     private ArrayList<String[]> getInsertFor3Col() {
         ArrayList<String[]> insert = new ArrayList<>();
         insert.add(new String[]{"TEST","'Hello'"});
@@ -458,6 +477,44 @@ public class JDBCDatabaseManagerTest {
             Assert.assertTrue(true);
         }
     }
+
+    @Test
+    public void read() throws SQLException {
+        connectUserPass();
+        ArrayList<String> settings = getNewTAble5col();
+        ArrayList<String[]> insert = getInsertFor5Col();
+        ArrayList<String[]> insert1 = getInsertFor5ColOther();
+        manager.createTableWithoutPK(getTableName(), settings);
+        manager.insert(getTableName(), insert, false);
+        manager.insert(getTableName(), insert1, false);
+        Table table = manager.readTable(getTableName());
+        String result = view.printTable(table);
+        String actualResult =
+                                "---------------------------------------------------------\n" +
+                                "|                         FIRST                         |\n" +
+                                "---------------------------------------------------------\n" +
+                                "| TEST  | TEST1 | TEST2 |         TEST3         | TEST4 |\n" +
+                                "---------------------------------------------------------\n" +
+                                "| Hello |  21   | null  | 1996-03-21 00:00:00.0 |  50   |\n" +
+                                "|  Go   | 5556  | Point | 2016-05-01 00:00:00.0 |  59   |\n" +
+                                "---------------------------------------------------------\n";
+
+        dropTable();
+        assertEquals(actualResult, result);
+
+    }
+
+    @Test
+    public void reed_wrongImport() {
+        connectUserPass();
+        Table table = null;
+        try {
+            table = manager.readTable("SomeNAme");
+        } catch (SQLException e) {
+            assertEquals("ORA-00942: table or view does not exist", e.getMessage());
+        }
+    }
+
 
 
 }

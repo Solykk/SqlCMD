@@ -298,3 +298,12 @@
 
 [После логического завершения любой операции] я вижу поле для ввода команды + комаду для предоставления помощи
                                                                         -> значит могу понять, как дальше действовать.
+
+select * from v$resource_limit where resource_name = 'processes';
+cmd>sqlplus / as sysdba
+sqlplus>alter system set processes=300 scope=spfile;
+sqlplus>shut immediate;
+sqlplus>startup
+
+PURGE RECYCLEBIN;// очистить корзину
+to_date('19760321','YYYYMMDD')
