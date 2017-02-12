@@ -479,7 +479,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void read() throws SQLException {
+    public void read_insert() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
@@ -515,6 +515,181 @@ public class JDBCDatabaseManagerTest {
         }
     }
 
+    @Test
+    public void readSettings() throws SQLException {
+        connectUserPass();
+        ArrayList<String> settings = getNewTAble5col();
+        ArrayList<String[]> insert = getInsertFor5Col();
+        ArrayList<String[]> insert1 = getInsertFor5ColOther();
+        ArrayList<String[]> settingsFine = new ArrayList<>();
+        settingsFine.add(new String[]{"TEST", "'Hello'"});
+        manager.createTableWithoutPK(getTableName(), settings);
+        manager.insert(getTableName(), insert, false);
+        manager.insert(getTableName(), insert1, false);
+        Table table = manager.read(getTableName(), settingsFine);
+        String result = view.printTable(table);
+        String actualResult =
+                        "---------------------------------------------------------\n" +
+                        "|                         FIRST                         |\n" +
+                        "---------------------------------------------------------\n" +
+                        "| TEST  | TEST1 | TEST2 |         TEST3         | TEST4 |\n" +
+                        "---------------------------------------------------------\n" +
+                        "| Hello |  21   | null  | 1996-03-21 00:00:00.0 |  50   |\n" +
+                        "---------------------------------------------------------\n";
+
+        dropTable();
+        assertEquals(actualResult, result);
+
+    }
+
+    @Test
+    public void reedSettings_wrongImport() throws SQLException {
+        connectUserPass();
+        ArrayList<String> settings = getNewTAble5col();
+        ArrayList<String[]> insert = getInsertFor5Col();
+        ArrayList<String[]> insert1 = getInsertFor5ColOther();
+        ArrayList<String[]> settingsFine = new ArrayList<>();
+        settingsFine.add(new String[]{"TEST", "'GGTHhhh'"});
+        manager.createTableWithoutPK(getTableName(), settings);
+        manager.insert(getTableName(), insert, false);
+        manager.insert(getTableName(), insert1, false);
+        Table table = manager.read(getTableName(), settingsFine);
+        String result = view.printTable(table);
+        String actualResult =
+                                "----------------------------------------\n" +
+                                "|                FIRST                 |\n" +
+                                "----------------------------------------\n" +
+                                "| TEST | TEST1 | TEST2 | TEST3 | TEST4 |\n" +
+                                "----------------------------------------\n" +
+                                "----------------------------------------\n";
+
+        dropTable();
+        assertEquals(actualResult, result);
+
+    }
+
+    @Test
+    public void delete() throws SQLException {
+        connectUserPass();
+        ArrayList<String> settings = getNewTAble5col();
+        ArrayList<String[]> insert = getInsertFor5Col();
+        ArrayList<String[]> insert1 = getInsertFor5ColOther();
+        ArrayList<String[]> settingsFine = new ArrayList<>();
+        settingsFine.add(new String[]{"TEST", "'Hello'"});
+        manager.createTableWithoutPK(getTableName(), settings);
+        manager.insert(getTableName(), insert, false);
+        manager.insert(getTableName(), insert1, false);
+        manager.delete(getTableName(), settingsFine);
+        Table table = manager.readTable(getTableName());
+        String result = view.printTable(table);
+        String actualResult =
+                                "--------------------------------------------------------\n" +
+                                "|                        FIRST                         |\n" +
+                                "--------------------------------------------------------\n" +
+                                "| TEST | TEST1 | TEST2 |         TEST3         | TEST4 |\n" +
+                                "--------------------------------------------------------\n" +
+                                "|  Go  | 5556  | Point | 2016-05-01 00:00:00.0 |  59   |\n" +
+                                "--------------------------------------------------------\n";
+
+        dropTable();
+        assertEquals(actualResult, result);
+
+    }
+
+    @Test
+    public void delete_wrongImport() throws SQLException {
+        connectUserPass();
+        ArrayList<String> settings = getNewTAble5col();
+        ArrayList<String[]> insert = getInsertFor5Col();
+        ArrayList<String[]> insert1 = getInsertFor5ColOther();
+        ArrayList<String[]> settingsFine = new ArrayList<>();
+        settingsFine.add(new String[]{"TEST", "'FFCVvvv'"});
+        manager.createTableWithoutPK(getTableName(), settings);
+        manager.insert(getTableName(), insert, false);
+        manager.insert(getTableName(), insert1, false);
+        try {
+            manager.delete(getTableName(), settingsFine);
+        } catch (Exception e){
+            //do nothing
+        }
+        Table table = manager.readTable(getTableName());
+        String result = view.printTable(table);
+        String actualResult =
+                                "---------------------------------------------------------\n" +
+                                "|                         FIRST                         |\n" +
+                                "---------------------------------------------------------\n" +
+                                "| TEST  | TEST1 | TEST2 |         TEST3         | TEST4 |\n" +
+                                "---------------------------------------------------------\n" +
+                                "| Hello |  21   | null  | 1996-03-21 00:00:00.0 |  50   |\n" +
+                                "|  Go   | 5556  | Point | 2016-05-01 00:00:00.0 |  59   |\n" +
+                                "---------------------------------------------------------\n";
+
+        dropTable();
+        assertEquals(actualResult, result);
+
+    }
+
+    @Test
+    public void update() throws SQLException {
+        connectUserPass();
+        ArrayList<String> settings = getNewTAble5col();
+        ArrayList<String[]> insert = getInsertFor5Col();
+        ArrayList<String[]> insert1 = getInsertFor5ColOther();
+        ArrayList<String[]> settingsFine = new ArrayList<>();
+        settingsFine.add(new String[]{"TEST", "'Hello'"});
+        ArrayList<String[]> settingsHowUpdate = new ArrayList<>();
+        settingsHowUpdate.add(new String[]{"TEST", "'World'"});
+        manager.createTableWithoutPK(getTableName(), settings);
+        manager.insert(getTableName(), insert, false);
+        manager.insert(getTableName(), insert1, false);
+        manager.update(getTableName(), settingsHowUpdate, settingsFine);
+        Table table = manager.readTable(getTableName());
+        String result = view.printTable(table);
+        String actualResult =
+                        "---------------------------------------------------------\n" +
+                        "|                         FIRST                         |\n" +
+                        "---------------------------------------------------------\n" +
+                        "| TEST  | TEST1 | TEST2 |         TEST3         | TEST4 |\n" +
+                        "---------------------------------------------------------\n" +
+                        "| World |  21   | null  | 1996-03-21 00:00:00.0 |  50   |\n" +
+                        "|  Go   | 5556  | Point | 2016-05-01 00:00:00.0 |  59   |\n" +
+                        "---------------------------------------------------------\n";
+
+        dropTable();
+        assertEquals(actualResult, result);
+
+    }
+
+    @Test
+    public void update_wrongImport() throws SQLException {
+        connectUserPass();
+        ArrayList<String> settings = getNewTAble5col();
+        ArrayList<String[]> insert = getInsertFor5Col();
+        ArrayList<String[]> insert1 = getInsertFor5ColOther();
+        ArrayList<String[]> settingsFine = new ArrayList<>();
+        settingsFine.add(new String[]{"TEST", "'Ghjk'"});
+        ArrayList<String[]> settingsHowUpdate = new ArrayList<>();
+        settingsHowUpdate.add(new String[]{"TEST", "'World'"});
+        manager.createTableWithoutPK(getTableName(), settings);
+        manager.insert(getTableName(), insert, false);
+        manager.insert(getTableName(), insert1, false);
+        manager.update(getTableName(), settingsHowUpdate, settingsFine);
+        Table table = manager.readTable(getTableName());
+        String result = view.printTable(table);
+        String actualResult =
+                        "---------------------------------------------------------\n" +
+                        "|                         FIRST                         |\n" +
+                        "---------------------------------------------------------\n" +
+                        "| TEST  | TEST1 | TEST2 |         TEST3         | TEST4 |\n" +
+                        "---------------------------------------------------------\n" +
+                        "| Hello |  21   | null  | 1996-03-21 00:00:00.0 |  50   |\n" +
+                        "|  Go   | 5556  | Point | 2016-05-01 00:00:00.0 |  59   |\n" +
+                        "---------------------------------------------------------\n";
+
+        dropTable();
+        assertEquals(actualResult, result);
+
+    }
 
 
 }

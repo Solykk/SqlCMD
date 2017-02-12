@@ -293,13 +293,6 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         statExecUpdate(query);
     }
 
-    private void statExecUpdate(String query) throws SQLException, NullPointerException{
-        try (Statement statement =  connection.createStatement())
-        {
-            statement.executeUpdate(query);
-        }
-    }
-
     @Override
     public Table readQuery(String query) throws SQLException, NullPointerException {
 
@@ -332,6 +325,13 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     @Override
     public void disconnect() {
         connection = null;
+    }
+
+    private void statExecUpdate(String query) throws SQLException, NullPointerException{
+        try (Statement statement =  connection.createStatement())
+        {
+            statement.executeUpdate(query);
+        }
     }
 
     private String generateQueryComaString(ArrayList<String[]> settingsForUpdate) {
