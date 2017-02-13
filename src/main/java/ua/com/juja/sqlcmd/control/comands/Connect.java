@@ -42,11 +42,11 @@ public class Connect implements Command {
 
             History.cache.add(view.requestTab(view.blueText("Успех")));
 
-            view.write("\t\t\t\t\t\t\t\t" + view.blueText("Успех, вы подключились к базе данных:"));
+            view.write("\t\t\t\t\t" + view.blueText("Успех, вы подключились к базе данных:"));
             view.write(view.blueText("Oracle Database - Production"));
 
         } catch (SQLException e) {
-            view.write(History.getDate() + " " + "Не удалось подключиться к базе данных " + view.redText(e.getMessage()));
+            view.write("Не удалось подключиться к базе данных " + view.redText(e.getMessage()));
             History.cache.add(History.getDate() + " " + "Не удалось подключиться к базе данных " + view.redText(e.getMessage()));
         }
 

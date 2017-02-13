@@ -45,7 +45,7 @@ public class Console implements View {
 
     @Override
     public String read() {
-        Scanner scanner =  new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
     @Override
@@ -57,13 +57,13 @@ public class Console implements View {
         }
     }
     @Override
-    public String redText(String text){return red + text + bre;}
+    public String redText(String text){return text;}//red + text + bre;
     @Override
-    public String greenText(String text){return green + text + bre;}
+    public String greenText(String text){return text;}//green + text + bre;
     @Override
-    public String yellowText(String text){return yellow + text + bre;}
+    public String yellowText(String text){return text;}//yellow + text + bre;
     @Override
-    public String blueText(String text){return blue + text + bre;}
+    public String blueText(String text){return text;}//blue + text + bre;
     @Override
     public String requestTab(String string) {
         return "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + string;

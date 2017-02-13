@@ -68,7 +68,8 @@ public class Help implements Command {
                  "\tФормат вывода: " + view.blueText("текстовое сообщение с результатом выполнения операции");
          String create = view.redText("create") + "\n" +
                 "\tКоманда создает новую таблицу с заданными полями\n" +
-                "\tФормат команды: " + view.greenText("create|tableName|column1(data type(data size)) nullable|column2(data type(data size)) nullable|...|columnN(data type(data size)) nullable") + "\n" +
+                "\tФормат команды: " + view.greenText("create|tableName|column1(data type(data size)) nullable|column2(data type(data size)) \n" +
+                 "nullable|...|columnN(data type(data size)) nullable") + "\n" +
                 "\tгде: " + view.greenText("tableName") + " - имя таблицы\n" +
                 "\t" + view.greenText("column1") + " - имя первого столбца записи\n" +
                 "\t\t" + view.greenText("(data type(data size))")+ " - (тип данных колонки(максимальный размер данных для колонки))\n" +

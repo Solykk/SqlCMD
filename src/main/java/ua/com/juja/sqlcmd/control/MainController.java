@@ -11,6 +11,7 @@ public class MainController {
 
     private View view;
     private ArrayList<Command> commands;
+    public static boolean WHILE_STOPER = true;
 
     public MainController(View view, DatabaseManager manager) {
         this.view = view;
@@ -43,26 +44,24 @@ public class MainController {
     }
 
     private void doWork() {
-        view.stepPrint("\t\t\t\t\t\t\t\tВас приветствует приложение ");
+        view.stepPrint("\t\t\t\t\tВас приветствует приложение ");
         view.write(view.blueText("SqlCMD"));
         view.stepPrint("Пожалуйста, введите данные для подключения к базе данных в формате: ");
         view.write(view.greenText("connect|username|password"));
 
-        while (true) {
-            String input = view.read();
-
-            for (Command command : commands) {
-                    if (command.isProcessed(input)) {
-                        try {
-                            command.process(input);
-                            break;
-                        } catch (Exception e){
-                            view.write(view.redText("Ошибка ") + e.getMessage());
-                        }
-                    }
-            }
+        while (WHILE_STOPER) {
             view.write("Введи команду (или " + view.redText("help") + " для помощи):");
+            String input = view.read();
+            for (Command command : commands) {
+                if (command.isProcessed(input)) {
+                    try {
+                        command.process(input);
+                        break;
+                    } catch (Exception e){
+                        view.write(view.redText("Ошибка ") + e.getMessage());
+                    }
+                }
+            }
         }
     }
-
 }
