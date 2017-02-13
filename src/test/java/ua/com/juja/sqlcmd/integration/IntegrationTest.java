@@ -9,11 +9,12 @@ import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.control.JDBCDatabaseManager;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.assertEquals;
-
+import static org.junit.Assert.assertTrue;
 
 
 public class IntegrationTest {
@@ -33,7 +34,7 @@ public class IntegrationTest {
 
     @After
     public void end() {
-
+        purgeDrop();
     }
 
     public String getData() {
@@ -428,5 +429,362 @@ public class IntegrationTest {
 
     }
 
+    @Test
+    public void test_columnsFindWrongQuery() {
+        in.add("connect|user|pass");
+        in.add("create|" + createTable());
+        in.add("n");
+        in.add("columns|FIRST");
+        in.add("cudQuery|jdjjidijisj");
+        in.add("drop|FIRST");
+        in.add("exit");
+        Main.main(new String[0]);
+        String actualResult =
+                        "\t\t\t\t\tВас приветствует приложение SqlCMD\r\n" +
+                        "Пожалуйста, введите данные для подключения к базе данных в формате: connect|username|password\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "\t\t\t\t\tУспех, вы подключились к базе данных:\r\n" +
+                        "Oracle Database - Production\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "Успех! Таблица создана\r\n" +
+                        "Присвоить колонке первичный ключ, если такой имеется? Если да, введите y\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "---------------\r\n" +
+                        "|    FIRST    |\r\n" +
+                        "---------------\r\n" +
+                        "| COLUMN_NAME |\r\n" +
+                        "---------------\r\n" +
+                        "|    TEST     |\r\n" +
+                        "|    TEST1    |\r\n" +
+                        "|    TEST2    |\r\n" +
+                        "|    TEST3    |\r\n" +
+                        "|    TEST4    |\r\n" +
+                        "---------------\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "Ошибка. Не удалось выполнить ваш запрос ( jdjjidijisj ) ORA-00900: invalid SQL statement\n" +
+                        "\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "Успех! Таблица удалена\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "До встречи!\r\n";
+        assertEquals(actualResult, getData());
+    }
 
+    @Test
+    public void test_tableTypeReadQuery() {
+        in.add("connect|user|pass");
+        in.add("create|" + createTable());
+        in.add("n");
+        in.add("tabletype|FIRST");
+        in.add("readQuery|SELECT * FROM FIRST");
+        in.add("drop|FIRST");
+        in.add("exit");
+        Main.main(new String[0]);
+        String actualResult =
+                        "\t\t\t\t\tВас приветствует приложение SqlCMD\r\n" +
+                        "Пожалуйста, введите данные для подключения к базе данных в формате: connect|username|password\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "\t\t\t\t\tУспех, вы подключились к базе данных:\r\n" +
+                        "Oracle Database - Production\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "Успех! Таблица создана\r\n" +
+                        "Присвоить колонке первичный ключ, если такой имеется? Если да, введите y\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "-----------------------------------------\r\n" +
+                        "|                 FIRST                 |\r\n" +
+                        "-----------------------------------------\r\n" +
+                        "| COLUMN_NAME |  DATA_TYPE   | NULLABLE |\r\n" +
+                        "-----------------------------------------\r\n" +
+                        "|    TEST     | VARCHAR2(20) |    N     |\r\n" +
+                        "|    TEST1    |  NUMBER(22)  |    Y     |\r\n" +
+                        "|    TEST2    | VARCHAR2(10) |    Y     |\r\n" +
+                        "|    TEST3    |   DATE(7)    |    Y     |\r\n" +
+                        "|    TEST4    |  NUMBER(22)  |    N     |\r\n" +
+                        "-----------------------------------------\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "----------------------------------------\r\n" +
+                        "|              Your Query              |\r\n" +
+                        "----------------------------------------\r\n" +
+                        "| TEST | TEST1 | TEST2 | TEST3 | TEST4 |\r\n" +
+                        "----------------------------------------\r\n" +
+                        "----------------------------------------\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "Успех! Таблица удалена\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "До встречи!\r\n";
+        assertEquals(actualResult, getData());
+    }
+
+    @Test
+    public void test_columnTypeInsert() {
+        in.add("connect|user|pass");
+        in.add("create|" + createTable());
+        in.add("n");
+        in.add("columntype|FIRST|TEST");
+        in.add("insert|FIRST|TEST|'Hello'|TEST1|12|TEST2|'World'|TEST3|to_date('19990321','YYYYMMDD')|TEST4|155");
+        in.add("no");
+        in.add("find|FIRST");
+        in.add("drop|FIRST");
+        in.add("exit");
+        Main.main(new String[0]);
+        String actualResult =
+                                "\t\t\t\t\tВас приветствует приложение SqlCMD\r\n" +
+                                "Пожалуйста, введите данные для подключения к базе данных в формате: connect|username|password\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "\t\t\t\t\tУспех, вы подключились к базе данных:\r\n" +
+                                "Oracle Database - Production\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "Успех! Таблица создана\r\n" +
+                                "Присвоить колонке первичный ключ, если такой имеется? Если да, введите y\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "-----------------------------------------\r\n" +
+                                "|                 FIRST                 |\r\n" +
+                                "-----------------------------------------\r\n" +
+                                "| COLUMN_NAME |  DATA_TYPE   | NULLABLE |\r\n" +
+                                "-----------------------------------------\r\n" +
+                                "|    TEST     | VARCHAR2(20) |    N     |\r\n" +
+                                "-----------------------------------------\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "Добавить Seq генератор, если такой имеется? Если да, введите y\r\n" +
+                                "Успех! Данные добавлены\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "---------------------------------------------------------\r\n" +
+                                "|                         FIRST                         |\r\n" +
+                                "---------------------------------------------------------\r\n" +
+                                "| TEST  | TEST1 | TEST2 |         TEST3         | TEST4 |\r\n" +
+                                "---------------------------------------------------------\r\n" +
+                                "| Hello |  12   | World | 1999-03-21 00:00:00.0 |  155  |\r\n" +
+                                "---------------------------------------------------------\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "Успех! Таблица удалена\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "До встречи!\r\n";
+        assertEquals(actualResult, getData());
+    }
+
+    @Test
+    public void test_deleteClear() {
+        in.add("connect|user|pass");
+        in.add("create|" + createTable());
+        in.add("n");
+        in.add("columntype|FIRST|TEST");
+        in.add("insert|FIRST|TEST|'Hello'|TEST1|12|TEST2|'World'|TEST3|to_date('19990321','YYYYMMDD')|TEST4|155");
+        in.add("no");
+        in.add("insert|FIRST|TEST|'Java'|TEST1|19|TEST2|'JUJA'|TEST3|to_date('19930321','YYYYMMDD')|TEST4|233");
+        in.add("no");
+        in.add("insert|FIRST|TEST|'C++'|TEST1|2|TEST2|'Other'|TEST3|to_date('19800321','YYYYMMDD')|TEST4|99");
+        in.add("no");
+        in.add("find|FIRST");
+        in.add("delete|FIRST|TEST|'C++'");
+        in.add("clear|FIRST");
+        in.add("find|FIRST");
+        in.add("drop|FIRST");
+        in.add("exit");
+        Main.main(new String[0]);
+        String actualResult =
+                        "\t\t\t\t\tВас приветствует приложение SqlCMD\r\n" +
+                        "Пожалуйста, введите данные для подключения к базе данных в формате: connect|username|password\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "\t\t\t\t\tУспех, вы подключились к базе данных:\r\n" +
+                        "Oracle Database - Production\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "Успех! Таблица создана\r\n" +
+                        "Присвоить колонке первичный ключ, если такой имеется? Если да, введите y\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "-----------------------------------------\r\n" +
+                        "|                 FIRST                 |\r\n" +
+                        "-----------------------------------------\r\n" +
+                        "| COLUMN_NAME |  DATA_TYPE   | NULLABLE |\r\n" +
+                        "-----------------------------------------\r\n" +
+                        "|    TEST     | VARCHAR2(20) |    N     |\r\n" +
+                        "-----------------------------------------\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "Добавить Seq генератор, если такой имеется? Если да, введите y\r\n" +
+                        "Успех! Данные добавлены\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "Добавить Seq генератор, если такой имеется? Если да, введите y\r\n" +
+                        "Успех! Данные добавлены\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "Добавить Seq генератор, если такой имеется? Если да, введите y\r\n" +
+                        "Успех! Данные добавлены\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "---------------------------------------------------------\r\n" +
+                        "|                         FIRST                         |\r\n" +
+                        "---------------------------------------------------------\r\n" +
+                        "| TEST  | TEST1 | TEST2 |         TEST3         | TEST4 |\r\n" +
+                        "---------------------------------------------------------\r\n" +
+                        "| Hello |  12   | World | 1999-03-21 00:00:00.0 |  155  |\r\n" +
+                        "| Java  |  19   | JUJA  | 1993-03-21 00:00:00.0 |  233  |\r\n" +
+                        "|  C++  |   2   | Other | 1980-03-21 00:00:00.0 |  99   |\r\n" +
+                        "---------------------------------------------------------\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "Успех! запись была удалена\r\n" +
+                        "---------------------------------------------------------\r\n" +
+                        "|                         FIRST                         |\r\n" +
+                        "---------------------------------------------------------\r\n" +
+                        "| TEST  | TEST1 | TEST2 |         TEST3         | TEST4 |\r\n" +
+                        "---------------------------------------------------------\r\n" +
+                        "| Hello |  12   | World | 1999-03-21 00:00:00.0 |  155  |\r\n" +
+                        "| Java  |  19   | JUJA  | 1993-03-21 00:00:00.0 |  233  |\r\n" +
+                        "---------------------------------------------------------\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "Успех! Таблица была очищена\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "----------------------------------------\r\n" +
+                        "|                FIRST                 |\r\n" +
+                        "----------------------------------------\r\n" +
+                        "| TEST | TEST1 | TEST2 | TEST3 | TEST4 |\r\n" +
+                        "----------------------------------------\r\n" +
+                        "----------------------------------------\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "Успех! Таблица удалена\r\n" +
+                        "Введи команду (или help для помощи):\r\n" +
+                        "До встречи!\r\n";
+        assertEquals(actualResult, getData());
+    }
+
+    @Test
+    public void test_updateFindSettings() {
+        in.add("connect|user|pass");
+        in.add("create|" + createTable());
+        in.add("n");
+        in.add("insert|FIRST|TEST|'Hello'|TEST1|12|TEST2|'World'|TEST3|to_date('19990321','YYYYMMDD')|TEST4|155");
+        in.add("no");
+        in.add("insert|FIRST|TEST|'Java'|TEST1|19|TEST2|'JUJA'|TEST3|to_date('19930321','YYYYMMDD')|TEST4|233");
+        in.add("no");
+        in.add("insert|FIRST|TEST|'C++'|TEST1|2|TEST2|'Other'|TEST3|to_date('19800321','YYYYMMDD')|TEST4|99");
+        in.add("no");
+        in.add("find|FIRST");
+        in.add("findsettings|FIRST|TEST|'Java'|TEST4|233");
+        in.add("update|FIRST|TEST|'Guitar'|TEST4|500|TEST|'Java'|TEST4|233");
+        in.add("drop|FIRST");
+        in.add("exit");
+        Main.main(new String[0]);
+        String actualResult =
+                                "\t\t\t\t\tВас приветствует приложение SqlCMD\r\n" +
+                                "Пожалуйста, введите данные для подключения к базе данных в формате: connect|username|password\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "\t\t\t\t\tУспех, вы подключились к базе данных:\r\n" +
+                                "Oracle Database - Production\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "Успех! Таблица создана\r\n" +
+                                "Присвоить колонке первичный ключ, если такой имеется? Если да, введите y\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "Добавить Seq генератор, если такой имеется? Если да, введите y\r\n" +
+                                "Успех! Данные добавлены\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "Добавить Seq генератор, если такой имеется? Если да, введите y\r\n" +
+                                "Успех! Данные добавлены\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "Добавить Seq генератор, если такой имеется? Если да, введите y\r\n" +
+                                "Успех! Данные добавлены\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "---------------------------------------------------------\r\n" +
+                                "|                         FIRST                         |\r\n" +
+                                "---------------------------------------------------------\r\n" +
+                                "| TEST  | TEST1 | TEST2 |         TEST3         | TEST4 |\r\n" +
+                                "---------------------------------------------------------\r\n" +
+                                "| Hello |  12   | World | 1999-03-21 00:00:00.0 |  155  |\r\n" +
+                                "| Java  |  19   | JUJA  | 1993-03-21 00:00:00.0 |  233  |\r\n" +
+                                "|  C++  |   2   | Other | 1980-03-21 00:00:00.0 |  99   |\r\n" +
+                                "---------------------------------------------------------\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "--------------------------------------------------------\r\n" +
+                                "|                        FIRST                         |\r\n" +
+                                "--------------------------------------------------------\r\n" +
+                                "| TEST | TEST1 | TEST2 |         TEST3         | TEST4 |\r\n" +
+                                "--------------------------------------------------------\r\n" +
+                                "| Java |  19   | JUJA  | 1993-03-21 00:00:00.0 |  233  |\r\n" +
+                                "--------------------------------------------------------\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "Успех! Данные обновлены\r\n" +
+                                "----------------------------------------------------------\r\n" +
+                                "|                         FIRST                          |\r\n" +
+                                "----------------------------------------------------------\r\n" +
+                                "|  TEST  | TEST1 | TEST2 |         TEST3         | TEST4 |\r\n" +
+                                "----------------------------------------------------------\r\n" +
+                                "| Hello  |  12   | World | 1999-03-21 00:00:00.0 |  155  |\r\n" +
+                                "| Guitar |  19   | JUJA  | 1993-03-21 00:00:00.0 |  500  |\r\n" +
+                                "|  C++   |   2   | Other | 1980-03-21 00:00:00.0 |  99   |\r\n" +
+                                "----------------------------------------------------------\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "Успех! Таблица удалена\r\n" +
+                                "Введи команду (или help для помощи):\r\n" +
+                                "До встречи!\r\n";
+        assertEquals(actualResult, getData());
+    }
+    @Test
+    public void test_fileTable() {
+        in.add("connect|user|pass");
+        in.add("create|" + createTable());
+        in.add("n");
+        in.add("insert|FIRST|TEST|'Hello'|TEST1|12|TEST2|'World'|TEST3|to_date('19990321','YYYYMMDD')|TEST4|155");
+        in.add("no");
+        in.add("insert|FIRST|TEST|'Java'|TEST1|19|TEST2|'JUJA'|TEST3|to_date('19930321','YYYYMMDD')|TEST4|233");
+        in.add("no");
+        in.add("insert|FIRST|TEST|'C++'|TEST1|2|TEST2|'Other'|TEST3|to_date('19800321','YYYYMMDD')|TEST4|99");
+        in.add("no");
+        in.add("filetable|FIRST");
+        in.add("y");
+        in.add("y");
+        in.add("drop|FIRST");
+        purgeDrop();
+        in.add("exit");
+        Main.main(new String[0]);
+        String actualResult =
+                                "\t\t\t\t\tВас приветствует приложение SqlCMD\r\n" +
+                                        "Пожалуйста, введите данные для подключения к базе данных в формате: connect|username|password\r\n" +
+                                        "Введи команду (или help для помощи):\r\n" +
+                                        "\t\t\t\t\tУспех, вы подключились к базе данных:\r\n" +
+                                        "Oracle Database - Production\r\n" +
+                                        "Введи команду (или help для помощи):\r\n" +
+                                        "Успех! Таблица создана\r\n" +
+                                        "Присвоить колонке первичный ключ, если такой имеется? Если да, введите y\r\n" +
+                                        "Введи команду (или help для помощи):\r\n" +
+                                        "Добавить Seq генератор, если такой имеется? Если да, введите y\r\n" +
+                                        "Успех! Данные добавлены\r\n" +
+                                        "Введи команду (или help для помощи):\r\n" +
+                                        "Добавить Seq генератор, если такой имеется? Если да, введите y\r\n" +
+                                        "Успех! Данные добавлены\r\n" +
+                                        "Введи команду (или help для помощи):\r\n" +
+                                        "Добавить Seq генератор, если такой имеется? Если да, введите y\r\n" +
+                                        "Успех! Данные добавлены\r\n" +
+                                        "Введи команду (или help для помощи):\r\n" +
+                                        "---------------------------------------------------------\r\n" +
+                                        "|                         FIRST                         |\r\n" +
+                                        "---------------------------------------------------------\r\n" +
+                                        "| TEST  | TEST1 | TEST2 |         TEST3         | TEST4 |\r\n" +
+                                        "---------------------------------------------------------\r\n" +
+                                        "| Hello |  12   | World | 1999-03-21 00:00:00.0 |  155  |\r\n" +
+                                        "| Java  |  19   | JUJA  | 1993-03-21 00:00:00.0 |  233  |\r\n" +
+                                        "|  C++  |   2   | Other | 1980-03-21 00:00:00.0 |  99   |\r\n" +
+                                        "---------------------------------------------------------\r\n" +
+                                        "Сохранить эти данные в файл? Если да, введите y\r\n" +
+                                        "Имя файла будет соответствовать имени таблицы. Если согланы, введите y\r\n" +
+                                        "Если хотите переименовать файл, нажмите Enter\r\n" +
+                                        "Данные сохранены в файл\r\n" +
+                                        "Введи команду (или help для помощи):\r\n" +
+                                        "Успех! Таблица удалена\r\n" +
+                                        "Введи команду (или help для помощи):\r\n" +
+                                        "До встречи!\r\n";
+        File file = new File("src/main/resources", "FIRST" + ".txt");
+        if(file.exists()){
+            assertTrue(true);
+            boolean del = file.delete();
+            if(del){
+                assertTrue(true);
+            } else {
+                assertTrue(false);
+            }
+        }
+        assertEquals(actualResult, getData());
+    }
+
+    private void purgeDrop() {
+        try {
+            databaseManager.cudQuery("PURGE RECYCLEBIN");
+        } catch (Exception e){
+            //do nothing
+        }
+    }
 }

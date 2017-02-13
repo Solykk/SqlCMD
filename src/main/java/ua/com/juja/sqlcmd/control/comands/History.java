@@ -18,10 +18,8 @@ public class History implements Command {
     }
 
     public static String getDate(){
-
         long millis = System.currentTimeMillis();
         java.sql.Date date = new java.sql.Date(millis);
-
         return new SimpleDateFormat("yyyy,MM,dd_(HH:mm:ss)").format(date);
     }
 
