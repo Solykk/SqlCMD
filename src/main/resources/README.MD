@@ -1,3 +1,15 @@
+Для корректной работы тестов нужно увеличить количество параллельных подключений .
+1. Загрузить Run SQL Command Line
+2. Установить количество параллельных подключений:
+    SQL> connect ->
+    Enter user-name: sys as sysdba -> (где sys - имя администратора БД)
+    Enter password: ваш пароль ->
+    SQL>alter system set processes=300 scope=spfile; ->
+    SQL>shut immediate; ->
+    SQL>startup ->
+Команда для проверки параметров:
+    SQL>select * from v$resource_limit where resource_name = 'processes'; ->
+
 												User Stories
 
 1[Начало работы] --- Я как ЮЗЕР хочу понять началась ли сессия работы с приложением.
@@ -305,5 +317,3 @@ sqlplus>alter system set processes=300 scope=spfile;
 sqlplus>shut immediate;
 sqlplus>startup
 
-PURGE RECYCLEBIN;// очистить корзину
-to_date('19760321','YYYYMMDD')
