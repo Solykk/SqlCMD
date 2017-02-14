@@ -7,7 +7,6 @@ import org.junit.Test;
 import ua.com.juja.sqlcmd.Main;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.control.JDBCDatabaseManager;
-import ua.com.juja.sqlcmd.control.MainController;
 import java.io.*;
 
 import static org.junit.Assert.assertEquals;
@@ -34,7 +33,6 @@ public class IntegrationTest {
     @After
     public void end() {
         purgeDrop();
-        MainController.WHILE_STOPER = true;
     }
 
     public String getData() {
@@ -49,7 +47,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testHelp() {
+    public void test_Help() {
         in.add("help");
         in.add("exit");
         Main.main(new String[0]);

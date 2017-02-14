@@ -11,7 +11,7 @@ public class MainController {
 
     private View view;
     private ArrayList<Command> commands;
-    public static boolean WHILE_STOPER = true;
+    public static boolean WHILE_STOPER;
 
     public MainController(View view, DatabaseManager manager) {
         this.view = view;
@@ -40,7 +40,8 @@ public class MainController {
     }
 
     public void run() {
-            doWork();
+        WHILE_STOPER = true;
+        doWork();
     }
 
     private void doWork() {
