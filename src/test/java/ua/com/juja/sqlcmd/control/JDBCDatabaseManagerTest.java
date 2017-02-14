@@ -94,7 +94,7 @@ public class JDBCDatabaseManagerTest {
     private String getTableName(){return "FIRST";}
 
     private ArrayList<String[]> getInsertFor5Col() {
-        ArrayList<String[]> insert = new ArrayList<>();
+        ArrayList<String[]> insert = new ArrayList<String[]>();
         insert.add(new String[]{"TEST","'Hello'"});
         insert.add(new String[]{"TEST1","21"});
         insert.add(new String[]{"TEST3","to_date('19960321','YYYYMMDD')"});
@@ -103,7 +103,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     private ArrayList<String[]> getInsertFor5ColOther() {
-        ArrayList<String[]> insert = new ArrayList<>();
+        ArrayList<String[]> insert = new ArrayList<String[]>();
         insert.add(new String[]{"TEST","'Go'"});
         insert.add(new String[]{"TEST1","5556"});
         insert.add(new String[]{"TEST2","'Point'"});
@@ -113,7 +113,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     private ArrayList<String[]> getInsertFor3Col() {
-        ArrayList<String[]> insert = new ArrayList<>();
+        ArrayList<String[]> insert = new ArrayList<String[]>();
         insert.add(new String[]{"TEST","'Hello'"});
         insert.add(new String[]{"TEST1","21"});
         insert.add(new String[]{"TEST2","'World'"});
@@ -521,7 +521,7 @@ public class JDBCDatabaseManagerTest {
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
         ArrayList<String[]> insert1 = getInsertFor5ColOther();
-        ArrayList<String[]> settingsFine = new ArrayList<>();
+        ArrayList<String[]> settingsFine = new ArrayList<String[]>();
         settingsFine.add(new String[]{"TEST", "'Hello'"});
         manager.createTableWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
@@ -548,7 +548,7 @@ public class JDBCDatabaseManagerTest {
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
         ArrayList<String[]> insert1 = getInsertFor5ColOther();
-        ArrayList<String[]> settingsFine = new ArrayList<>();
+        ArrayList<String[]> settingsFine = new ArrayList<String[]>();
         settingsFine.add(new String[]{"TEST", "'GGTHhhh'"});
         manager.createTableWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
@@ -574,7 +574,7 @@ public class JDBCDatabaseManagerTest {
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
         ArrayList<String[]> insert1 = getInsertFor5ColOther();
-        ArrayList<String[]> settingsFine = new ArrayList<>();
+        ArrayList<String[]> settingsFine = new ArrayList<String[]>();
         settingsFine.add(new String[]{"TEST", "'Hello'"});
         manager.createTableWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
@@ -602,7 +602,7 @@ public class JDBCDatabaseManagerTest {
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
         ArrayList<String[]> insert1 = getInsertFor5ColOther();
-        ArrayList<String[]> settingsFine = new ArrayList<>();
+        ArrayList<String[]> settingsFine = new ArrayList<String[]>();
         settingsFine.add(new String[]{"TEST", "'FFCVvvv'"});
         manager.createTableWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
@@ -635,9 +635,9 @@ public class JDBCDatabaseManagerTest {
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
         ArrayList<String[]> insert1 = getInsertFor5ColOther();
-        ArrayList<String[]> settingsFine = new ArrayList<>();
+        ArrayList<String[]> settingsFine = new ArrayList<String[]>();
         settingsFine.add(new String[]{"TEST", "'Hello'"});
-        ArrayList<String[]> settingsHowUpdate = new ArrayList<>();
+        ArrayList<String[]> settingsHowUpdate = new ArrayList<String[]>();
         settingsHowUpdate.add(new String[]{"TEST", "'World'"});
         manager.createTableWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
@@ -666,9 +666,9 @@ public class JDBCDatabaseManagerTest {
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
         ArrayList<String[]> insert1 = getInsertFor5ColOther();
-        ArrayList<String[]> settingsFine = new ArrayList<>();
+        ArrayList<String[]> settingsFine = new ArrayList<String[]>();
         settingsFine.add(new String[]{"TEST", "'Ghjk'"});
-        ArrayList<String[]> settingsHowUpdate = new ArrayList<>();
+        ArrayList<String[]> settingsHowUpdate = new ArrayList<String[]>();
         settingsHowUpdate.add(new String[]{"TEST", "'World'"});
         manager.createTableWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
