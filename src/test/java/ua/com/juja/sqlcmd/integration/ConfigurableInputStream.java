@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 public class ConfigurableInputStream extends InputStream {
 
-    private String line;
+    private String line = null;
     private boolean endLine = false;
 
     @Override
@@ -35,6 +35,7 @@ public class ConfigurableInputStream extends InputStream {
         } else {
             this.line += "\n" + line;
         }
+
     }
 
     @Override
