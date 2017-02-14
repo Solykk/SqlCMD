@@ -8,10 +8,7 @@ import ua.com.juja.sqlcmd.Main;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.control.JDBCDatabaseManager;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,9 +16,9 @@ import static org.junit.Assert.assertTrue;
 
 public class IntegrationTest {
 
-    private DatabaseManager databaseManager;
-    private ByteArrayOutputStream out;
-    private ConfigurableInputStream in;
+    private  DatabaseManager databaseManager;
+    private  ByteArrayOutputStream out;
+    private  ConfigurableInputStream in;
 
     @Before
     public void setup() {
@@ -197,7 +194,6 @@ public class IntegrationTest {
 
     @Test
     public void test_Exit(){
-
         in.add("exit");
         Main.main(new String[0]);
         String actualResult =
@@ -300,6 +296,7 @@ public class IntegrationTest {
                         "Вы не можете пользоваться командами, пока не подключитесь с помощью комманды connect|username|password\r\n" +
                         "Введи команду (или help для помощи):\r\n" +
                         "До встречи!\r\n";
+
         assertEquals(actualResult, getData());
 
     }
