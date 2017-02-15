@@ -112,6 +112,9 @@ public class Help implements Command {
                  "\t" + view.greenText("value2") + " - значение второго столбца записи\n" +
                  "\t" + view.greenText("columnN") + " - имя n-го столбца записи\n" +
                  "\t" + view.greenText("valueN") + " - имя n-го столбца записи\n" +
+                 "\t\tNUMBER --- записывается число без ковычек   columnName|123\n" +
+                 "\t\tVARCHAR2 - строковое значение записывается в ковычках   columnName|'Hello'\n" +
+                 "\t\tDATE ----- даты записываются следующим образом  to_date('20160321','YYYYMMDD')\n" +
                  "\tФормат вывода: " + view.blueText("текстовое сообщение с результатом выполнения операции");
          String update = view.redText("update") + "\n" +
                 "\tКоманда обновит запись, установив значение column2 = value2, для которой соблюдается условие column1 = value1\n" +
@@ -123,6 +126,9 @@ public class Help implements Command {
                 "\t" + view.greenText("value2") + " - значение обновляемого столбца записи\n" +
                 "\t" + view.greenText("columnN") + " - имя n-го обновляемого столбца записи\n" +
                 "\t" + view.greenText("valueN")+ " - значение n-го обновляемого столбца записи\n" +
+                "\t\tNUMBER --- записывается число без ковычек   columnName|123\n" +
+                "\t\tVARCHAR2 - строковое значение записывается в ковычках   columnName|'Hello'\n" +
+                "\t\tDATE ----- даты записываются следующим образом  to_date('20160321','YYYYMMDD')\n" +
                 "\t" + view.redText("Количесьво обновляемых параметров и параметров по которым обновлять должно быть одинаковым!") + "\n" +
                 "\tФормат вывода: " + view.blueText("табличный, как при find со старыми значениями обновленных записей.");
          String delete = view.redText("delete") + "\n" +

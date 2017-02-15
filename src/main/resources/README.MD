@@ -1,7 +1,15 @@
 Для корректной работы тестов нужно увеличить количество параллельных подключений .
 1. Создать для БД нового пользователя 'user' и паролем 'pass'
-2. Загрузить Run SQL Command Line
-3. Установить количество параллельных подключений:
+2. Создать Connection с такими параметрами:
+    ConnectionName  [user]
+    UserName        [user]
+    Password        [pass]
+    Hostname        [localhost]
+    Port            [1521]
+    SID             [xe]
+
+3. Загрузить Run SQL Command Line
+4. Установить количество параллельных подключений:
     SQL> connect ->
     Enter user-name: sys as sysdba -> (где sys - имя администратора БД)
     Enter password: ваш пароль ->
