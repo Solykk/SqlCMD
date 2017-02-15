@@ -82,7 +82,6 @@ public class Console implements View {
     public  String  printTable(Table table){
 
         if(table == null){
-            write("Table = null");
             return "";
         }
         StringBuilder stringInString = new StringBuilder();

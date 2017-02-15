@@ -23,7 +23,6 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     public void connect(String userName, String dbPassword) throws SQLException{
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Please add jdbc jar to project.", e);
         }
@@ -418,6 +417,5 @@ public class  JDBCDatabaseManager implements DatabaseManager{
             throw e;
         }
     }
-
 }
 
