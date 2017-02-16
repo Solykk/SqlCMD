@@ -7,17 +7,8 @@ import ua.com.juja.sqlcmd.model.Table;
  */
 public interface View {
 
-        void write(String massege);
+        void write(String message);
         String read();
-        void sleeper(int time);
-        void stepPrint(String step);
         String printTable(Table table);
-
-        String redText(String text);
-        String greenText(String text);
-        String yellowText(String text);
-        String blueText(String text);
-
-        String requestTab(String string);
 
 }

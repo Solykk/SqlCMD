@@ -22,7 +22,7 @@ public class Exit implements Command {
     @Override
     public void process(String command) {
         view.write(view.blueText("До встречи!"));
-        MainController.WHILE_STOPER = false;
+        MainController.whileCTRL = false;
     }
 
 

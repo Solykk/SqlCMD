@@ -9,35 +9,6 @@ import java.util.Scanner;
  */
 public class Console implements View {
 
-    private String red;
-    {
-        red = "\033[31;1m";
-    }
-
-    private String green;
-
-    {
-        green = "\033[32;1m";
-    }
-
-    private String yellow;
-
-    {
-        yellow = "\033[33;1m";
-    }
-
-    private String blue;
-
-    {
-        blue = "\033[34;1m";
-    }
-
-    private String bre;
-
-    {
-        bre = "\033[39;49m";
-    }
-
     @Override
     public void write(String message) {
         System.out.println(message);
@@ -48,36 +19,15 @@ public class Console implements View {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
-    @Override
-    public  void sleeper(int time) {
+
+    private void sleeper(int time) {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-    @Override
-    public String redText(String text){return text;}//red + text + bre;
-    @Override
-    public String greenText(String text){return text;}//green + text + bre;
-    @Override
-    public String yellowText(String text){return text;}//yellow + text + bre;
-    @Override
-    public String blueText(String text){return text;}//blue + text + bre;
-    @Override
-    public String requestTab(String string) {
-        return "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + string;
-    }
-    @Override
-    public  void stepPrint(String step) {
 
-        char [] result = step.toCharArray();
-
-        for (int i = 0; i < result.length; i++){
-            sleeper(10);
-            System.out.print(result[i]);
-        }
-    }
     @Override
     public  String  printTable(Table table){
 
