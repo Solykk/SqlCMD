@@ -2,9 +2,6 @@ package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.view.View;
 
-/**
- * Created by Solyk on 26.01.2017.
- */
 public class Help implements Command {
 
     private View view;
@@ -160,24 +157,24 @@ public class Help implements Command {
                 "\tКоманда для отключения от БД и выход из приложения\n" +
                 "\tФормат команды: " + "exit" + "\n" +
                  "\tФормат вывода: " + "текстовое сообщение";
-        view.write(connect);
-        view.write(tables);
-        view.write(columns);
-        view.write(tabletype);
-        view.write(columntype);
-        view.write(clear);
-        view.write(drop);
-        view.write(create);
-        view.write(find);
-        view.write(filetable);
-        view.write(findsettings);
-        view.write(insert);
-        view.write(update);
-        view.write(delete);
-        view.write(readQuery);
-        view.write(cudQuery);
-        view.write(history);
-        view.write(help);
-        view.write(exit);
+         view.write(connect);
+         view.write(tables);
+         view.write(columns);
+         view.write(tabletype);
+         view.write(columntype);
+         view.write(clear);
+         view.write(drop);
+         view.write(create);
+         view.write(find);
+         view.write(filetable);
+         view.write(findsettings);
+         view.write(insert);
+         view.write(update);
+         view.write(delete);
+         view.write(readQuery);
+         view.write(cudQuery);
+         view.write(history);
+         view.write(help);
+         view.write(exit);
     }
 }

@@ -2,11 +2,9 @@ package ua.com.juja.sqlcmd.control;
 
 import ua.com.juja.sqlcmd.control.comands.*;
 import ua.com.juja.sqlcmd.view.View;
+
 import java.util.ArrayList;
 
-/**
- * Created by Solyk on 26.01.2017.
- */
 public class MainController {
 
     private View view;

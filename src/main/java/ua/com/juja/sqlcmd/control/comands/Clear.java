@@ -5,9 +5,6 @@ import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 
-/**
- * Created by Solyk on 05.02.2017.
- */
 public class Clear implements Command {
 
     private DatabaseManager manager;

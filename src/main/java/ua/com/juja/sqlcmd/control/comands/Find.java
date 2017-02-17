@@ -4,9 +4,6 @@ import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.view.View;
 
-/**
- * Created by Solyk on 05.02.2017.
- */
 public class Find implements Command {
 
     private DatabaseManager manager;

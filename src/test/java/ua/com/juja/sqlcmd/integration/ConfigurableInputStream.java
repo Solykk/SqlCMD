@@ -35,7 +35,6 @@ public class ConfigurableInputStream extends InputStream {
         } else {
             this.line += "\n" + line;
         }
-
     }
 
     @Override

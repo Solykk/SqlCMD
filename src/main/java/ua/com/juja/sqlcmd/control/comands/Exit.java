@@ -3,9 +3,6 @@ package ua.com.juja.sqlcmd.control.comands;
 import ua.com.juja.sqlcmd.control.WhileCTRL;
 import ua.com.juja.sqlcmd.view.View;
 
-/**
- * Created by Solyk on 26.01.2017.
- */
 public class Exit implements Command {
 
     private View view;

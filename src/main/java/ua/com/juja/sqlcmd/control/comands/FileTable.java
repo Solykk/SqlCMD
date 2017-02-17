@@ -9,9 +9,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/**
- * Created by Solyk on 08.02.2017.
- */
 public class FileTable implements Command{
 
     private DatabaseManager manager;
@@ -125,15 +122,12 @@ public class FileTable implements Command{
     }
 
     private void fileInput(String dataTable, String name, File file) throws IOException {
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            throw e;
-        }
-        try(FileWriter writer = new FileWriter("src/main/resources/" + name + ".txt"))
-        {
-            writer.write(dataTable);
-            writer.flush();
-        }
+
+       if(file.createNewFile()) {
+           try (FileWriter writer = new FileWriter("src/main/resources/" + name + ".txt")) {
+               writer.write(dataTable);
+               writer.flush();
+           }
+       }
     }
 }

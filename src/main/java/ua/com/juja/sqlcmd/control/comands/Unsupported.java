@@ -2,9 +2,6 @@ package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.view.View;
 
-/**
- * Created by Solyk on 05.02.2017.
- */
 public class Unsupported implements Command {
 
     private View view;

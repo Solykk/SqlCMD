@@ -2,9 +2,6 @@ package ua.com.juja.sqlcmd.service;
 
 import java.util.ArrayList;
 
-/**
- * Created by Solyk on 07.02.2017.
- */
 public class SettingsHelper {
 
     private void toSettings(String[] data, ArrayList<String[]> settings, int index) {

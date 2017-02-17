@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-/**
- * Created by Solyk on 26.01.2017.
- */
 public class Console implements View {
 
     private ArrayList<String> cache;

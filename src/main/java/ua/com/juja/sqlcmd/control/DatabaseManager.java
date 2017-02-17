@@ -1,12 +1,10 @@
 package ua.com.juja.sqlcmd.control;
 
 import ua.com.juja.sqlcmd.model.Table;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- * Created by Solyk on 26.01.2017.
- */
 public interface DatabaseManager {
 
     void  connect(String userName, String dbPassword) throws SQLException;

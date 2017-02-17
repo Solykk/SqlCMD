@@ -4,12 +4,10 @@ import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.service.SettingsHelper;
 import ua.com.juja.sqlcmd.view.View;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- * Created by Solyk on 05.02.2017.
- */
 public class Insert implements Command {
 
     private DatabaseManager manager;

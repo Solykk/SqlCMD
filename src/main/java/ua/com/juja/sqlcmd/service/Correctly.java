@@ -1,8 +1,5 @@
 package ua.com.juja.sqlcmd.service;
 
-/**
- * Created by Solyk on 17.02.2017.
- */
 public class Correctly {
 
     public String expectedTwo(String command) {

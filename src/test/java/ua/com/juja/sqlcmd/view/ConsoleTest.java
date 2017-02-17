@@ -5,9 +5,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by Solyk on 15.02.2017.
- */
 public class ConsoleTest {
     private View view;
 

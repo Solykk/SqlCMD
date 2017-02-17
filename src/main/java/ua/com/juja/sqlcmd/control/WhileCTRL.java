@@ -1,8 +1,5 @@
 package ua.com.juja.sqlcmd.control;
 
-/**
- * Created by Solyk on 17.02.2017.
- */
 public class WhileCTRL {
 
     private boolean value;

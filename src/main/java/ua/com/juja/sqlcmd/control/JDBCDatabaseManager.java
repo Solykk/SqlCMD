@@ -2,13 +2,11 @@ package ua.com.juja.sqlcmd.control;
 
 import ua.com.juja.sqlcmd.model.ColumnDate;
 import ua.com.juja.sqlcmd.model.Table;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Locale;
 
-/**
- * Created by Solyk on 26.01.2017.
- */
 public class  JDBCDatabaseManager implements DatabaseManager{
 
     private Connection connection;

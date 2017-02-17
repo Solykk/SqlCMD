@@ -3,11 +3,9 @@ package ua.com.juja.sqlcmd.control.comands;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.view.View;
+
 import java.sql.SQLException;
 
-/**
- * Created by Solyk on 06.02.2017.
- */
 public class CudQuery implements Command {
 
     private DatabaseManager manager;
