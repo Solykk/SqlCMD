@@ -15,11 +15,13 @@ public class FindSettings implements Command {
     private DatabaseManager manager;
     private View view;
     private Correctly correctly;
+    private SettingsHelper settingsHelper;
 
     public FindSettings(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
         this.correctly = new Correctly();
+        this.settingsHelper = new SettingsHelper();
     }
 
     @Override
@@ -33,7 +35,7 @@ public class FindSettings implements Command {
         String[] data = correctly.expectedMinEven(command, 4);
 
         String tableName = data[1];
-        ArrayList<String[]> settings = getSettings(data);
+        ArrayList<String[]> settings = settingsHelper.getSettings(data);
 
         view.addHistory("Вывод содержимого таблицы: " + tableName + " по критериям " + command + " findsettings");
 
@@ -45,15 +47,4 @@ public class FindSettings implements Command {
                     + e.getMessage(), "\tНеудача " + e.getMessage());
         }
     }
-
-    private ArrayList<String[]> getSettings(String[] data) {
-        ArrayList<String[]> settings = new ArrayList<>();
-        int index = 2;
-        while (index != data.length) {
-            SettingsHelper.toSettings(data, settings, index);
-            index += 2;
-        }
-        return settings;
-    }
-
 }

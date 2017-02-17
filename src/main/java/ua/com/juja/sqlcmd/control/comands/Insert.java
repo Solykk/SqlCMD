@@ -15,11 +15,13 @@ public class Insert implements Command {
     private DatabaseManager manager;
     private View view;
     private Correctly correctly;
+    private SettingsHelper settingsHelper;
 
     public Insert(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
         this.correctly = new Correctly();
+        this.settingsHelper = new SettingsHelper();
     }
 
     @Override
@@ -33,7 +35,7 @@ public class Insert implements Command {
         String[] data = correctly.expectedMinEven(command, 4);
 
         String tableName = data[1];
-        boolean isKey = false;
+        boolean isKey = getKeySet();
         ArrayList<String[]> settings = getSettings(data, isKey);
 
         view.addHistory("Добавление данных в таблицу: " + tableName + " по критериям " + command + " insert");
@@ -47,34 +49,32 @@ public class Insert implements Command {
         }
     }
 
-    private ArrayList<String[]> getSettings(String[] data, boolean isKey) {
-        ArrayList<String[]> settings = new ArrayList<>();
-        getKeySet(settings, isKey);
-        addSettings(data, settings);
-        return settings;
-    }
-
-    private void getKeySet(ArrayList<String[]> settings, boolean isKey) {
-        String key = keyAction();
-        if (key.equalsIgnoreCase("y")) {
-            isKey = true;
-            view.write("Введите название колонки: ");
-            String seqName = view.read();
-            settings.add(new String[]{seqName, ""});
-        }
-    }
-
-    private ArrayList<String[]> addSettings(String[] data, ArrayList<String[]> settings) {
-        int index = 2;
-        while (index != data.length) {
-            SettingsHelper.toSettings(data, settings, index);
-            index += 2;
-        }
-        return settings;
-    }
-
     private String keyAction() {
         view.write("Добавить Seq генератор, если такой имеется? Y/N");
         return view.read();
+    }
+
+    private boolean getKeySet() {
+        String key = keyAction();
+        if (key.equalsIgnoreCase("y")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private String seqAction() {
+        view.write("Введите название колонки: ");
+        return view.read();
+    }
+
+    private ArrayList<String[]> getSettings(String[] data, boolean isKey) {
+        ArrayList<String[]> settings = new ArrayList<>();
+        if(isKey){
+            String seqName = seqAction();
+            settings.add(new String[]{seqName, ""});
+        }
+        settingsHelper.addSettings(data, settings);
+        return settings;
     }
 }

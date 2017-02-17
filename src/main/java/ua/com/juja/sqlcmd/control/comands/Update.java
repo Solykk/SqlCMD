@@ -15,11 +15,13 @@ public class Update implements Command {
     private DatabaseManager manager;
     private View view;
     private Correctly correctly;
+    private SettingsHelper settingsHelper;
 
     public Update(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
         this.correctly = new Correctly();
+        this.settingsHelper = new SettingsHelper();
     }
 
     @Override
@@ -36,7 +38,7 @@ public class Update implements Command {
         ArrayList<String[]> forUpdate = new ArrayList<>();
         ArrayList<String[]> howUpdate = new ArrayList<>();
 
-        getSettings(data, forUpdate, howUpdate);
+        settingsHelper.getSetUpdate(data, forUpdate, howUpdate);
 
         view.addHistory("Обновление содержимого таблицы: " + tableName +
                 " по критериям " + command + " update");
@@ -51,19 +53,4 @@ public class Update implements Command {
                                  "\tНеудача " + e.getMessage());
         }
     }
-
-    private void getSettings(String[] data, ArrayList<String[]> forUpdate, ArrayList<String[]> howUpdate) {
-        int indexFor = 2;
-        int indexHow = data.length - (data.length - 2)/2;
-
-        while (indexFor != indexHow){
-            SettingsHelper.toSettings(data, forUpdate, indexFor);
-            indexFor += 2;
-        }
-        while (indexHow  != data.length) {
-            SettingsHelper.toSettings(data, howUpdate, indexHow);
-            indexHow += 2;
-        }
-    }
-
 }

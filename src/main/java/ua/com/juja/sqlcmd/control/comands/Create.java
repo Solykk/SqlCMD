@@ -2,6 +2,7 @@ package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.SettingsHelper;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,11 +15,13 @@ public class Create implements Command {
     private DatabaseManager manager;
     private View view;
     private Correctly correctly;
+    private SettingsHelper settingsHelper;
 
     public Create(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
         this.correctly = new Correctly();
+        this.settingsHelper = new SettingsHelper();
     }
 
     @Override
@@ -32,7 +35,7 @@ public class Create implements Command {
         String[] data = correctly.expectedThreeMin(command);
 
         String tableName = data[1];
-        ArrayList<String> settings = getSettings(data);
+        ArrayList<String> settings = settingsHelper.getSetCreate(data);
 
         view.addHistory("Создание таблицы: " + tableName + " по критериям " + command + " create");
 
@@ -100,13 +103,4 @@ public class Create implements Command {
         return view.read();
     }
 
-    private ArrayList<String> getSettings(String[] data) {
-        ArrayList<String> settings = new ArrayList<>();
-        int index = 2;
-        while (index  != data.length){
-            settings.add(data[index]);
-            index++;
-        }
-        return settings;
-    }
 }

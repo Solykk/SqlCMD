@@ -1,6 +1,6 @@
 package ua.com.juja.sqlcmd.control.comands;
 
-import ua.com.juja.sqlcmd.control.MainController;
+import ua.com.juja.sqlcmd.control.WhileCTRL;
 import ua.com.juja.sqlcmd.view.View;
 
 /**
@@ -9,9 +9,11 @@ import ua.com.juja.sqlcmd.view.View;
 public class Exit implements Command {
 
     private View view;
+    private WhileCTRL whileCTRL;
 
-    public Exit(View view) {
+    public Exit(View view, WhileCTRL whileCTRL) {
         this.view = view;
+        this.whileCTRL = whileCTRL;
     }
 
     @Override
@@ -22,6 +24,6 @@ public class Exit implements Command {
     @Override
     public void process(String command) {
         view.write("До встречи!");
-        MainController.whileCTRL = false;
+        whileCTRL.setValue(false);
     }
 }

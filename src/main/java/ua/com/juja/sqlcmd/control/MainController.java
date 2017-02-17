@@ -11,14 +11,15 @@ public class MainController {
 
     private View view;
     private ArrayList<Command> commands;
-    public static boolean whileCTRL;
+    private WhileCTRL whileCTRL;
 
     public MainController(View view, DatabaseManager manager) {
         this.view = view;
+        this.whileCTRL = new WhileCTRL();
         this.commands = new ArrayList<>();
         commands.add(new Connect(manager, view));
         commands.add(new Help(view));
-        commands.add(new Exit(view));
+        commands.add(new Exit(view, whileCTRL));
         commands.add(new IsConnect(manager, view));
         commands.add(new Tables(manager, view));
         commands.add(new Columns(manager, view));
@@ -40,14 +41,13 @@ public class MainController {
     }
 
     public void run() {
-        whileCTRL = true;
         doWork();
     }
 
     private void doWork() {
         greeting();
 
-        while (whileCTRL) {
+        while (whileCTRL.getValue()) {
             String input = forAction();
 
             for (Command command : commands) {
