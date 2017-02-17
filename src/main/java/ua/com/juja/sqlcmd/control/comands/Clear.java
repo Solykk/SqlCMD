@@ -2,19 +2,20 @@ package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 
 public class Clear implements Command {
 
     private DatabaseManager manager;
-    private View view;
     private Correctly correctly;
+    private ViewService viewService;
 
     public Clear(DatabaseManager manager, View view) {
         this.manager = manager;
-        this.view = view;
         this.correctly = new Correctly();
+        this.viewService = new ViewService(view);
     }
 
     @Override
@@ -27,14 +28,11 @@ public class Clear implements Command {
 
         String tableName = correctly.expectedTwo(command);
 
-        view.addHistory("Вывод содержимого таблицы: " + tableName + " clear");
-
         try {
             manager.clear(tableName);
-            view.writeAndHistory("Успех! Таблица была очищена", "\tУспех");
+            viewService.clearComTry(tableName);
         } catch (SQLException | NullPointerException e) {
-            view.writeAndHistory("Ошибка. Не удалось очистить таблицу ( " + tableName + " ) "
-                    + e.getMessage(), "\tНеудача " + e.getMessage());
+            viewService.clearComCatch(tableName, e.getMessage());
         }
     }
 }

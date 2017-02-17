@@ -48,6 +48,7 @@ public class Query {
     private String getName(ArrayList<String[]> nameDate) {
         String columnNames = "";
         for (int index = 0; index < nameDate.size(); index++){
+
             columnNames += nameDate.get(index)[0];
             if(index != nameDate.size() - 1){
                 columnNames += ", ";
