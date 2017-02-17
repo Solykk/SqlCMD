@@ -21,8 +21,8 @@ public interface DatabaseManager {
     Table read(String tableName) throws SQLException, NullPointerException;
     Table readSet(String tableName, ArrayList<String[]> settings) throws SQLException, NullPointerException;
 
-    void insert(String tableName, ArrayList<String[]> columnNameVSdata, boolean isKey) throws SQLException, NullPointerException;
-    void update(String tableName, ArrayList<String[]> settings, ArrayList<String[]> settingsHowUpdate)throws SQLException, NullPointerException;
+    void insert(String tableName, ArrayList<String[]> nameDate, boolean isKey) throws SQLException, NullPointerException;
+    void update(String tableName, ArrayList<String[]> forUpdate, ArrayList<String[]> howUpdate)throws SQLException, NullPointerException;
     void drop(String tableName) throws SQLException, NullPointerException;
     void delete(String tableName, ArrayList<String[]> settings)  throws SQLException, NullPointerException;
     void clear(String tableName)throws SQLException, NullPointerException;
