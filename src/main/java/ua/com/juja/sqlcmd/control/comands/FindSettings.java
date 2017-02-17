@@ -1,7 +1,8 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
-import ua.com.juja.sqlcmd.model.Table;
+import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.SettingsHelper;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,10 +14,12 @@ public class FindSettings implements Command {
 
     private DatabaseManager manager;
     private View view;
+    private Correctly correctly;
 
     public FindSettings(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
+        this.correctly = new Correctly();
     }
 
     @Override
@@ -26,35 +29,31 @@ public class FindSettings implements Command {
 
     @Override
     public void process(String command) {
-        String [] data = command.split("\\|");
-        if(data.length < 4){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается минимум 4, но есть: " + data.length);
-        } else if(data.length%2 != 0){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается четное количество аргументов, но есть: " + data.length);
-        }
+
+        String[] data = correctly.expectedMinEven(command, 4);
 
         String tableName = data[1];
+        ArrayList<String[]> settings = getSettings(data);
+
+        view.addHistory("Вывод содержимого таблицы: " + tableName + " по критериям " + command + " findsettings");
+
+        try {
+            view.printTable(manager.readSet(tableName, settings));
+            view.writeAndHistory("", "\tУспех");
+        } catch (SQLException | NullPointerException e) {
+            view.writeAndHistory("Ошибка. Не удалось по критериям вывести таблицу ( " + tableName + " ) "
+                    + e.getMessage(), "\tНеудача " + e.getMessage());
+        }
+    }
+
+    private ArrayList<String[]> getSettings(String[] data) {
         ArrayList<String[]> settings = new ArrayList<>();
         int index = 2;
-
         while (index != data.length) {
             SettingsHelper.toSettings(data, settings, index);
             index += 2;
         }
-
-        History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName +
-                " по критериям " + command + " " + view.yellowText(FindSettings.class.getSimpleName().toLowerCase()));
-
-        try {
-            Table request = manager.read(tableName, settings);
-            view.printTable(request);
-            History.cache.add(view.requestTab(view.blueText("Успех")));
-        } catch (SQLException | NullPointerException e) {
-            History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось по критериям вывести таблицу ( " + tableName + " ) "
-                    + view.redText(e.getMessage())));
-        }
+        return settings;
     }
+
 }

@@ -1,6 +1,7 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 
@@ -11,10 +12,12 @@ public class Drop implements Command {
 
     private DatabaseManager manager;
     private View view;
+    private Correctly correctly;
 
     public Drop(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
+        this.correctly = new Correctly();
     }
 
     @Override
@@ -26,24 +29,16 @@ public class Drop implements Command {
     @Override
     public void process(String command) {
 
-        String [] data = command.split("\\|");
-        if(data.length != 2){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается 2, но есть: " + data.length);
-        }
-        String tableName = data[1];
+        String tableName = correctly.expectedTwo(command);
 
-        History.cache.add(History.getDate() + " " + "Попытка удалить таблицу: " + tableName
-                + " " + view.yellowText(Drop.class.getSimpleName().toLowerCase()));
+        view.addHistory("Попытка удалить таблицу: " + tableName + " drop");
 
         try {
             manager.drop(tableName);
-            History.cache.add(view.requestTab(view.blueText("Успех")));
-            view.write(view.blueText("Успех! Таблица удалена"));
+            view.writeAndHistory("Успех! Таблица удалена", "\tУспех");
         } catch (SQLException | NullPointerException e) {
-            History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось удалить таблицу: ( " + tableName + " ) "
-                    + view.redText(e.getMessage())));
+            view.writeAndHistory("Ошибка. Не удалось удалить таблицу: ( " + tableName + " ) "
+                    + e.getMessage(), "\tНеудача " + e.getMessage());
         }
     }
 }

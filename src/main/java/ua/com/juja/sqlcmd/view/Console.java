@@ -1,13 +1,22 @@
 package ua.com.juja.sqlcmd.view;
 
 import ua.com.juja.sqlcmd.model.Table;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
  * Created by Solyk on 26.01.2017.
  */
 public class Console implements View {
+
+    private ArrayList<String> cache;
+
+    public Console(){
+        this.cache = new ArrayList<>();
+    }
 
     @Override
     public void write(String message) {
@@ -18,14 +27,6 @@ public class Console implements View {
     public String read() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
-    }
-
-    private void sleeper(int time) {
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -177,4 +178,37 @@ public class Console implements View {
         return stringInString.toString();
     }
 
+    @Override
+    public void printHistory() {
+        for (String result: cache) {
+            write(result);
+        }
+    }
+
+    @Override
+    public void writeAndHistory(String toWrite, String toHistory) {
+        if(toWrite != null && !toWrite.equals("")){
+            write(toWrite);
+        }
+        cache.add(toHistory);
+    }
+
+    @Override
+    public void addHistory(String toHistory) {
+        cache.add(getDate() + " " + toHistory);
+    }
+
+    private void sleeper(int time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getDate(){
+        long millis = System.currentTimeMillis();
+        Date date = new Date(millis);
+        return new SimpleDateFormat("yyyy,MM,dd_(HH:mm:ss)").format(date);
+    }
 }

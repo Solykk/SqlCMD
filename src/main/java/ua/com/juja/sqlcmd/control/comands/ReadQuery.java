@@ -1,7 +1,7 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
-import ua.com.juja.sqlcmd.model.Table;
+import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 
@@ -12,10 +12,12 @@ public class ReadQuery implements Command {
 
     private DatabaseManager manager;
     private View view;
+    private Correctly correctly;
 
     public ReadQuery(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
+        this.correctly = new Correctly();
     }
 
     @Override
@@ -25,25 +27,17 @@ public class ReadQuery implements Command {
 
     @Override
     public void process(String command) {
-        String [] data = command.split("\\|");
-        if(data.length != 2){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается минимум 2, но есть: " + data.length);
-        }
 
-        String query = data[1];
+        String query = correctly.expectedTwo(command);
 
-        History.cache.add(History.getDate() + " " + "Вывод SQL запроса: " + query + " "
-                + view.yellowText(ReadQuery.class.getSimpleName().toLowerCase()));
+        view.addHistory("Вывод SQL запроса: " + query + " readQuery");
 
         try {
-            Table request = manager.readQuery(query);
-            view.printTable(request);
-            History.cache.add(view.requestTab(view.blueText("Успех")));
+            view.printTable(manager.readQuery(query));
+            view.writeAndHistory("", "\tУспех");
         } catch (SQLException | NullPointerException e) {
-            History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось выполнить ваш запрос ( " + query + " ) "
-                    + view.redText(e.getMessage())));
+            view.writeAndHistory("Ошибка. Не удалось выполнить ваш запрос ( " + query + " ) "
+                    + e.getMessage(), "\tНеудача " + e.getMessage());
         }
     }
 }

@@ -36,7 +36,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public Table getAllTableNames() throws SQLException, NullPointerException{
+    public Table getTableNames() throws SQLException, NullPointerException{
 
         ArrayList<ColumnDate> columnDatas = new ArrayList<>();
         columnDatas.add(new ColumnDate("TABLE_NAME", new ArrayList<String>()));
@@ -60,7 +60,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public Table getAllColumnNamesFromTable(String tableName) throws SQLException, NullPointerException {
+    public Table getColumnNames(String tableName) throws SQLException, NullPointerException {
 
         String dateTables = "SELECT COLUMN_NAME FROM USER_TAB_COLUMNS WHERE TABLE_NAME = " + "'" + tableName + "'";
 
@@ -87,7 +87,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public Table getDataTypeAllColumnsFromTable(String tableName) throws SQLException, NullPointerException{
+    public Table getAllTypeColumns(String tableName) throws SQLException, NullPointerException{
 
         ArrayList<ColumnDate> columnDates = new ArrayList<>();
         columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<String>()));
@@ -111,7 +111,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public Table getDataTypeColumnFromTable(String tableName, String columnName) throws SQLException, NullPointerException {
+    public Table getTypeColumn(String tableName, String columnName) throws SQLException, NullPointerException {
 
         ArrayList<ColumnDate> columnDates = new ArrayList<>();
         columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<String>()));
@@ -134,7 +134,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public void createTableWithoutPK(String tableName, ArrayList<String> settings) throws SQLException, NullPointerException{
+    public void createWithoutPK(String tableName, ArrayList<String> settings) throws SQLException, NullPointerException{
 
         String ulrSettings = "";
         for (int i = 0; i < settings.size() ; i++) {
@@ -153,7 +153,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public void createTableCreatePK (String tableName, String columnNamePK) throws SQLException, NullPointerException {
+    public void createCreatePK(String tableName, String columnNamePK) throws SQLException, NullPointerException {
 
         String primaryKey = "ALTER TABLE " + tableName + " ADD (CONSTRAINT " +  tableName + "_PK PRIMARY KEY (" + columnNamePK + "))";
 
@@ -164,7 +164,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public void createTableSequenceForPK(String tableName, Long startWith) throws SQLException, NullPointerException{
+    public void createSequencePK(String tableName, Long startWith) throws SQLException, NullPointerException{
 
         String sequence = "CREATE SEQUENCE " + tableName + "_seq START WITH " + startWith;
 
@@ -220,11 +220,11 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public Table readTable(String tableName) throws SQLException, NullPointerException {
+    public Table read(String tableName) throws SQLException, NullPointerException {
 
         try {
 
-            Table containts = getAllTableNames();
+            Table containts = getTableNames();
             ArrayList<String> temp = new ArrayList<>();
 
             for (int index = 0; index < containts.getTableDate().get(0).getValue().size(); index++) {
@@ -246,7 +246,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public Table read(String tableName, ArrayList<String[]> settings) throws SQLException, NullPointerException {
+    public Table readSet(String tableName, ArrayList<String[]> settings) throws SQLException, NullPointerException {
 
         ArrayList<ColumnDate> columnDates = getColumnDates(tableName);
 
@@ -406,7 +406,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     private ArrayList<ColumnDate> getColumnDates(String tableName) throws SQLException, NullPointerException {
 
         try {
-            ArrayList<String> columnNamesFromTable = getAllColumnNamesFromTable(tableName).getTableDate().get(0).getValue();
+            ArrayList<String> columnNamesFromTable = getColumnNames(tableName).getTableDate().get(0).getValue();
             ArrayList<ColumnDate> columnDates = new ArrayList<>();
             for (int i = 0; i < columnNamesFromTable.size(); i++) {
                 ColumnDate temp = new ColumnDate(columnNamesFromTable.get(i), new ArrayList<String>());

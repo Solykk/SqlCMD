@@ -21,10 +21,7 @@ public class Exit implements Command {
 
     @Override
     public void process(String command) {
-        view.write(view.blueText("До встречи!"));
+        view.write("До встречи!");
         MainController.whileCTRL = false;
     }
-
-
-
 }

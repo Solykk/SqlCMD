@@ -1,6 +1,8 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.SettingsHelper;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,10 +14,12 @@ public class Insert implements Command {
 
     private DatabaseManager manager;
     private View view;
+    private Correctly correctly;
 
     public Insert(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
+        this.correctly = new Correctly();
     }
 
     @Override
@@ -26,49 +30,51 @@ public class Insert implements Command {
     @Override
     public void process(String command) {
 
-        String [] data = command.split("\\|");
-
-        if(data.length < 4){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается минимум 4, но есть: " + data.length);
-        } else if(data.length%2 != 0){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается четное количество аргументов, но есть: " + data.length);
-        }
-
-        ArrayList<String[]> settings = new ArrayList<>();
-        boolean isKey;
-        view.write(view.blueText("Добавить Seq генератор, если такой имеется? Если да, введите " + view.greenText("y")));
-        String key = view.read();
-        if (key.equals("y")) {
-            isKey = true;
-            view.write(view.blueText("Введите название колонки: "));
-            String seqName = view.read();
-            settings.add(new String[]{seqName,""});
-        } else {
-            isKey = false;
-        }
+        String[] data = correctly.expectedMinEven(command, 4);
 
         String tableName = data[1];
+        boolean isKey = false;
+        ArrayList<String[]> settings = getSettings(data, isKey);
 
+        view.addHistory("Добавление данных в таблицу: " + tableName + " по критериям " + command + " insert");
+
+        try {
+            manager.insert(tableName, settings, isKey);
+            view.writeAndHistory("Успех! Данные добавлены", "\tУспех");
+        } catch (SQLException | NullPointerException e) {
+            view.writeAndHistory("Ошибка. Не удалось добавить данные в  таблицу ( " + tableName + " ) "
+                    + e.getMessage(), "\tНеудача " + e.getMessage());
+        }
+    }
+
+    private ArrayList<String[]> getSettings(String[] data, boolean isKey) {
+        ArrayList<String[]> settings = new ArrayList<>();
+        getKeySet(settings, isKey);
+        addSettings(data, settings);
+        return settings;
+    }
+
+    private void getKeySet(ArrayList<String[]> settings, boolean isKey) {
+        String key = keyAction();
+        if (key.equalsIgnoreCase("y")) {
+            isKey = true;
+            view.write("Введите название колонки: ");
+            String seqName = view.read();
+            settings.add(new String[]{seqName, ""});
+        }
+    }
+
+    private ArrayList<String[]> addSettings(String[] data, ArrayList<String[]> settings) {
         int index = 2;
         while (index != data.length) {
             SettingsHelper.toSettings(data, settings, index);
             index += 2;
         }
-
-        History.cache.add(History.getDate() + " " + "Добавление данных в таблицу: " + tableName +
-                " по критериям " + command + " " + view.yellowText(Insert.class.getSimpleName().toLowerCase()));
-
-        try {
-            manager.insert(tableName, settings, isKey);
-            view.write(view.blueText("Успех! Данные добавлены"));
-            History.cache.add(view.requestTab(view.blueText("Успех")));
-        } catch (SQLException | NullPointerException e) {
-            History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось добавить данные в  таблицу ( " + tableName + " ) "
-                    + view.redText(e.getMessage())));
-        }
+        return settings;
     }
 
+    private String keyAction() {
+        view.write("Добавить Seq генератор, если такой имеется? Y/N");
+        return view.read();
+    }
 }

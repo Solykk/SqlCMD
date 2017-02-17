@@ -1,6 +1,7 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,10 +13,12 @@ public class Create implements Command {
 
     private DatabaseManager manager;
     private View view;
+    private Correctly correctly;
 
     public Create(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
+        this.correctly = new Correctly();
     }
 
     @Override
@@ -26,76 +29,84 @@ public class Create implements Command {
     @Override
     public void process(String command) {
 
-        String [] data = command.split("\\|");
-        if(data.length < 3){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается минимум 3, но есть: " + data.length);
-        }
+        String[] data = correctly.expectedThreeMin(command);
 
         String tableName = data[1];
-        ArrayList<String> settings = new ArrayList<>();
+        ArrayList<String> settings = getSettings(data);
 
-        int index = 2;
-
-        while (index  != data.length){
-            settings.add(data[index]);
-            index++;
-        }
-
-        History.cache.add(History.getDate() + " " + "Создание таблицы: " + tableName + " по критериям "
-                + command + " " + view.yellowText(Create.class.getSimpleName().toLowerCase()));
+        view.addHistory("Создание таблицы: " + tableName + " по критериям " + command + " create");
 
         try {
-            manager.createTableWithoutPK(tableName, settings);
-            view.write(view.blueText("Успех! Таблица создана"));
-            History.cache.add(view.requestTab(view.blueText("Успех")));
+            manager.createWithoutPK(tableName, settings);
+            view.writeAndHistory("Успех! Таблица создана", "\tУспех");
         } catch (SQLException | NullPointerException e) {
-            History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось создать таблицу ( " + tableName + " ) "
-                    + view.redText(e.getMessage())));
+            view.writeAndHistory("Ошибка. Не удалось создать таблицу ( " + tableName + " ) "
+                    + e.getMessage(), "\tНеудача " + e.getMessage());
         }
 
-        view.write("Присвоить колонке первичный ключ, если такой имеется? Если да, введите " + view.greenText("y"));
-        String key = view.read();
-        if (key.equals("y")) {
-            view.write(view.blueText("Введите название колонки, которой хотите присвоить ключ "));
-            String columnName = view.read();
-            History.cache.add(History.getDate() + " " + "Создание первичного ключа для таблицы: ( " + tableName + " ) по критериям ( "
-                    + columnName + " ) " + view.yellowText(Create.class.getSimpleName().toLowerCase()));
+        String key = keyAction();
+        if (key.equalsIgnoreCase("y")) {
+
+            String columnName = nameAction();
+            view.addHistory("Создание первичного ключа для таблицы: ( " + tableName + " ) по критериям ( "
+                    + columnName + " ) create");
 
             try {
-                manager.createTableCreatePK(tableName, columnName);
-                view.write(view.blueText("Успех! Первичный ключ создан"));
-                History.cache.add(view.requestTab(view.blueText("Успех")));
+                manager.createCreatePK(tableName, columnName);
+                view.writeAndHistory("Успех! Первичный ключ создан", "\tУспех");
             } catch (SQLException | NullPointerException e) {
-                History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-                view.write(view.redText("Ошибка. Не удалось создать первичный ключ ( " + tableName + " ) " + view.redText(e.getMessage())));
+                view.writeAndHistory("Ошибка. Не удалось создать первичный ключ ( " + tableName + " ) "
+                        + e.getMessage(), "\tНеудача " + e.getMessage());
             }
 
-            view.write(view.blueText("Если ваш первичный ключ - числовое значение, можно создать Sequence генератор для него. Хотите это сделать? "));
-            view.write(view.blueText("Если да, введите " + view.greenText("y")));
+            String seq = seqAction();
+            if(seq.equalsIgnoreCase("y")){
+                view.addHistory("Создание Sequence генератора для таблицы: ( " + tableName + " ) по критериям ( "
+                        + columnName + " ) create");
 
-            String seq = view.read();
-            if(seq.equals("y")){
-                History.cache.add(History.getDate() + " " + "Создание Sequence генератора для таблицы: ( " + tableName + " ) по критериям ( "
-                        + columnName + " ) " + view.yellowText(Create.class.getSimpleName().toLowerCase()));
-                view.write(view.blueText("Введите значени с которого будет начинаться отсчет "));
-
-                Long startWith = Long.valueOf(view.read());
+                Long startWith = startWith();
                 try {
-                    manager.createTableSequenceForPK(tableName, startWith);
-                    view.write(view.blueText("Успех! Первичный ключ создан"));
-                    History.cache.add(view.requestTab(view.blueText("Успех")));
+                    manager.createSequencePK(tableName, startWith);
+                    view.writeAndHistory("Успех! Первичный ключ создан", "\tУспех");
                 } catch (SQLException | NullPointerException e) {
-                    History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-                    view.write(view.redText("Ошибка. Не удалось создать Sequence генератор ( " + tableName + " ) "
-                            + view.redText(e.getMessage())));
+                    view.writeAndHistory("Ошибка. Не удалось создать Sequence генератор ( " + tableName + " ) "
+                            + e.getMessage(), "\tНеудача " + e.getMessage());
                 }
-            }else {
+            } else {
                 return;
             }
         } else {
             return;
         }
+    }
+
+    private Long startWith() {
+        view.write("Введите значени с которого будет начинаться отсчет ");
+        return Long.valueOf(view.read());
+    }
+
+    private String seqAction() {
+        view.write("Если ваш первичный ключ - числовое значение, можно создать Sequence генератор для него. Хотите это сделать? (Y/N)");
+        return view.read();
+    }
+
+    private String nameAction() {
+        view.write("Введите название колонки, которой хотите присвоить ключ ");
+        return view.read();
+    }
+
+    private String keyAction() {
+        view.write("Присвоить колонке первичный ключ? (Y/N)");
+        return view.read();
+    }
+
+    private ArrayList<String> getSettings(String[] data) {
+        ArrayList<String> settings = new ArrayList<>();
+        int index = 2;
+        while (index  != data.length){
+            settings.add(data[index]);
+            index++;
+        }
+        return settings;
     }
 }

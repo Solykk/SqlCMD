@@ -1,7 +1,8 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
-import ua.com.juja.sqlcmd.model.Table;
+import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.SettingsHelper;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,10 +14,12 @@ public class Update implements Command {
 
     private DatabaseManager manager;
     private View view;
+    private Correctly correctly;
 
     public Update(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
+        this.correctly = new Correctly();
     }
 
     @Override
@@ -27,44 +30,40 @@ public class Update implements Command {
     @Override
     public void process(String command) {
 
-        String [] data = command.split("\\|");
-        if(data.length < 6){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается минимум 6, но есть: " + data.length);
-        } else if(data.length%2 != 0){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается четное количество аргументов, но есть: " + data.length);
-        }
+        String[] data = correctly.expectedMinEven(command, 6);
 
         String tableName = data[1];
-        ArrayList<String[]> settingsForUpdate = new ArrayList<>();
-        ArrayList<String[]> settingsHowUpdate = new ArrayList<>();
+        ArrayList<String[]> forUpdate = new ArrayList<>();
+        ArrayList<String[]> howUpdate = new ArrayList<>();
 
-        int indexForUpdate = 2;
-        int indexHowUpdate = data.length - (data.length - 2)/2;
+        getSettings(data, forUpdate, howUpdate);
 
-        while (indexForUpdate != indexHowUpdate){
-            SettingsHelper.toSettings(data, settingsForUpdate, indexForUpdate);
-            indexForUpdate += 2;
-        }
-        while (indexHowUpdate  != data.length) {
-            SettingsHelper.toSettings(data, settingsHowUpdate, indexHowUpdate);
-            indexHowUpdate += 2;
-        }
-
-        History.cache.add(History.getDate() + " " + "Обновление содержимого таблицы: " + tableName +
-                " по критериям " + command + " " + view.yellowText(Update.class.getSimpleName().toLowerCase()));
+        view.addHistory("Обновление содержимого таблицы: " + tableName +
+                " по критериям " + command + " update");
 
         try {
-            manager.update(tableName, settingsForUpdate, settingsHowUpdate);
-            view.write(view.blueText("Успех! Данные обновлены"));
-            History.cache.add(view.requestTab(view.blueText("Успех")));
-            Table updatedTable = manager.readTable(tableName);
-            view.printTable(updatedTable);
+            manager.update(tableName, forUpdate, howUpdate);
+            view.writeAndHistory("Успех! Данные обновлены", "\tУспех");
+
+            view.printTable(manager.read(tableName));
         } catch (SQLException | NullPointerException e) {
-            History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось обновить таблицу ( " + tableName + " ) "
-                    + view.redText(e.getMessage())));
+            view.writeAndHistory("Ошибка. Не удалось обновить таблицу ( " + tableName + " ) " + e.getMessage(),
+                                 "\tНеудача " + e.getMessage());
         }
     }
+
+    private void getSettings(String[] data, ArrayList<String[]> forUpdate, ArrayList<String[]> howUpdate) {
+        int indexFor = 2;
+        int indexHow = data.length - (data.length - 2)/2;
+
+        while (indexFor != indexHow){
+            SettingsHelper.toSettings(data, forUpdate, indexFor);
+            indexFor += 2;
+        }
+        while (indexHow  != data.length) {
+            SettingsHelper.toSettings(data, howUpdate, indexHow);
+            indexHow += 2;
+        }
+    }
+
 }

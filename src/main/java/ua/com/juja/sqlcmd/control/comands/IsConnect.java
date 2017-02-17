@@ -25,6 +25,6 @@ public class IsConnect implements Command {
     public void process(String command) {
         view.write("Вы не можете пользоваться командами, пока " +
                 "не подключитесь с помощью комманды " +
-                view.greenText("connect|username|password"));
+                "connect|username|password");
     }
 }

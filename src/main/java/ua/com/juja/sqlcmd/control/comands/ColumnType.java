@@ -1,7 +1,7 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
-import ua.com.juja.sqlcmd.model.Table;
+import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 
@@ -12,10 +12,12 @@ public class ColumnType implements Command {
 
     private DatabaseManager manager;
     private View view;
+    private Correctly correctly;
 
     public ColumnType(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
+        this.correctly = new Correctly();
     }
 
     @Override
@@ -25,25 +27,21 @@ public class ColumnType implements Command {
 
     @Override
     public void process(String command) {
-        String [] data = command.split("\\|");
-        if(data.length != 3){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается 3, но есть: " + data.length);
-        }
+
+        String[] data = correctly.expectedThree(command);
+
         String tableName = data[1];
         String columnName = data[2];
 
-        History.cache.add(History.getDate() + " " + "Определение типа данных содержащийся в таблице: " + tableName
-                + " у колонки " + columnName + " " + view.yellowText(ColumnType.class.getSimpleName().toLowerCase()));
+        view.addHistory("Определение типа данных содержащийся в таблице: " + tableName
+                + " у колонки " + columnName + " columntype");
 
         try {
-            Table request = manager.getDataTypeColumnFromTable(tableName, columnName);
-            view.printTable(request);
-            History.cache.add(view.requestTab(view.blueText("Успех")));
+            view.printTable(manager.getTypeColumn(tableName, columnName));
+            view.writeAndHistory("", "\tУспех");
         } catch (SQLException |  NullPointerException e) {
-            History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось определить тип данных колоноки ( " + columnName
-                    + " ) в таблице ( " + tableName + " ) " + view.redText(e.getMessage())));
+            view.writeAndHistory("Ошибка. Не удалось определить тип данных колоноки ( " + columnName
+                    + " ) в таблице ( " + tableName + " ) " + e.getMessage(), "\tНеудача " + e.getMessage());
         }
     }
 }

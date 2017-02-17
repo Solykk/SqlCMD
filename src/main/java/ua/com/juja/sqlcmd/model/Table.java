@@ -7,10 +7,8 @@ import java.util.ArrayList;
  */
 public class Table {
 
-
     private String tableName;
     private ArrayList<ColumnDate> tableDate ;
-
 
     public  Table (String tableName, ArrayList<ColumnDate> tableDate){
         this.tableName = tableName;

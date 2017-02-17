@@ -1,7 +1,7 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
-import ua.com.juja.sqlcmd.model.Table;
+import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 
@@ -12,10 +12,12 @@ public class TableType implements Command {
 
     private DatabaseManager manager;
     private View view;
+    private Correctly correctly;
 
     public TableType(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
+        this.correctly = new Correctly();
     }
 
     @Override
@@ -25,26 +27,17 @@ public class TableType implements Command {
 
     @Override
     public void process(String command) {
-        String [] data = command.split("\\|");
-        if(data.length != 2){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается 2, но есть: " + data.length);
-        }
 
-        String tableName = data[1];
+        String tableName = correctly.expectedTwo(command);
 
-        History.cache.add(History.getDate() + " " + "Определение типа данных содержащийся в таблице: " + tableName
-                + " " + view.yellowText(TableType.class.getSimpleName().toLowerCase()));
+        view.addHistory("Определение типа данных содержащийся в таблице: " + tableName + " tabletype");
 
         try {
-            Table request = manager.getDataTypeAllColumnsFromTable(tableName);
-            view.printTable(request);
-            History.cache.add(view.requestTab(view.blueText("Успех")));
+            view.printTable(manager.getAllTypeColumns(tableName));
+            view.writeAndHistory("", "\tУспех");
         } catch (SQLException | NullPointerException e) {
-            History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось определить тип данных колонок в таблице ( " + tableName + " ) "
-                    + view.redText(e.getMessage())));
+            view.writeAndHistory("Ошибка. Не удалось определить тип данных колонок в таблице ( " + tableName + " ) "
+                    + e.getMessage(), "\tНеудача " + e.getMessage());
         }
-
     }
 }

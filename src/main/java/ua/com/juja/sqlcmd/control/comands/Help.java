@@ -21,145 +21,145 @@ public class Help implements Command {
 
     @Override
     public void process(String command) {
-         String connect = view.redText("connect") + "\n" +
+         String connect = "connect" + "\n" +
                 "\tКоманда для подключения к соответствующей БД\n" +
-                "\tФормат команды: " + view.greenText("connect|username|password") + "\n" +
+                "\tФормат команды: " + "connect|username|password" + "\n" +
                 "\tгде: \n" +
-                "\t\t" + view.greenText("username") + " -  имя пользователя БД (совпвдает с именем БД)\n" +
-                "\t\t" + view.greenText("password") + " - пароль пользователя БД\n" +
-                "\tФормат вывода: " + view.blueText("текстовое сообщение с результатом выполнения операции.");
-         String tables = view.redText("tables") + "\n" +
+                "\t\t" + "username" + " -  имя пользователя БД (совпвдает с именем БД\n" +
+                "\t\t" + "password" + " - пароль пользователя БД\n" +
+                "\tФормат вывода: " + "текстовое сообщение с результатом выполнения операции.";
+         String tables = "tables" + "\n" +
                  "\tКоманда выводит список всех пользовательских таблиц \n" +
                  "\t\tсодержащихся в БД к которой вы подключены.\n" +
-                 "\tФормат команды: " + view.greenText("tables")  + "\n" +
-                 "\tФормат вывода: " + view.blueText("табличка в консольном формате");
-         String columns = view.redText("columns") + "\n" +
+                 "\tФормат команды: " + "tables"  + "\n" +
+                 "\tФормат вывода: " + "табличка в консольном формате";
+         String columns = "columns" + "\n" +
                 "\tКоманда выводит список всех колонок  \n" +
                 "\t\tсодержащихся в запрашиваемой таблице.\n" +
-                "\tФормат команды: " + view.greenText("columns|tableName") + "\n" +
-                "\tгде " + view.greenText("tableName") + " - имя запрашиваемой таблицы\n" +
-                 "\tФормат вывода: " + view.blueText("табличка в консольном формате");
-         String tabletype = view.redText("tabletype") + "\n" +
+                "\tФормат команды: " + "columns|tableName" + "\n" +
+                "\tгде " + "tableName" + " - имя запрашиваемой таблицы\n" +
+                 "\tФормат вывода: " + "табличка в консольном формате";
+         String tabletype = "tabletype" + "\n" +
                 "\tКоманда выводит список всех колонок, \n" +
                 "\t\t\t\t\tтип данных для соответсвующей колонки, \n" +
                 "\t\t\t\t\tвозможность содержать null значение соответсвующей колонки\n" +
                 "\t\tв запрашиваемой таблице.\n" +
-                "\tФормат команды: " + view.greenText("tabletype|tableName") + "\n" +
-                "\tгде " + view.greenText("tableName") + " - имя запрашиваемой таблицы\n" +
-                 "\tФормат вывода: " + view.blueText("табличка в консольном формате");
-         String columntype = view.redText("columntype") + "\n" +
+                "\tФормат команды: " + "tabletype|tableName" + "\n" +
+                "\tгде " + "tableName" + " - имя запрашиваемой таблицы\n" +
+                 "\tФормат вывода: " + "табличка в консольном формате";
+         String columntype = "columntype" + "\n" +
                  "\tКоманда выводит  колоноку, \n" +
                  "\t\t\t\t\tтип данных для соответсвующей колонки, \n" +
                  "\t\t\t\t\tвозможность содержать null значение соответсвующей колонки\n" +
                  "\t\tв запрашиваемой таблице.\n" +
-                 "\tФормат команды: " + view.greenText("columntype|tableName|columnName") + "\n" +
-                 "\tгде " + view.greenText("tableName") + " - имя запрашиваемой таблицы\n" +
-                 "\t\t" + view.greenText("colummnName") + " - имя столбца в запрашиваемой таблице\n" +
-                 "\tФормат вывода: " + view.blueText("табличка в консольном формате");
-         String clear = view.redText("clear") + "\n" +
-                "\tКоманда очищает содержимое указанной (всей) таблицы\n" +
-                "\tФормат команды: " + view.greenText("clear|tableName") + "\n" +
-                "\tгде " + view.greenText("tableName") + " - имя очищаемой таблицы\n" +
-                "\tФормат вывода: " + view.blueText("текстовое сообщение с результатом выполнения операции");
-         String drop = view.redText("drop") + "\n" +
+                 "\tФормат команды: " + "columntype|tableName|columnName" + "\n" +
+                 "\tгде " + "tableName" + " - имя запрашиваемой таблицы\n" +
+                 "\t\t" + "colummnName" + " - имя столбца в запрашиваемой таблице\n" +
+                 "\tФормат вывода: " + "табличка в консольном формате";
+         String clear = "clear" + "\n" +
+                "\tКоманда очищает содержимое указанной (всей таблицы\n" +
+                "\tФормат команды: " + "clear|tableName" + "\n" +
+                "\tгде " + "tableName" + " - имя очищаемой таблицы\n" +
+                "\tФормат вывода: " + "текстовое сообщение с результатом выполнения операции";
+         String drop = "drop" + "\n" +
                 "\tКоманда удаляет заданную таблицу\n" +
-                "\tФормат команды: " + view.greenText("drop|tableName") + "\n" +
-                "\tгде " + view.greenText("tableName") + " - имя удаляемой таблицы\n" +
-                 "\tФормат вывода: " + view.blueText("текстовое сообщение с результатом выполнения операции");
-         String create = view.redText("create") + "\n" +
+                "\tФормат команды: " + "drop|tableName" + "\n" +
+                "\tгде " + "tableName" + " - имя удаляемой таблицы\n" +
+                 "\tФормат вывода: " + "текстовое сообщение с результатом выполнения операции";
+         String create = "create" + "\n" +
                 "\tКоманда создает новую таблицу с заданными полями\n" +
-                "\tФормат команды: " + view.greenText("create|tableName|column1(data type(data size)) nullable|column2(data type(data size)) \n" +
-                 "nullable|...|columnN(data type(data size)) nullable") + "\n" +
-                "\tгде: " + view.greenText("tableName") + " - имя таблицы\n" +
-                "\t" + view.greenText("column1") + " - имя первого столбца записи\n" +
-                "\t\t" + view.greenText("(data type(data size))")+ " - (тип данных колонки(максимальный размер данных для колонки))\n" +
-                "\t\t\t" + view.greenText("nullable:") + "\n" +
-                "\t\t\t\t" + view.greenText("null") + " - при создании записи в столбце значение может содержать null\n" +
-                "\t\t\t\t" + view.greenText("not null") + " - при создании записи в столбце значение НЕ может содержать null\n" +
-                "\t" + view.greenText("column2") + " - имя второго столбца записи\n" +
+                "\tФормат команды: " + "create|tableName|column1(data type(data size)) nullable|column2(data type(data size)) \n" +
+                 "nullable|...|columnN(data type(data size)) nullable" + "\n" +
+                "\tгде: " + "tableName" + " - имя таблицы\n" +
+                "\t" + "column1" + " - имя первого столбца записи\n" +
+                "\t\t" + "(data type(data size))"+ " - (тип данных колонки(максимальный размер данных для колонки))\n" +
+                "\t\t\t" + "nullable:" + "\n" +
+                "\t\t\t\t" + "null" + " - при создании записи в столбце значение может содержать null\n" +
+                "\t\t\t\t" + "not null" + " - при создании записи в столбце значение НЕ может содержать null\n" +
+                "\t" + "column2" + " - имя второго столбца записи\n" +
                 "\t\t-//-\n" +
-                "\t" + view.greenText("columnN") + " - имя n-го столбца записи\n" +
+                "\t" + "columnN" + " - имя n-го столбца записи\n" +
                 "\t\t-//-\n" +
-                 "\tФормат вывода: " + view.blueText("текстовое сообщение с результатом выполнения операции");
-         String find = view.redText("find") + "\n" +
+                 "\tФормат вывода: " + "текстовое сообщение с результатом выполнения операции";
+         String find = "find" + "\n" +
                 "\tКоманда для получения содержимого указанной таблицы\n" +
-                "\tФормат команды: " + view.greenText("find|tableName") + "\n" +
-                 "\tгде: " + view.greenText("tableName") + " - имя таблицы\n" +
-                 "\tФормат вывода: " + view.blueText("табличка в консольном формате");
-        String filetable = view.redText("filetable") + "\n" +
+                "\tФормат команды: " + "find|tableName" + "\n" +
+                 "\tгде: " + "tableName" + " - имя таблицы\n" +
+                 "\tФормат вывода: " + "табличка в консольном формате";
+         String filetable = "filetable" + "\n" +
                 "\tКоманда для сохранения содержимого указанной таблицы в файл\n" +
-                "\tФормат команды: " + view.greenText("filetable|tableName") + "\n" +
-                 "\tгде: " + view.greenText("tableName") + " - имя таблицы\n" +
-                 "\tФормат вывода: " + view.blueText("табличка в консольном формате + текстовое сообщение с результатом выполнения операции");
-         String findsettings = view.redText("findsettings") + "\n" +
+                "\tФормат команды: " + "filetable|tableName" + "\n" +
+                 "\tгде: " + "tableName" + " - имя таблицы\n" +
+                 "\tФормат вывода: " + "табличка в консольном формате + текстовое сообщение с результатом выполнения операции";
+         String findsettings = "findsettings" + "\n" +
                 "\tКоманда для получения содержимого указанной таблицы по определенным критериям\n" +
-                "\tФормат команды: " + view.greenText("find|tableName|columnName|value|column2|value2|...|columnN|valueN") + "\n" +
-                 "\tгде: " + view.greenText("tableName") + " - имя таблицы\n" +
-                "\t\t" + view.greenText("column1") + " - имя первого столбца\n" +
-                "\t\t" + view.greenText("value1") + " - значение первого столбца\n" +
-                "\t\t" + view.greenText("column2") + " - имя второго столбца\n" +
-                "\t\t" + view.greenText("value2") + " - значение второго столбца\n" +
-                "\t\t" + view.greenText("columnN") + " - имя n-го столбца\n" +
-                "\t\t" + view.greenText("valueN") + " - имя n-го столбца\n" +
-                 "\tФормат вывода: " + view.blueText("табличка в консольном формате");
-         String insert = view.redText("insert") + "\n" +
+                "\tФормат команды: " + "find|tableName|columnName|value|column2|value2|...|columnN|valueN" + "\n" +
+                 "\tгде: " + "tableName" + " - имя таблицы\n" +
+                "\t\t" + "column1" + " - имя первого столбца\n" +
+                "\t\t" + "value1" + " - значение первого столбца\n" +
+                "\t\t" + "column2" + " - имя второго столбца\n" +
+                "\t\t" + "value2" + " - значение второго столбца\n" +
+                "\t\t" + "columnN" + " - имя n-го столбца\n" +
+                "\t\t" + "valueN" + " - имя n-го столбца\n" +
+                 "\tФормат вывода: " + "табличка в консольном формате";
+         String insert = "insert" + "\n" +
                 "\tКоманда для вставки одной строки в заданную таблицу\n" +
-                "\tФормат команды: " + view.greenText("insert|tableName|column1|value1|column2|value2|...|columnN|valueN") + "\n" +
-                 "\tгде: " + view.greenText("tableName") + " - имя таблицы\n" +
-                 "\t" + view.greenText("column1") + " - имя первого столбца записи\n" +
-                 "\t" + view.greenText("value1") + " - значение первого столбца записи\n" +
-                 "\t" + view.greenText("column2") + " - имя второго столбца записи\n" +
-                 "\t" + view.greenText("value2") + " - значение второго столбца записи\n" +
-                 "\t" + view.greenText("columnN") + " - имя n-го столбца записи\n" +
-                 "\t" + view.greenText("valueN") + " - имя n-го столбца записи\n" +
+                "\tФормат команды: " + "insert|tableName|column1|value1|column2|value2|...|columnN|valueN" + "\n" +
+                 "\tгде: " + "tableName" + " - имя таблицы\n" +
+                 "\t" + "column1" + " - имя первого столбца записи\n" +
+                 "\t" + "value1" + " - значение первого столбца записи\n" +
+                 "\t" + "column2" + " - имя второго столбца записи\n" +
+                 "\t" + "value2" + " - значение второго столбца записи\n" +
+                 "\t" + "columnN" + " - имя n-го столбца записи\n" +
+                 "\t" + "valueN" + " - имя n-го столбца записи\n" +
                  "\t\tNUMBER --- записывается число без ковычек   columnName|123\n" +
                  "\t\tVARCHAR2 - строковое значение записывается в ковычках   columnName|'Hello'\n" +
                  "\t\tDATE ----- даты записываются следующим образом  to_date('20160321','YYYYMMDD')\n" +
-                 "\tФормат вывода: " + view.blueText("текстовое сообщение с результатом выполнения операции");
-         String update = view.redText("update") + "\n" +
+                 "\tФормат вывода: " + "текстовое сообщение с результатом выполнения операции";
+         String update = "update" + "\n" +
                 "\tКоманда обновит запись, установив значение column2 = value2, для которой соблюдается условие column1 = value1\n" +
-                "\tФормат команды: " + view.greenText("update|tableName|column1|value1|column2|value2") + "\n" +
-                 "\tгде: " + view.greenText("tableName") + " - имя таблицы\n" +
-                "\t" + view.greenText("column1") + " - имя столбца записи которое проверяется\n" +
-                "\t" + view.greenText("value1") + " - значение которому должен соответствовать столбец column1 для обновляемой записи\n" +
-                "\t" + view.greenText("column2") + " - имя обновляемого столбца записи\n" +
-                "\t" + view.greenText("value2") + " - значение обновляемого столбца записи\n" +
-                "\t" + view.greenText("columnN") + " - имя n-го обновляемого столбца записи\n" +
-                "\t" + view.greenText("valueN")+ " - значение n-го обновляемого столбца записи\n" +
+                "\tФормат команды: " + "update|tableName|column1|value1|column2|value2" + "\n" +
+                 "\tгде: " + "tableName" + " - имя таблицы\n" +
+                "\t" + "column1" + " - имя столбца записи которое проверяется\n" +
+                "\t" + "value1" + " - значение которому должен соответствовать столбец column1 для обновляемой записи\n" +
+                "\t" + "column2" + " - имя обновляемого столбца записи\n" +
+                "\t" + "value2" + " - значение обновляемого столбца записи\n" +
+                "\t" + "columnN" + " - имя n-го обновляемого столбца записи\n" +
+                "\t" + "valueN"+ " - значение n-го обновляемого столбца записи\n" +
                 "\t\tNUMBER --- записывается число без ковычек   columnName|123\n" +
                 "\t\tVARCHAR2 - строковое значение записывается в ковычках   columnName|'Hello'\n" +
                 "\t\tDATE ----- даты записываются следующим образом  to_date('20160321','YYYYMMDD')\n" +
-                "\t" + view.redText("Количесьво обновляемых параметров и параметров по которым обновлять должно быть одинаковым!") + "\n" +
-                "\tФормат вывода: " + view.blueText("табличный, как при find со старыми значениями обновленных записей.");
-         String delete = view.redText("delete") + "\n" +
+                "\t" + "Количесьво обновляемых параметров и параметров по которым обновлять должно быть одинаковым!" + "\n" +
+                "\tФормат вывода: " + "табличный, как при find со старыми значениями обновленных записей.";
+         String delete = "delete" + "\n" +
                 "\tКоманда удаляет одну или несколько записей для которых соблюдается условие column = value\n" +
-                "\tФормат команды: " + view.greenText("delete|tableName|column|value") + "\n" +
-                 "\tгде: " + view.greenText("tableName") + " - имя таблицы\n" +
-                "\t" + view.greenText("column") + " - имя столбца записи которое проверяется\n" +
-                "\t" + view.greenText("value") + " - значение которому должен соответствовать столбец column1 для удаляемой записи\n" +
-                "\tФормат вывода: " + view.blueText("табличный, как при find со старыми значениями удаляемых записей.");
-         String readQuery = view.redText("readQuery") + "\n" +
+                "\tФормат команды: " + "delete|tableName|column|value" + "\n" +
+                 "\tгде: " + "tableName" + " - имя таблицы\n" +
+                "\t" + "column" + " - имя столбца записи которое проверяется\n" +
+                "\t" + "value" + " - значение которому должен соответствовать столбец column1 для удаляемой записи\n" +
+                "\tФормат вывода: " + "табличный, как при find со старыми значениями удаляемых записей.";
+         String readQuery = "readQuery" + "\n" +
                  "\tКоманда для ввода SQL запроса\n" +
-                 "\tФормат команды: " + view.greenText("readQuery|SQLQuery") + view.redText("(Только чтение из БД)") +  "\n" +
+                 "\tФормат команды: " + "readQuery|SQLQuery" + "(Только чтение из БД)" +  "\n" +
                  "\tгде: SQLQuery - ваш SQL запрос\n" +
-                 "\tФормат вывода: " + view.blueText("табличка в консольном формате");
-         String cudQuery = view.redText("cudQuery") + "\n" +
-                 "\tФормат команды: " + view.greenText("cudQuery|SQLQuery") + " (Для внесения изменений в таблицу)\n" +
-                 "\tгде: " + view.greenText("SQLQuery") + " - ваш SQL запрос\n" +
-                 "\tФормат вывода: " + view.blueText("текстовое сообщение с результатом выполнения операции");
-         String history = view.redText("history") + "\n" +
+                 "\tФормат вывода: " + "табличка в консольном формате";
+         String cudQuery = "cudQuery" + "\n" +
+                 "\tФормат команды: " + "cudQuery|SQLQuery" + " (Для внесения изменений в таблицу)\n" +
+                 "\tгде: " + "SQLQuery" + " - ваш SQL запрос\n" +
+                 "\tФормат вывода: " + "текстовое сообщение с результатом выполнения операции";
+         String history = "history" + "\n" +
                 "\tКоманда для получения истории работы с приложением\n" +
-                 "\tФормат команды: " + view.greenText("history") + "\n" +
-                "\tФормат вывода: " + view.blueText("дата и время использования команды -> действия") + "\n" +
-                "\t\t\t\t\t\t\t" + view.blueText("результат выполнения команды");
-         String help = view.redText("help") + "\n" +
+                 "\tФормат команды: " + "history" + "\n" +
+                "\tФормат вывода: " + "дата и время использования команды -> действия" + "\n" +
+                "\t\t\t\t\t\t\t" + "результат выполнения команды";
+         String help = "help" + "\n" +
                 "\tКоманда выводит в консоль список всех доступных команд\n" +
-                "\tФормат команды: " + view.greenText("help") + "\n" +
-                "\tФормат вывода: " + view.blueText("текст, описания команд");
-         String exit = view.redText("exit") + "\n" +
+                "\tФормат команды: " + "help" + "\n" +
+                "\tФормат вывода: " + "текст, описания команд";
+         String exit = "exit" + "\n" +
                 "\tКоманда для отключения от БД и выход из приложения\n" +
-                "\tФормат команды: " + view.greenText("exit") + "\n" +
-                 "\tФормат вывода: " + view.blueText("текстовое сообщение");
+                "\tФормат команды: " + "exit" + "\n" +
+                 "\tФормат вывода: " + "текстовое сообщение";
         view.write(connect);
         view.write(tables);
         view.write(columns);

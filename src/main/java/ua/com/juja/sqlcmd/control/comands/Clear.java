@@ -1,6 +1,7 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 
@@ -11,10 +12,12 @@ public class Clear implements Command {
 
     private DatabaseManager manager;
     private View view;
+    private Correctly correctly;
 
     public Clear(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
+        this.correctly = new Correctly();
     }
 
     @Override
@@ -24,25 +27,17 @@ public class Clear implements Command {
 
     @Override
     public void process(String command) {
-        String [] data = command.split("\\|");
-        if(data.length != 2){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается 2, но есть: " + data.length);
-        }
 
-        String tableName = data[1];
+        String tableName = correctly.expectedTwo(command);
 
-        History.cache.add(History.getDate() + " " + "Вывод содержимого таблицы: " + tableName + " " +
-                view.yellowText(Clear.class.getSimpleName().toLowerCase()));
+        view.addHistory("Вывод содержимого таблицы: " + tableName + " clear");
 
         try {
             manager.clear(tableName);
-            view.write(view.blueText("Успех! Таблица была очищена"));
-            History.cache.add(view.requestTab(view.blueText("Успех")));
+            view.writeAndHistory("Успех! Таблица была очищена", "\tУспех");
         } catch (SQLException | NullPointerException e) {
-            History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось очистить таблицу ( " + tableName + " ) "
-                    + view.redText(e.getMessage())));
+            view.writeAndHistory("Ошибка. Не удалось очистить таблицу ( " + tableName + " ) "
+                    + e.getMessage(), "\tНеудача " + e.getMessage());
         }
     }
 }

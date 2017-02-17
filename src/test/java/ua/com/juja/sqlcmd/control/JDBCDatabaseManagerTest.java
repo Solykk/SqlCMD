@@ -145,8 +145,8 @@ public class JDBCDatabaseManagerTest {
     public void getAllTableNames() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTable1col();
-        manager.createTableWithoutPK(getTableName(), settings);
-        Table table = manager.getAllTableNames();
+        manager.createWithoutPK(getTableName(), settings);
+        Table table = manager.getTableNames();
         String result = view.printTable(table);
         String actualResult =
                 "--------------\n" +
@@ -167,7 +167,7 @@ public class JDBCDatabaseManagerTest {
 
         connectUserPass();
 
-        Table table = manager.getAllTableNames();
+        Table table = manager.getTableNames();
         String result = view.printTable(table);
         String actualResult =
                 "--------------\n" +
@@ -184,7 +184,7 @@ public class JDBCDatabaseManagerTest {
     public void getAllColumnNamesFromTable_wrongInput() throws SQLException {
         connectUserPass();
 
-        Table  table = manager.getAllColumnNamesFromTable("CCC");
+        Table  table = manager.getColumnNames("CCC");
         String result = view.printTable(table);
         String actualResult =
                 "---------------\n" +
@@ -201,9 +201,9 @@ public class JDBCDatabaseManagerTest {
     public void getAllColumnNamesFromTable() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTable1col();
-        manager.createTableWithoutPK(getTableName(), settings);
+        manager.createWithoutPK(getTableName(), settings);
 
-        Table table = manager.getAllColumnNamesFromTable(getTableName());
+        Table table = manager.getColumnNames(getTableName());
 
         String result = view.printTable(table);
         String actualResult =
@@ -224,8 +224,8 @@ public class JDBCDatabaseManagerTest {
     public void getDataTypeAllColumnsFromTable() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTAble5col();
-        manager.createTableWithoutPK(getTableName(), settings);
-        Table table = manager.getDataTypeAllColumnsFromTable(getTableName());
+        manager.createWithoutPK(getTableName(), settings);
+        Table table = manager.getAllTypeColumns(getTableName());
         String result = view.printTable(table);
         String actualResult =
                         "-----------------------------------------\n" +
@@ -248,7 +248,7 @@ public class JDBCDatabaseManagerTest {
     public void getDataTypeAllColumnsFromTable_wrongInput() throws SQLException {
         connectUserPass();
 
-        Table  table = manager.getDataTypeAllColumnsFromTable("CCC");
+        Table  table = manager.getAllTypeColumns("CCC");
         String result = view.printTable(table);
         String actualResult =
                 "--------------------------------------\n" +
@@ -266,9 +266,9 @@ public class JDBCDatabaseManagerTest {
 
         connectUserPass();
         ArrayList<String> settings = getNewTAble5col();
-        manager.createTableWithoutPK(getTableName(), settings);
+        manager.createWithoutPK(getTableName(), settings);
 
-        Table table = manager.getDataTypeColumnFromTable(getTableName(), "TEST1");
+        Table table = manager.getTypeColumn(getTableName(), "TEST1");
 
         String result = view.printTable(table);
         String actualResult =
@@ -288,7 +288,7 @@ public class JDBCDatabaseManagerTest {
     public void getDataTypeColumnFromTable_wrongInput() throws SQLException {
         connectUserPass();
 
-        Table table = manager.getDataTypeColumnFromTable("CCC", "TAT");
+        Table table = manager.getTypeColumn("CCC", "TAT");
 
         String result = view.printTable(table);
         String actualResult =
@@ -307,7 +307,7 @@ public class JDBCDatabaseManagerTest {
         connectUserPass();
         try {
             ArrayList<String> settings = getNewTable1col();
-            manager.createTableWithoutPK(getTableName(), settings);
+            manager.createWithoutPK(getTableName(), settings);
             dropTable();
             assertTrue(true);
         } catch (SQLException e) {
@@ -320,7 +320,7 @@ public class JDBCDatabaseManagerTest {
     public void createTableWithoutPK_wrongInput() {
         connectUserPass();
         try {
-            manager.createTableWithoutPK("hs69", new ArrayList<String>());
+            manager.createWithoutPK("hs69", new ArrayList<String>());
             assertTrue(false);
         } catch (SQLException e) {
             assertTrue(true);
@@ -332,8 +332,8 @@ public class JDBCDatabaseManagerTest {
         connectUserPass();
         try {
             ArrayList<String> settings = getNewTable2col();
-            manager.createTableWithoutPK(getTableName(), settings);
-            manager.createTableCreatePK(getTableName(), "TEST1");
+            manager.createWithoutPK(getTableName(), settings);
+            manager.createCreatePK(getTableName(), "TEST1");
             dropTable();
             assertTrue(true);
         } catch (SQLException e) {
@@ -347,8 +347,8 @@ public class JDBCDatabaseManagerTest {
         connectUserPass();
         try {
             ArrayList<String> settings = getNewTable2col();
-            manager.createTableWithoutPK(getTableName(), settings);
-            manager.createTableCreatePK(getTableName(), "TEST23");
+            manager.createWithoutPK(getTableName(), settings);
+            manager.createCreatePK(getTableName(), "TEST23");
             dropTable();
             assertTrue(false);
         } catch (SQLException e) {
@@ -362,9 +362,9 @@ public class JDBCDatabaseManagerTest {
         connectUserPass();
         try {
             ArrayList<String> settings = getNewTable3col();
-            manager.createTableWithoutPK(getTableName(), settings);
-            manager.createTableCreatePK(getTableName(), "TEST1");
-            manager.createTableSequenceForPK(getTableName(), new Long(1));
+            manager.createWithoutPK(getTableName(), settings);
+            manager.createCreatePK(getTableName(), "TEST1");
+            manager.createSequencePK(getTableName(), new Long(1));
             dropTable();
             dropSEQ();
             assertTrue(true);
@@ -378,9 +378,9 @@ public class JDBCDatabaseManagerTest {
         connectUserPass();
         try {
             ArrayList<String> settings = getNewTable3col();
-            manager.createTableWithoutPK(getTableName(), settings);
-            manager.createTableCreatePK(getTableName(), "TEST2");
-            manager.createTableSequenceForPK(getTableName(), null);
+            manager.createWithoutPK(getTableName(), settings);
+            manager.createCreatePK(getTableName(), "TEST2");
+            manager.createSequencePK(getTableName(), null);
             dropTable();
             dropSEQ();
             assertTrue(false);
@@ -402,10 +402,10 @@ public class JDBCDatabaseManagerTest {
         connectUserPass();
         ArrayList<String> settings = getNewTable3col();
         ArrayList<String[]> insert = getInsertFor3Col();
-        manager.createTableWithoutPK(getTableName(), settings);
+        manager.createWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
         manager.clear(getTableName());
-        Table table = manager.readTable(getTableName());
+        Table table = manager.read(getTableName());
         String result = view.printTable(table);
         String actualResult =
                 "------------------------\n" +
@@ -423,12 +423,12 @@ public class JDBCDatabaseManagerTest {
         connectUserPass();
         ArrayList<String> settings = getNewTable3col();
         ArrayList<String[]> insert = getInsertFor3Col();
-        manager.createTableWithoutPK(getTableName(), settings);
-        manager.createTableCreatePK(getTableName(), "TEST1");
-        manager.createTableSequenceForPK(getTableName(), new Long(2));
+        manager.createWithoutPK(getTableName(), settings);
+        manager.createCreatePK(getTableName(), "TEST1");
+        manager.createSequencePK(getTableName(), new Long(2));
         manager.insert(getTableName(), insert, true);
         manager.clear(getTableName());
-        Table table = manager.readTable(getTableName());
+        Table table = manager.read(getTableName());
         String result = view.printTable(table);
         String actualResult =
                         "------------------------\n" +
@@ -446,10 +446,10 @@ public class JDBCDatabaseManagerTest {
     public void drop() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTable3col();
-        manager.createTableWithoutPK(getTableName(), settings);
-        manager.createTableWithoutPK("SECOND", settings);
+        manager.createWithoutPK(getTableName(), settings);
+        manager.createWithoutPK("SECOND", settings);
         manager.drop("SECOND");
-        Table table = manager.getAllTableNames();
+        Table table = manager.getTableNames();
         String result = view.printTable(table);
         String actualResult =
                 "--------------\n" +
@@ -467,8 +467,8 @@ public class JDBCDatabaseManagerTest {
     public void drop_wrongImport() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTable3col();
-        manager.createTableWithoutPK(getTableName(), settings);
-        manager.createTableWithoutPK("SECOND", settings);
+        manager.createWithoutPK(getTableName(), settings);
+        manager.createWithoutPK("SECOND", settings);
         try {
             manager.drop("Gdhd");
         } catch (SQLException e){
@@ -484,10 +484,10 @@ public class JDBCDatabaseManagerTest {
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
         ArrayList<String[]> insert1 = getInsertFor5ColOther();
-        manager.createTableWithoutPK(getTableName(), settings);
+        manager.createWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
         manager.insert(getTableName(), insert1, false);
-        Table table = manager.readTable(getTableName());
+        Table table = manager.read(getTableName());
         String result = view.printTable(table);
         String actualResult =
                                         "-------------------------------------------------------\n" +
@@ -509,7 +509,7 @@ public class JDBCDatabaseManagerTest {
         connectUserPass();
         Table table = null;
         try {
-            table = manager.readTable("SomeNAme");
+            table = manager.read("SomeNAme");
         } catch (SQLException e) {
             assertEquals("ORA-00942: table or view does not exist", e.getMessage());
         }
@@ -523,10 +523,10 @@ public class JDBCDatabaseManagerTest {
         ArrayList<String[]> insert1 = getInsertFor5ColOther();
         ArrayList<String[]> settingsFine = new ArrayList<String[]>();
         settingsFine.add(new String[]{"TEST", "'Hello'"});
-        manager.createTableWithoutPK(getTableName(), settings);
+        manager.createWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
         manager.insert(getTableName(), insert1, false);
-        Table table = manager.read(getTableName(), settingsFine);
+        Table table = manager.readSet(getTableName(), settingsFine);
         String result = view.printTable(table);
         String actualResult =
                                 "-------------------------------------------------------\n" +
@@ -550,10 +550,10 @@ public class JDBCDatabaseManagerTest {
         ArrayList<String[]> insert1 = getInsertFor5ColOther();
         ArrayList<String[]> settingsFine = new ArrayList<String[]>();
         settingsFine.add(new String[]{"TEST", "'GGTHhhh'"});
-        manager.createTableWithoutPK(getTableName(), settings);
+        manager.createWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
         manager.insert(getTableName(), insert1, false);
-        Table table = manager.read(getTableName(), settingsFine);
+        Table table = manager.readSet(getTableName(), settingsFine);
         String result = view.printTable(table);
         String actualResult =
                                 "----------------------------------------\n" +
@@ -576,11 +576,11 @@ public class JDBCDatabaseManagerTest {
         ArrayList<String[]> insert1 = getInsertFor5ColOther();
         ArrayList<String[]> settingsFine = new ArrayList<String[]>();
         settingsFine.add(new String[]{"TEST", "'Hello'"});
-        manager.createTableWithoutPK(getTableName(), settings);
+        manager.createWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
         manager.insert(getTableName(), insert1, false);
         manager.delete(getTableName(), settingsFine);
-        Table table = manager.readTable(getTableName());
+        Table table = manager.read(getTableName());
         String result = view.printTable(table);
         String actualResult =
                                         "------------------------------------------------------\n" +
@@ -604,7 +604,7 @@ public class JDBCDatabaseManagerTest {
         ArrayList<String[]> insert1 = getInsertFor5ColOther();
         ArrayList<String[]> settingsFine = new ArrayList<String[]>();
         settingsFine.add(new String[]{"TEST", "'FFCVvvv'"});
-        manager.createTableWithoutPK(getTableName(), settings);
+        manager.createWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
         manager.insert(getTableName(), insert1, false);
         try {
@@ -612,7 +612,7 @@ public class JDBCDatabaseManagerTest {
         } catch (Exception e){
             //do nothing
         }
-        Table table = manager.readTable(getTableName());
+        Table table = manager.read(getTableName());
         String result = view.printTable(table);
         String actualResult =
                                         "-------------------------------------------------------\n" +
@@ -639,11 +639,11 @@ public class JDBCDatabaseManagerTest {
         settingsFine.add(new String[]{"TEST", "'Hello'"});
         ArrayList<String[]> settingsHowUpdate = new ArrayList<String[]>();
         settingsHowUpdate.add(new String[]{"TEST", "'World'"});
-        manager.createTableWithoutPK(getTableName(), settings);
+        manager.createWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
         manager.insert(getTableName(), insert1, false);
         manager.update(getTableName(), settingsHowUpdate, settingsFine);
-        Table table = manager.readTable(getTableName());
+        Table table = manager.read(getTableName());
         String result = view.printTable(table);
         String actualResult =
                                 "-------------------------------------------------------\n" +
@@ -670,11 +670,11 @@ public class JDBCDatabaseManagerTest {
         settingsFine.add(new String[]{"TEST", "'Ghjk'"});
         ArrayList<String[]> settingsHowUpdate = new ArrayList<String[]>();
         settingsHowUpdate.add(new String[]{"TEST", "'World'"});
-        manager.createTableWithoutPK(getTableName(), settings);
+        manager.createWithoutPK(getTableName(), settings);
         manager.insert(getTableName(), insert, false);
         manager.insert(getTableName(), insert1, false);
         manager.update(getTableName(), settingsHowUpdate, settingsFine);
-        Table table = manager.readTable(getTableName());
+        Table table = manager.read(getTableName());
         String result = view.printTable(table);
         String actualResult =
                                 "-------------------------------------------------------\n" +

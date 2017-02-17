@@ -1,7 +1,8 @@
 package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
-import ua.com.juja.sqlcmd.model.Table;
+import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.SettingsHelper;
 import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,10 +14,12 @@ public class Delete implements Command {
 
     private DatabaseManager manager;
     private View view;
+    private Correctly correctly;
 
     public Delete(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
+        this.correctly = new Correctly();
     }
 
     @Override
@@ -27,37 +30,32 @@ public class Delete implements Command {
     @Override
     public void process(String command) {
 
-        String [] data = command.split("\\|");
-        if(data.length < 4){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается минимум 4, но есть: " + data.length);
-        } else if(data.length%2 != 0){
-            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается четное количество аргументов, но есть: " + data.length);
-        }
+        String[] data = correctly.expectedMinEven(command, 4);
 
         String tableName = data[1];
-        ArrayList<String[]> settings = new ArrayList<>();
-        int index = 2;
+        ArrayList<String[]> settings = getSettings(data);
 
+        view.addHistory("Попытка удалить , по критериям,запись в таблице: " + tableName + " delete");
+
+        try {
+            manager.delete(tableName,settings);
+            view.writeAndHistory("Успех! запись была удалена", "\tУспех");
+            view.printTable(manager.read(tableName));
+        } catch (SQLException | NullPointerException e) {
+            view.writeAndHistory("Ошибка. Не удалось удалить запись в таблице ( " + tableName + " ) "
+                    + e.getMessage(), "\tНеудача" + e.getMessage());
+        }
+    }
+
+    private ArrayList<String[]> getSettings(String[] data) {
+        ArrayList<String[]> settings = new ArrayList<>();
+
+        int index = 2;
         while (index != data.length) {
             SettingsHelper.toSettings(data, settings, index);
             index += 2;
         }
-
-        History.cache.add(History.getDate() + " " + "Попытка удалить , по критериям,запись в таблице: " + tableName
-                + " " + view.yellowText(Delete.class.getSimpleName().toLowerCase()));
-
-        try {
-            manager.delete(tableName,settings);
-            History.cache.add(view.requestTab(view.blueText("Успех")));
-            view.write(view.blueText("Успех! запись была удалена"));
-            Table deletedTable = manager.readTable(tableName);
-            view.printTable(deletedTable);
-        } catch (SQLException | NullPointerException e) {
-            History.cache.add(view.requestTab(view.redText("Неудача " + view.redText(e.getMessage()))));
-            view.write(view.redText("Ошибка. Не удалось удалить запись в таблице ( " + tableName + " ) "
-                    + view.redText(e.getMessage())));
-        }
+        return settings;
     }
+
 }

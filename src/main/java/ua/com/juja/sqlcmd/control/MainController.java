@@ -45,12 +45,10 @@ public class MainController {
     }
 
     private void doWork() {
-        view.write("\tВас приветствует приложение SqlCMD\n " +
-                "Пожалуйста, введите данные для подключения к базе данных в формате: connect|username|password");
+        greeting();
 
         while (whileCTRL) {
-            view.write("Введи команду (или help для помощи):");
-            String input = view.read();
+            String input = forAction();
 
             for (Command command : commands) {
                 if (command.isProcessed(input)) {
@@ -64,4 +62,16 @@ public class MainController {
             }
         }
     }
+
+    private void greeting(){
+        view.write("\tВас приветствует приложение SqlCMD\n " +
+                "Пожалуйста, введите данные для подключения к базе данных в формате: connect|username|password");
+        view.addHistory("Запуск приложения");
+    }
+
+    private String forAction(){
+        view.write("Введи команду (или help для помощи):");
+        return view.read();
+    }
+
 }
