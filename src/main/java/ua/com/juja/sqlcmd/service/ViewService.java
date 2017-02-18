@@ -154,4 +154,18 @@ public class ViewService {
                 "\tНеудача " + message);
     }
 
+    public void fileTabComTrySuc(String tableName){
+        view.addHistory("Запись содержимого таблицы: " + tableName + " в файл filetable");
+        view.writeAndHistory("Данные сохранены в файл", "\tУспех");
+    }
+    public void fileTabComTryAbort(String tableName){
+        view.addHistory("Запись содержимого таблицы: " + tableName + " в файл filetable");
+        view.writeAndHistory("", "\tЗапись отменена");
+    }
+    public void fileTabComCatch(String tableName, String message){
+        view.addHistory("Запись содержимого таблицы: " + tableName + " в файл filetable");
+        view.writeAndHistory("Ошибка. Не удалось сохранить таблицу ( " + tableName + " ) "
+                + message, "\tНеудача " + message);
+    }
+
 }

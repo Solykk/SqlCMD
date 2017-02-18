@@ -3,6 +3,7 @@ package ua.com.juja.sqlcmd.control.comands;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.io.File;
@@ -14,11 +15,13 @@ public class FileTable implements Command{
     private DatabaseManager manager;
     private View view;
     private Correctly correctly;
+    private ViewService viewService;
 
     public FileTable(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
         this.correctly = new Correctly();
+        this.viewService = new ViewService(view);
     }
 
     @Override
@@ -30,8 +33,6 @@ public class FileTable implements Command{
     public void process(String command) {
 
         String tableName = correctly.expectedTwo(command);
-
-        view.addHistory("Запись содержимого таблицы: " + tableName + " в файл filetable");
 
         try {
             Table request = manager.read(tableName);
@@ -47,11 +48,10 @@ public class FileTable implements Command{
                     reNameWriter(dataTable);
                 }
             } else {
-                view.writeAndHistory("", "\tЗапись отменена");
+                viewService.fileTabComTryAbort(tableName);
             }
         } catch (Exception e) {
-            view.writeAndHistory("Ошибка. Не удалось сохранить таблицу ( " + tableName + " ) "
-                    + e.getMessage(), "\tНеудача " + e.getMessage());
+            viewService.fileTabComCatch(tableName, e.getMessage());
         }
     }
 
@@ -74,21 +74,22 @@ public class FileTable implements Command{
     private void reNameWriter(String dataTable) throws IOException {
         view.write("Введите название файла: ");
         String name = view.read();
-        if(name.equals("")){
-            view.write("Название файла не мжет быть пустым! ");
+        if (name.equals("")){
+            view.write("Название файла не может быть пустым! ");
             reNameWriter(dataTable);
         }
 
         CharSequence [] taboo = new CharSequence[]{"/", "\\", "<", ">", "?",":", "|" , "*", "\""};
         boolean isCont = false;
 
-        for (int i = 0; i < taboo.length; i++) {
-            if (name.contains(taboo[i])){
+        for (CharSequence chars: taboo) {
+            if (name.contains(chars)){
                 isCont = true;
                 break;
             }
         }
-        if(isCont){
+
+        if (isCont){
             view.write("Название файла не мжет содержать " + "/\\<>?:|*\"");
             reNameWriter(dataTable);
             return;
@@ -118,16 +119,16 @@ public class FileTable implements Command{
 
     private void nameOkWriter(String tableName, String dataTable, File file) throws IOException {
         fileInput(dataTable, tableName, file);
-        view.writeAndHistory("Данные сохранены в файл", "\tУспех");
+        viewService.fileTabComTrySuc(tableName);
     }
 
     private void fileInput(String dataTable, String name, File file) throws IOException {
 
-       if(file.createNewFile()) {
-           try (FileWriter writer = new FileWriter("src/main/resources/" + name + ".txt")) {
-               writer.write(dataTable);
-               writer.flush();
-           }
-       }
+        if(file.createNewFile()) {
+            try (FileWriter writer = new FileWriter("src/main/resources/" + name + ".txt")) {
+                writer.write(dataTable);
+                writer.flush();
+            }
+        }
     }
 }
