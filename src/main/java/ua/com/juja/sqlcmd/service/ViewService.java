@@ -121,4 +121,14 @@ public class ViewService {
         view.writeAndHistory("Ошибка. Не удалось выполнить ваш запрос ( " + query + " ) "
                 + message, "\tНеудача " + message);
     }
+
+    public void tablesComTry(){
+        view.addHistory("Вывод имен всех пользовательских таблиц tables");
+        view.writeAndHistory("", "\tУспех");
+    }
+    public void tablesComCatch(String message){
+        view.addHistory("Вывод имен всех пользовательских таблиц tables");
+        view.writeAndHistory("Ошибка. Не могу осуществить вывод всех таблиц " + message,
+                "\tНеудача " + message);
+    }
 }
