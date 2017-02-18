@@ -35,14 +35,9 @@ public class IntegrationTest {
     }
 
     public String getData() {
-        try {
-            String result = new String(out.toByteArray(),"UTF-8");
+            String result = new String(out.toByteArray());
             out.reset();
             return result;
-        } catch (UnsupportedEncodingException e) {
-            return e.getMessage();
-        }
-
     }
 
     private void purgeDrop() {
