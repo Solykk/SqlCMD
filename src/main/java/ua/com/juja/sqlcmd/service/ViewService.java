@@ -75,7 +75,7 @@ public class ViewService {
     public void deleteComCatch(String tableName, String message){
         view.addHistory("Попытка удалить , по критериям,запись в таблице: " + tableName + " delete");
         view.writeAndHistory("Ошибка. Не удалось удалить запись в таблице ( " + tableName + " ) "
-                + message, "\tНеудача" + message);
+                + message, "\tНеудача " + message);
     }
 
     public void dropComTry(String tableName){
