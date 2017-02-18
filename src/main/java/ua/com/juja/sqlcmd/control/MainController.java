@@ -1,6 +1,7 @@
 package ua.com.juja.sqlcmd.control;
 
 import ua.com.juja.sqlcmd.control.comands.*;
+import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.util.ArrayList;
@@ -10,9 +11,11 @@ public class MainController {
     private View view;
     private ArrayList<Command> commands;
     private WhileCTRL whileCTRL;
+    private ViewService viewService;
 
     public MainController(View view, DatabaseManager manager) {
         this.view = view;
+        this.viewService = new ViewService(view);
         this.whileCTRL = new WhileCTRL();
         this.commands = new ArrayList<>();
         commands.add(new Connect(manager, view));
@@ -43,7 +46,7 @@ public class MainController {
     }
 
     private void doWork() {
-        greeting();
+        viewService.greeting();
 
         while (whileCTRL.getValue()) {
             String input = forAction();
@@ -59,12 +62,6 @@ public class MainController {
                 }
             }
         }
-    }
-
-    private void greeting(){
-        view.write("\tВас приветствует приложение SqlCMD\n " +
-                "Пожалуйста, введите данные для подключения к базе данных в формате: connect|username|password");
-        view.addHistory("Запуск приложения");
     }
 
     private String forAction(){
