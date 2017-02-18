@@ -33,7 +33,7 @@ public class Correctly {
         String [] data = command.split("\\|");
         if(data.length < 4){
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается минимум" + parametrs + ", но есть: " + data.length);
+                    "ожидается минимум " + parametrs + ", но есть: " + data.length);
         } else if(data.length%2 != 0){
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
                     "ожидается четное количество аргументов, но есть: " + data.length);
