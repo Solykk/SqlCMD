@@ -3,6 +3,7 @@ package ua.com.juja.sqlcmd.control.comands;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.service.SettingsHelper;
+import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
@@ -14,12 +15,14 @@ public class Insert implements Command {
     private View view;
     private Correctly correctly;
     private SettingsHelper settingsHelper;
+    private ViewService viewService;
 
     public Insert(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
         this.correctly = new Correctly();
         this.settingsHelper = new SettingsHelper();
+        this.viewService = new ViewService(view);
     }
 
     @Override
@@ -36,14 +39,11 @@ public class Insert implements Command {
         boolean isKey = getKeySet();
         ArrayList<String[]> settings = getSettings(data, isKey);
 
-        view.addHistory("Добавление данных в таблицу: " + tableName + " по критериям " + command + " insert");
-
         try {
             manager.insert(tableName, settings, isKey);
-            view.writeAndHistory("Успех! Данные добавлены", "\tУспех");
+            viewService.insertComTry(tableName, command);
         } catch (SQLException | NullPointerException e) {
-            view.writeAndHistory("Ошибка. Не удалось добавить данные в  таблицу ( " + tableName + " ) "
-                    + e.getMessage(), "\tНеудача " + e.getMessage());
+            viewService.insertComCatch(tableName, command, e.getMessage());
         }
     }
 
@@ -54,11 +54,7 @@ public class Insert implements Command {
 
     private boolean getKeySet() {
         String key = keyAction();
-        if (key.equalsIgnoreCase("y")) {
-            return true;
-        } else {
-            return false;
-        }
+        return key.equalsIgnoreCase("y");
     }
 
     private String seqAction() {

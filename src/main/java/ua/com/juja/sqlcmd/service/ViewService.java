@@ -101,4 +101,14 @@ public class ViewService {
         view.writeAndHistory("Ошибка. Не удалось по критериям вывести таблицу ( " + tableName + " ) "
                 + message, "\tНеудача " + message);
     }
+
+    public void insertComTry(String tableName, String command){
+        view.addHistory("Добавление данных в таблицу: " + tableName + " по критериям " + command + " insert");
+        view.writeAndHistory("Успех! Данные добавлены", "\tУспех");
+    }
+    public void insertComCatch(String tableName, String command, String message){
+        view.addHistory("Добавление данных в таблицу: " + tableName + " по критериям " + command + " insert");
+        view.writeAndHistory("Ошибка. Не удалось добавить данные в  таблицу ( " + tableName + " ) "
+                + message, "\tНеудача " + message);
+    }
 }
