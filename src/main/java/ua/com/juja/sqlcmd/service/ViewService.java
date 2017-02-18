@@ -168,4 +168,36 @@ public class ViewService {
                 + message, "\tНеудача " + message);
     }
 
+    public void createComTry(String tableName, String command){
+        view.addHistory("Создание таблицы: " + tableName + " по критериям " + command + " create");
+        view.writeAndHistory("Успех! Таблица создана", "\tУспех");
+    }
+    public void createComCatch(String tableName, String command, String message){
+        view.addHistory("Создание таблицы: " + tableName + " по критериям " + command + " create");
+        view.writeAndHistory("Ошибка. Не удалось создать таблицу ( " + tableName + " ) "
+                + message, "\tНеудача " + message);
+    }
+    public void createPKComTry(String tableName, String columnName){
+        view.addHistory("Создание первичного ключа для таблицы: ( " + tableName + " ) по критериям ( "
+                + columnName + " ) create");
+        view.writeAndHistory("Успех! Первичный ключ создан", "\tУспех");
+    }
+    public void createPKComCatch(String tableName, String columnName, String message){
+        view.addHistory("Создание первичного ключа для таблицы: ( " + tableName + " ) по критериям ( "
+                + columnName + " ) create");
+        view.writeAndHistory("Ошибка. Не удалось создать первичный ключ ( " + tableName + " ) "
+                + message, "\tНеудача " + message);
+    }
+    public void createSeqComTry(String tableName, String columnName){
+        view.addHistory("Создание Sequence генератора для таблицы: ( " + tableName + " ) по критериям ( "
+                + columnName + " ) create");
+        view.writeAndHistory("Успех! Sequence генератор создан", "\tУспех");
+    }
+    public void createSeqComCatch(String tableName, String columnName, String message){
+        view.addHistory("Создание Sequence генератора для таблицы: ( " + tableName + " ) по критериям ( "
+                + columnName + " ) create");
+        view.writeAndHistory("Ошибка. Не удалось создать Sequence генератор ( " + tableName + " ) "
+                + message, "\tНеудача " + message);
+    }
+
 }
