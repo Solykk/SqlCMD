@@ -132,8 +132,8 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public void update(String tableName, ArrayList<String[]> forUpdate, ArrayList<String[]> howUpdate)throws SQLException, NullPointerException {
-        statExecUpdate(query.updateQuery(tableName, forUpdate, howUpdate));
+    public void update(String tableName, ArrayList<String[]> howUpdate, ArrayList<String[]> forUpdate)throws SQLException, NullPointerException {
+        statExecUpdate(query.updateQuery(tableName, howUpdate, forUpdate));
     }
 
     @Override

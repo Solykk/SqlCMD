@@ -18,7 +18,7 @@ public class Query {
         if(idKey) {
             for (int index = 0; index < nameDate.size(); index++) {
                 if (index == 0) {
-                    values += tableName + "_SEQ.nextval,";
+                    values += tableName + "_SEQ.nextval, ";
                 } else {
                     values += nameDate.get(index)[1];
 
@@ -29,11 +29,8 @@ public class Query {
                 }
             }
         } else {
-            int startFrom = 0;
-            if (idKey) {
-                startFrom = 1;
-            }
 
+            int startFrom = 0;
             for (int j = startFrom; j < nameDate.size(); j++) {
                 values += nameDate.get(j)[1];
 
@@ -77,9 +74,9 @@ public class Query {
         return  "CREATE TABLE " + tableName + " (" + postQuery + " )";
     }
 
-    public String updateQuery(String tableName, ArrayList<String[]> forUpdate, ArrayList<String[]> howUpdate){
-        String perQuery = generateQueryComaString(forUpdate);
-        String postQuery = generateQueryAndString(howUpdate);
+    public String updateQuery(String tableName, ArrayList<String[]> howUpdate, ArrayList<String[]> forUpdate){
+        String perQuery = generateQueryComaString(howUpdate);
+        String postQuery = generateQueryAndString(forUpdate);
 
         return  "UPDATE " + tableName +  " SET " + perQuery + " WHERE " + postQuery;
     }
