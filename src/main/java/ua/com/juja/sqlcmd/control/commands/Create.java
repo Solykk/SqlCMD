@@ -50,21 +50,21 @@ public class Create implements Command {
                 try {
                     manager.createCreatePK(tableName, columnName);
                     viewService.createPKComTry(tableName, columnName);
-                } catch (SQLException | NullPointerException e) {
-                    viewService.createPKComCatch(tableName, columnName, e.getMessage());
-                }
 
-                String seq = seqAction();
-                if(seq.equalsIgnoreCase("y")){
+                    String seq = seqAction();
+                    if(seq.equalsIgnoreCase("y")){
 
-                    Long startWith = startWith();
+                        Long startWith = startWith();
 
-                    try {
-                        manager.createSequencePK(tableName, startWith);
-                        viewService.createSeqComTry(tableName, columnName);
-                    } catch (SQLException | NullPointerException e) {
-                        viewService.createSeqComCatch(tableName, columnName, e.getMessage());
+                        try {
+                            manager.createSequencePK(tableName, startWith);
+                            viewService.createSeqComTry(tableName, columnName);
+                        } catch (SQLException | NumberFormatException | NullPointerException e) {
+                            viewService.createSeqComCatch(tableName, columnName, e.getMessage());
+                        }
                     }
+                } catch (SQLException | NumberFormatException | NullPointerException e) {
+                    viewService.createPKComCatch(tableName, columnName, e.getMessage());
                 }
             }
         } catch (SQLException | NullPointerException e) {

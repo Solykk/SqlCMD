@@ -1,5 +1,6 @@
 package ua.com.juja.sqlcmd.control.commands;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
@@ -48,7 +49,6 @@ public class CommandsTest {
         tableType = new TableType(manager, viewImpl);
         update = new Update(manager, viewImpl);
         create = new Create(manager, viewImpl);
-
 
         manager.connect("user","pass");
 
@@ -139,7 +139,7 @@ public class CommandsTest {
     }
 
     @Test
-    public void test_tablesQueryProcessFail(){
+    public void test_tablesProcessFail(){
         manager.disconnect();
         tables.process("tables");
 
@@ -148,7 +148,7 @@ public class CommandsTest {
     }
 
     @Test
-    public void test_tableTypeQueryProcessFail(){
+    public void test_tableTypeProcessFail(){
         manager.disconnect();
         tableType.process("tabletype|FIRST");
 
@@ -157,7 +157,7 @@ public class CommandsTest {
     }
 
     @Test
-    public void test_updateTypeQueryProcessFail(){
+    public void test_updateProcessFail(){
         update.process("update|FIRST|TEST|'Hello'|TEST1|'Bay'");
 
         assertEquals("Ошибка. Не удалось обновить таблицу ( FIRST ) ORA-00942: table or view does not exist\n\n",
@@ -165,10 +165,29 @@ public class CommandsTest {
     }
 
     @Test
-    public void test_createTypeQueryProcessFail(){
+    public void test_createProcessFail(){
         create.process("create|FIRST|TEST|'Hello'|TEST1|'Bay'");
 
         assertEquals("Ошибка. Не удалось создать таблицу ( FIRST ) ORA-00904: : invalid identifier\n\n",
                 viewImpl.getOut());
     }
+
+    @Test
+    public void test_createWithProcessFail(){
+        viewImpl.setCounter(1);
+        create.process("create|FIRST|TEST VARCHAR2(20 BYTE) NOT NULL|TEST1  NUMBER (10) NULL|" +
+                "TEST2 VARCHAR2(10 BYTE) NULL|TEST3 DATE NULL|TEST4 NUMBER(10) NOT NULL");
+        try {
+            manager.drop("FIRST");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        assertEquals(
+                        "Успех! Таблица создана\n" +
+                        "Присвоить колонке первичный ключ? (Y/N)\n" +
+                        "Введите название колонки, которой хотите присвоить ключ \n" +
+                        "Ошибка. Не удалось создать первичный ключ ( FIRST ) ORA-00904: \"Y\": invalid identifier\n\n",
+                viewImpl.getOut());
+    }
+
 }

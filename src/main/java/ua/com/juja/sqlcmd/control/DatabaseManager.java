@@ -14,9 +14,9 @@ public interface DatabaseManager {
     Table getAllTypeColumns(String tableName)throws SQLException, NullPointerException;
     Table getTypeColumn(String tableName, String columnName)  throws SQLException, NullPointerException;
 
-    void createCreatePK(String tableName, String columnNamePK)throws SQLException, NullPointerException;
+    void createCreatePK(String tableName, String columnNamePK)throws SQLException, NullPointerException, NumberFormatException;
     void createWithoutPK(String tableName, ArrayList<String> settings)throws SQLException, NullPointerException;
-    void createSequencePK(String tableName, Long startWith)throws SQLException, NullPointerException;
+    void createSequencePK(String tableName, Long startWith)throws SQLException, NullPointerException, NumberFormatException;
 
     Table read(String tableName) throws SQLException, NullPointerException;
     Table readSet(String tableName, ArrayList<String[]> settings) throws SQLException, NullPointerException;

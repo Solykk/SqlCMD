@@ -8,18 +8,16 @@ public class ViewImpl implements View {
 
     private String out;
     private String history;
+    private int counter;
 
     public String getHistory() {
         return history;
     }
 
-    public void setHistory(String history) {
-        this.history = history;
-    }
-
     public ViewImpl(){
         this.out = "";
         this.history = "";
+        this.counter = 0;
     }
 
     public String getOut() {
@@ -37,6 +35,11 @@ public class ViewImpl implements View {
 
     @Override
     public String read() {
+        if(counter >= 1){
+
+            return "y";
+        }
+        counter++;
         return "\n";
     }
 
@@ -56,5 +59,17 @@ public class ViewImpl implements View {
     @Override
     public void addHistory(String toHistory) {
         history += toHistory + "\n";
+    }
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
+    public void setHistory(String history) {
+        this.history = history;
     }
 }

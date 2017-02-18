@@ -103,12 +103,12 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public void createCreatePK(String tableName, String columnNamePK) throws SQLException, NullPointerException {
+    public void createCreatePK(String tableName, String columnNamePK) throws SQLException, NullPointerException, NumberFormatException {
         statExecUpdate(query.createPKQuery(tableName, columnNamePK));
     }
 
     @Override
-    public void createSequencePK(String tableName, Long startWith) throws SQLException, NullPointerException{
+    public void createSequencePK(String tableName, Long startWith) throws SQLException, NullPointerException, NumberFormatException{
         statExecUpdate(query.createSPKQuery(tableName, startWith));
     }
 
