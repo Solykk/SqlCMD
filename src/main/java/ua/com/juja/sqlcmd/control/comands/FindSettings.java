@@ -3,6 +3,7 @@ package ua.com.juja.sqlcmd.control.comands;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.service.SettingsHelper;
+import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
@@ -14,12 +15,14 @@ public class FindSettings implements Command {
     private View view;
     private Correctly correctly;
     private SettingsHelper settingsHelper;
+    private ViewService viewService;
 
     public FindSettings(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
         this.correctly = new Correctly();
         this.settingsHelper = new SettingsHelper();
+        this.viewService = new ViewService(view);
     }
 
     @Override
@@ -35,14 +38,11 @@ public class FindSettings implements Command {
         String tableName = data[1];
         ArrayList<String[]> settings = settingsHelper.getSettings(data);
 
-        view.addHistory("Вывод содержимого таблицы: " + tableName + " по критериям " + command + " findsettings");
-
         try {
             view.printTable(manager.readSet(tableName, settings));
-            view.writeAndHistory("", "\tУспех");
+            viewService.findSetComTry(tableName, command);
         } catch (SQLException | NullPointerException e) {
-            view.writeAndHistory("Ошибка. Не удалось по критериям вывести таблицу ( " + tableName + " ) "
-                    + e.getMessage(), "\tНеудача " + e.getMessage());
+            viewService.findSetComCatch(tableName, command, e.getMessage());
         }
     }
 }

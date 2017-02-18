@@ -32,9 +32,9 @@ public class Drop implements Command {
 
         try {
             manager.drop(tableName);
-            viewService.dropTypeComTry(tableName);
+            viewService.dropComTry(tableName);
         } catch (SQLException | NullPointerException e) {
-            viewService.dropTypComCatch(tableName, e.getMessage());
+            viewService.dropComCatch(tableName, e.getMessage());
         }
     }
 }

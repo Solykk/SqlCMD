@@ -42,54 +42,63 @@ public class ViewService {
                 + " ) в таблице ( " + tableName + " ) " + message, "\tНеудача " + message);
     }
 
-    public void connectTypeComTry(){
+    public void connectComTry(){
         view.addHistory("Попытка подключиться к базе данных connect");
         view.writeAndHistory("Успех, вы подключились к базе данных: Oracle Database - Production", "\tУспех");
     }
-    public void connectTypComCatch(String message){
+    public void connectComCatch(String message){
         view.addHistory("Попытка подключиться к базе данных connect");
         view.writeAndHistory("Не удалось подключиться к базе данных " + message,
                 "\tНе удалось подключиться к базе данных " + message);
     }
 
-    public void cudQueryTypeComTry(String query){
+    public void cudQueryComTry(String query){
         view.addHistory("Выполнение SQL запроса: " + query + " cudQuery");
         view.writeAndHistory("Успех! Запрос выполнен", "\tУспех");
     }
-    public void cudQueryTypComCatch(String query, String message){
+    public void cudQueryComCatch(String query, String message){
         view.addHistory("Выполнение SQL запроса: " + query + " cudQuery");
         view.writeAndHistory("Ошибка. Не удалось выполнить ваш запрос ( " + query + " ) "
                 + message, "\tНеудача " + message);
     }
 
-    public void deleteTypeComTry(String tableName){
+    public void deleteComTry(String tableName){
         view.addHistory("Попытка удалить , по критериям,запись в таблице: " + tableName + " delete");
         view.writeAndHistory("Успех! запись была удалена", "\tУспех");
     }
-    public void deleteTypComCatch(String tableName, String message){
+    public void deleteComCatch(String tableName, String message){
         view.addHistory("Попытка удалить , по критериям,запись в таблице: " + tableName + " delete");
         view.writeAndHistory("Ошибка. Не удалось удалить запись в таблице ( " + tableName + " ) "
                 + message, "\tНеудача" + message);
     }
 
-    public void dropTypeComTry(String tableName){
+    public void dropComTry(String tableName){
         view.addHistory("Попытка удалить таблицу: " + tableName + " drop");
         view.writeAndHistory("Успех! Таблица удалена", "\tУспех");
     }
-    public void dropTypComCatch(String tableName, String message){
+    public void dropComCatch(String tableName, String message){
         view.addHistory("Попытка удалить таблицу: " + tableName + " drop");
         view.writeAndHistory("Ошибка. Не удалось удалить таблицу: ( " + tableName + " ) "
                 + message, "\tНеудача " + message);
     }
 
-    public void findTypeComTry(String tableName){
+    public void findComTry(String tableName){
         view.addHistory("Вывод содержимого таблицы: " + tableName + " find");
         view.writeAndHistory("", "\tУспех");
     }
-    public void findTypComCatch(String tableName, String message){
+    public void findComCatch(String tableName, String message){
         view.addHistory("Вывод содержимого таблицы: " + tableName + " find");
         view.writeAndHistory("Ошибка. Не удалось вывести таблицу ( " + tableName + " ) " + message,
                 "\tНеудача " + message);
     }
 
+    public void findSetComTry(String tableName, String command){
+        view.addHistory("Вывод содержимого таблицы: " + tableName + " по критериям " + command + " findsettings");
+        view.writeAndHistory("", "\tУспех");
+    }
+    public void findSetComCatch(String tableName, String command, String message){
+        view.addHistory("Вывод содержимого таблицы: " + tableName + " по критериям " + command + " findsettings");
+        view.writeAndHistory("Ошибка. Не удалось по критериям вывести таблицу ( " + tableName + " ) "
+                + message, "\tНеудача " + message);
+    }
 }

@@ -42,9 +42,9 @@ public class Delete implements Command {
             manager.delete(tableName,settings);
             view.printTable(manager.read(tableName));
 
-            viewService.deleteTypeComTry(tableName);
+            viewService.deleteComTry(tableName);
         } catch (SQLException | NullPointerException e) {
-            viewService.deleteTypComCatch(tableName, e.getMessage());
+            viewService.deleteComCatch(tableName, e.getMessage());
         }
     }
 }

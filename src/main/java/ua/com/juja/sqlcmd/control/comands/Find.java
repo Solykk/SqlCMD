@@ -31,9 +31,9 @@ public class Find implements Command {
 
         try {
             view.printTable(manager.read(tableName));
-            viewService.findTypeComTry(tableName);
+            viewService.findComTry(tableName);
         } catch (Exception e) {
-            viewService.findTypComCatch(tableName, e.getMessage());
+            viewService.findComCatch(tableName, e.getMessage());
         }
     }
 }

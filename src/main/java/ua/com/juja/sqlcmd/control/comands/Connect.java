@@ -34,9 +34,9 @@ public class Connect implements Command {
 
         try {
             manager.connect(userName, password);
-            viewService.connectTypeComTry();
+            viewService.connectComTry();
         } catch (SQLException e) {
-            viewService.connectTypComCatch(e.getMessage());
+            viewService.connectComCatch(e.getMessage());
         }
     }
 }

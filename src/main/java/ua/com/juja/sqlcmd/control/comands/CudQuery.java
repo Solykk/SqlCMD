@@ -31,9 +31,9 @@ public class CudQuery implements Command {
 
         try {
             manager.cudQuery(query);
-            viewService.cudQueryTypeComTry(query);
+            viewService.cudQueryComTry(query);
         } catch (SQLException | NullPointerException e) {
-            viewService.cudQueryTypComCatch(query, e.getMessage());
+            viewService.cudQueryComCatch(query, e.getMessage());
         }
     }
 }
