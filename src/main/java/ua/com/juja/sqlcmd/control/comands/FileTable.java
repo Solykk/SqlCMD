@@ -3,6 +3,7 @@ package ua.com.juja.sqlcmd.control.comands;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.TablePrinter;
 import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 
@@ -16,12 +17,14 @@ public class FileTable implements Command{
     private View view;
     private Correctly correctly;
     private ViewService viewService;
+    private TablePrinter tablePrinter;
 
     public FileTable(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
         this.correctly = new Correctly();
         this.viewService = new ViewService(view);
+        this.tablePrinter = new TablePrinter(view);
     }
 
     @Override
@@ -36,7 +39,7 @@ public class FileTable implements Command{
 
         try {
             Table request = manager.read(tableName);
-            String dataTable = view.printTable(request);
+            String dataTable = tablePrinter.printTable(request);
 
             String response = saveAction();
             if (response.equalsIgnoreCase("y")){

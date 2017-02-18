@@ -3,6 +3,7 @@ package ua.com.juja.sqlcmd.control;
 import org.junit.*;
 
 import ua.com.juja.sqlcmd.model.Table;
+import ua.com.juja.sqlcmd.service.TablePrinter;
 import ua.com.juja.sqlcmd.view.Console;
 import ua.com.juja.sqlcmd.view.View;
 
@@ -17,11 +18,13 @@ public class JDBCDatabaseManagerTest {
 
     private DatabaseManager manager;
     private View view;
+    private TablePrinter tablePrinter;
 
     @Before
     public void start(){
             manager = new JDBCDatabaseManager();
             view = new Console();
+            tablePrinter = new TablePrinter(view);
         }
 
     @After
@@ -142,7 +145,7 @@ public class JDBCDatabaseManagerTest {
         ArrayList<String> settings = getNewTable1col();
         manager.createWithoutPK(getTableName(), settings);
         Table table = manager.getTableNames();
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                 "--------------\n" +
                 "| ALL_TABLES |\n" +
@@ -163,7 +166,7 @@ public class JDBCDatabaseManagerTest {
         connectUserPass();
 
         Table table = manager.getTableNames();
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                 "--------------\n" +
                 "| ALL_TABLES |\n" +
@@ -180,7 +183,7 @@ public class JDBCDatabaseManagerTest {
         connectUserPass();
 
         Table  table = manager.getColumnNames("CCC");
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                 "---------------\n" +
                 "|     CCC     |\n" +
@@ -200,7 +203,7 @@ public class JDBCDatabaseManagerTest {
 
         Table table = manager.getColumnNames(getTableName());
 
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                 "---------------\n" +
                 "|    FIRST    |\n" +
@@ -221,7 +224,7 @@ public class JDBCDatabaseManagerTest {
         ArrayList<String> settings = getNewTAble5col();
         manager.createWithoutPK(getTableName(), settings);
         Table table = manager.getAllTypeColumns(getTableName());
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                         "-----------------------------------------\n" +
                         "|                 FIRST                 |\n" +
@@ -244,7 +247,7 @@ public class JDBCDatabaseManagerTest {
         connectUserPass();
 
         Table  table = manager.getAllTypeColumns("CCC");
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                 "--------------------------------------\n" +
                 "|                CCC                 |\n" +
@@ -265,7 +268,7 @@ public class JDBCDatabaseManagerTest {
 
         Table table = manager.getTypeColumn(getTableName(), "TEST1");
 
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                         "---------------------------------------\n" +
                         "|                FIRST                |\n" +
@@ -285,7 +288,7 @@ public class JDBCDatabaseManagerTest {
 
         Table table = manager.getTypeColumn("CCC", "TAT");
 
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                 "--------------------------------------\n" +
                 "|                CCC                 |\n" +
@@ -401,7 +404,7 @@ public class JDBCDatabaseManagerTest {
         manager.insert(getTableName(), insert, false);
         manager.clear(getTableName());
         Table table = manager.read(getTableName());
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                 "------------------------\n" +
                 "|        FIRST         |\n" +
@@ -424,7 +427,7 @@ public class JDBCDatabaseManagerTest {
         manager.insert(getTableName(), insert, true);
         manager.clear(getTableName());
         Table table = manager.read(getTableName());
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                         "------------------------\n" +
                         "|        FIRST         |\n" +
@@ -445,7 +448,7 @@ public class JDBCDatabaseManagerTest {
         manager.createWithoutPK("SECOND", settings);
         manager.drop("SECOND");
         Table table = manager.getTableNames();
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                 "--------------\n" +
                 "| ALL_TABLES |\n" +
@@ -483,7 +486,7 @@ public class JDBCDatabaseManagerTest {
         manager.insert(getTableName(), insert, false);
         manager.insert(getTableName(), insert1, false);
         Table table = manager.read(getTableName());
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                                         "-------------------------------------------------------\n" +
                                         "|                        FIRST                        |\n" +
@@ -522,7 +525,7 @@ public class JDBCDatabaseManagerTest {
         manager.insert(getTableName(), insert, false);
         manager.insert(getTableName(), insert1, false);
         Table table = manager.readSet(getTableName(), settingsFine);
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                                 "-------------------------------------------------------\n" +
                                 "|                        FIRST                        |\n" +
@@ -549,7 +552,7 @@ public class JDBCDatabaseManagerTest {
         manager.insert(getTableName(), insert, false);
         manager.insert(getTableName(), insert1, false);
         Table table = manager.readSet(getTableName(), settingsFine);
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                                 "----------------------------------------\n" +
                                 "|                FIRST                 |\n" +
@@ -576,7 +579,7 @@ public class JDBCDatabaseManagerTest {
         manager.insert(getTableName(), insert1, false);
         manager.delete(getTableName(), settingsFine);
         Table table = manager.read(getTableName());
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                                         "------------------------------------------------------\n" +
                                         "|                       FIRST                        |\n" +
@@ -608,7 +611,7 @@ public class JDBCDatabaseManagerTest {
             //do nothing
         }
         Table table = manager.read(getTableName());
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                                         "-------------------------------------------------------\n" +
                                         "|                        FIRST                        |\n" +
@@ -639,7 +642,7 @@ public class JDBCDatabaseManagerTest {
         manager.insert(getTableName(), insert1, false);
         manager.update(getTableName(), settingsHowUpdate, settingsFine);
         Table table = manager.read(getTableName());
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                                 "-------------------------------------------------------\n" +
                                 "|                        FIRST                        |\n" +
@@ -670,7 +673,7 @@ public class JDBCDatabaseManagerTest {
         manager.insert(getTableName(), insert1, false);
         manager.update(getTableName(), settingsHowUpdate, settingsFine);
         Table table = manager.read(getTableName());
-        String result = view.printTable(table);
+        String result = tablePrinter.printTable(table);
         String actualResult =
                                 "-------------------------------------------------------\n" +
                                 "|                        FIRST                        |\n" +
