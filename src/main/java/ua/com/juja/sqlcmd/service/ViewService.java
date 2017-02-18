@@ -142,4 +142,16 @@ public class ViewService {
                 + message, "\tНеудача " + message);
     }
 
+    public void updateComTry(String tableName, String command){
+        view.addHistory("Обновление содержимого таблицы: " + tableName +
+                " по критериям " + command + " update");
+        view.writeAndHistory("Успех! Данные обновлены", "\tУспех");
+    }
+    public void updateComCatch(String tableName, String command, String message){
+        view.addHistory("Обновление содержимого таблицы: " + tableName +
+                " по критериям " + command + " update");
+        view.writeAndHistory("Ошибка. Не удалось обновить таблицу ( " + tableName + " ) " + message,
+                "\tНеудача " + message);
+    }
+
 }
