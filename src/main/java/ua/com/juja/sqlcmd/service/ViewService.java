@@ -111,4 +111,14 @@ public class ViewService {
         view.writeAndHistory("Ошибка. Не удалось добавить данные в  таблицу ( " + tableName + " ) "
                 + message, "\tНеудача " + message);
     }
+
+    public void readQueryComTry(String query){
+        view.addHistory("Вывод SQL запроса: " + query + " readQuery");
+        view.writeAndHistory("", "\tУспех");
+    }
+    public void readQueryComCatch(String query, String message){
+        view.addHistory("Вывод SQL запроса: " + query + " readQuery");
+        view.writeAndHistory("Ошибка. Не удалось выполнить ваш запрос ( " + query + " ) "
+                + message, "\tНеудача " + message);
+    }
 }
