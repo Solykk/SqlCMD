@@ -2,6 +2,7 @@ package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
@@ -9,13 +10,13 @@ import java.sql.SQLException;
 public class Connect implements Command {
 
     private DatabaseManager manager;
-    private View view;
     private Correctly correctly;
+    private ViewService viewService;
 
     public Connect(DatabaseManager manager, View view) {
         this.manager = manager;
-        this.view = view;
         this.correctly = new Correctly();
+        this.viewService = new ViewService(view);
     }
 
     @Override
@@ -31,14 +32,11 @@ public class Connect implements Command {
         String userName = data[1];
         String password = data[2];
 
-        view.addHistory("Попытка подключиться к базе данных connect");
-
         try {
             manager.connect(userName, password);
-            view.writeAndHistory("Успех, вы подключились к базе данных: Oracle Database - Production", "\tУспех");
+            viewService.connectTypeComTry();
         } catch (SQLException e) {
-            view.writeAndHistory("Не удалось подключиться к базе данных " + e.getMessage(),
-                    "\tНе удалось подключиться к базе данных " + e.getMessage());
+            viewService.connectTypComCatch(e.getMessage());
         }
     }
 }

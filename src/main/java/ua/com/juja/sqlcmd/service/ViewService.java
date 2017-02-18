@@ -42,6 +42,16 @@ public class ViewService {
                 + " ) в таблице ( " + tableName + " ) " + message, "\tНеудача " + message);
     }
 
+    public void connectTypeComTry(){
+        view.addHistory("Попытка подключиться к базе данных connect");
+        view.writeAndHistory("Успех, вы подключились к базе данных: Oracle Database - Production", "\tУспех");
+    }
+    public void connectTypComCatch(String message){
+        view.addHistory("Попытка подключиться к базе данных connect");
+        view.writeAndHistory("Не удалось подключиться к базе данных " + message,
+                "\tНе удалось подключиться к базе данных " + message);
+    }
+
 
 
 }
