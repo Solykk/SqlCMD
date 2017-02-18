@@ -2,6 +2,7 @@ package ua.com.juja.sqlcmd.control.comands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
@@ -9,13 +10,13 @@ import java.sql.SQLException;
 public class CudQuery implements Command {
 
     private DatabaseManager manager;
-    private View view;
     private Correctly correctly;
+    private ViewService viewService;
 
     public CudQuery(DatabaseManager manager, View view) {
         this.manager = manager;
-        this.view = view;
         this.correctly = new Correctly();
+        this.viewService = new ViewService(view);
     }
 
     @Override
@@ -28,14 +29,11 @@ public class CudQuery implements Command {
 
         String query = correctly.expectedTwo(command);
 
-        view.addHistory("Выполнение SQL запроса: " + query + " cudQuery");
-
         try {
             manager.cudQuery(query);
-            view.writeAndHistory("Успех! Запрос выполнен", "\tУспех");
+            viewService.cudQueryTypeComTry(query);
         } catch (SQLException | NullPointerException e) {
-            view.writeAndHistory("Ошибка. Не удалось выполнить ваш запрос ( " + query + " ) "
-                    + e.getMessage(), "\tНеудача " + e.getMessage());
+            viewService.cudQueryTypComCatch(query, e.getMessage());
         }
     }
 }

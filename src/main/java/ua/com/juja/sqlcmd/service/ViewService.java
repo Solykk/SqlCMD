@@ -52,6 +52,26 @@ public class ViewService {
                 "\tНе удалось подключиться к базе данных " + message);
     }
 
+    public void cudQueryTypeComTry(String query){
+        view.addHistory("Выполнение SQL запроса: " + query + " cudQuery");
+        view.writeAndHistory("Успех! Запрос выполнен", "\tУспех");
+    }
+    public void cudQueryTypComCatch(String query, String message){
+        view.addHistory("Выполнение SQL запроса: " + query + " cudQuery");
+        view.writeAndHistory("Ошибка. Не удалось выполнить ваш запрос ( " + query + " ) "
+                + message, "\tНеудача " + message);
+    }
+
+    public void deleteTypeComTry(String tableName){
+        view.addHistory("Попытка удалить , по критериям,запись в таблице: " + tableName + " delete");
+        view.writeAndHistory("Успех! запись была удалена", "\tУспех");
+    }
+    public void deleteTypComCatch(String tableName, String message){
+        view.addHistory("Попытка удалить , по критериям,запись в таблице: " + tableName + " delete");
+        view.writeAndHistory("Ошибка. Не удалось удалить запись в таблице ( " + tableName + " ) "
+                + message, "\tНеудача" + message);
+    }
+
 
 
 }

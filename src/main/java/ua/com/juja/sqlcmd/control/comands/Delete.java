@@ -3,6 +3,7 @@ package ua.com.juja.sqlcmd.control.comands;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.service.SettingsHelper;
+import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
@@ -14,12 +15,14 @@ public class Delete implements Command {
     private View view;
     private Correctly correctly;
     private SettingsHelper settingsHelper;
+    private ViewService viewService;
 
     public Delete(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
         this.correctly = new Correctly();
         this.settingsHelper = new SettingsHelper();
+        this.viewService = new ViewService(view);
     }
 
     @Override
@@ -35,15 +38,13 @@ public class Delete implements Command {
         String tableName = data[1];
         ArrayList<String[]> settings = settingsHelper.getSettings(data);
 
-        view.addHistory("Попытка удалить , по критериям,запись в таблице: " + tableName + " delete");
-
         try {
             manager.delete(tableName,settings);
-            view.writeAndHistory("Успех! запись была удалена", "\tУспех");
             view.printTable(manager.read(tableName));
+
+            viewService.deleteTypeComTry(tableName);
         } catch (SQLException | NullPointerException e) {
-            view.writeAndHistory("Ошибка. Не удалось удалить запись в таблице ( " + tableName + " ) "
-                    + e.getMessage(), "\tНеудача" + e.getMessage());
+            viewService.deleteTypComCatch(tableName, e.getMessage());
         }
     }
 }
