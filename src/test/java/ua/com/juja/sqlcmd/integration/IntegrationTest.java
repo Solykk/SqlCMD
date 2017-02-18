@@ -10,6 +10,7 @@ import ua.com.juja.sqlcmd.control.JDBCDatabaseManager;
 import java.io.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class IntegrationTest {
@@ -777,5 +778,16 @@ public class IntegrationTest {
             }
         }
         assertEquals(actualResult, getData());
+    }
+
+    @Test
+    public void test_consolePrintHistory(){
+        in.add("connect|user|pass");
+        in.add("history");
+        in.add("exit");
+
+        Main.main(new String[0]);
+
+        assertFalse(getData().equals(""));
     }
 }

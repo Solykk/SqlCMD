@@ -1,4 +1,4 @@
-package ua.com.juja.sqlcmd.control.comands;
+package ua.com.juja.sqlcmd.control.commands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
@@ -7,13 +7,13 @@ import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
 
-public class Drop implements Command {
+public class CudQuery implements Command {
 
     private DatabaseManager manager;
     private Correctly correctly;
     private ViewService viewService;
 
-    public Drop(DatabaseManager manager, View view) {
+    public CudQuery(DatabaseManager manager, View view) {
         this.manager = manager;
         this.correctly = new Correctly();
         this.viewService = new ViewService(view);
@@ -21,20 +21,19 @@ public class Drop implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("drop|");
-
+        return command.startsWith("cudQuery|");
     }
 
     @Override
     public void process(String command) {
 
-        String tableName = correctly.expectedTwo(command);
+        String query = correctly.expectedTwo(command);
 
         try {
-            manager.drop(tableName);
-            viewService.dropComTry(tableName);
+            manager.cudQuery(query);
+            viewService.cudQueryComTry(query);
         } catch (SQLException | NullPointerException e) {
-            viewService.dropComCatch(tableName, e.getMessage());
+            viewService.cudQueryComCatch(query, e.getMessage());
         }
     }
 }

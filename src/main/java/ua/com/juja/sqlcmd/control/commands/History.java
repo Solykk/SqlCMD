@@ -1,22 +1,22 @@
-package ua.com.juja.sqlcmd.control.comands;
+package ua.com.juja.sqlcmd.control.commands;
 
 import ua.com.juja.sqlcmd.view.View;
 
-public class Unsupported implements Command {
+public class History implements Command {
 
     private View view;
 
-    public Unsupported(View view){
+    public History(View view) {
         this.view = view;
     }
 
     @Override
     public boolean isProcessed(String command) {
-        return true;
+        return  command.equals("history");
     }
 
     @Override
     public void process(String command) {
-        view.write("Несуществующая команда: " + command);
+        view.printHistory();
     }
 }

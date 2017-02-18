@@ -37,7 +37,7 @@ public class ViewImpl implements View {
 
     @Override
     public String read() {
-        return null;
+        return "\n";
     }
 
     @Override

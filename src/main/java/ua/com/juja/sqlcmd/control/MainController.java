@@ -1,6 +1,6 @@
 package ua.com.juja.sqlcmd.control;
 
-import ua.com.juja.sqlcmd.control.comands.*;
+import ua.com.juja.sqlcmd.control.commands.*;
 import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 

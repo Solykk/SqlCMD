@@ -1,4 +1,4 @@
-package ua.com.juja.sqlcmd.control.comands;
+package ua.com.juja.sqlcmd.control.commands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
@@ -8,14 +8,14 @@ import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
 
-public class ColumnType implements Command {
+public class Columns implements Command {
 
     private DatabaseManager manager;
     private Correctly correctly;
     private ViewService viewService;
     private TablePrinter tablePrinter;
 
-    public ColumnType(DatabaseManager manager, View view) {
+    public Columns(DatabaseManager manager, View view) {
         this.manager = manager;
         this.correctly = new Correctly();
         this.viewService = new ViewService(view);
@@ -24,22 +24,19 @@ public class ColumnType implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("columntype|");
+        return command.startsWith("columns|");
     }
 
     @Override
     public void process(String command) {
 
-        String[] data = correctly.expectedThree(command);
-
-        String tableName = data[1];
-        String columnName = data[2];
+        String tableName = correctly.expectedTwo(command);
 
         try {
-            tablePrinter.printTable(manager.getTypeColumn(tableName, columnName));
-            viewService.columnTypeComTry(tableName, columnName);
-        } catch (SQLException |  NullPointerException e) {
-            viewService.columnTypComCatch(tableName, columnName, e.getMessage());
+            tablePrinter.printTable(manager.getColumnNames(tableName));
+            viewService.columnsComTry(tableName);
+        } catch (SQLException | NullPointerException e) {
+            viewService.columnsComCatch(tableName, e.getMessage());
         }
     }
 }

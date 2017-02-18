@@ -1,39 +1,37 @@
-package ua.com.juja.sqlcmd.control.comands;
+package ua.com.juja.sqlcmd.control.commands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
-import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.TablePrinter;
 import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
 
-public class CudQuery implements Command {
+public class Tables implements Command {
 
     private DatabaseManager manager;
-    private Correctly correctly;
     private ViewService viewService;
+    private TablePrinter tablePrinter;
 
-    public CudQuery(DatabaseManager manager, View view) {
+    public Tables(DatabaseManager manager, View view) {
         this.manager = manager;
-        this.correctly = new Correctly();
         this.viewService = new ViewService(view);
+        this.tablePrinter = new TablePrinter(view);
     }
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("cudQuery|");
+        return command.equals("tables");
     }
 
     @Override
     public void process(String command) {
 
-        String query = correctly.expectedTwo(command);
-
         try {
-            manager.cudQuery(query);
-            viewService.cudQueryComTry(query);
+            tablePrinter.printTable(manager.getTableNames());
+            viewService.tablesComTry();
         } catch (SQLException | NullPointerException e) {
-            viewService.cudQueryComCatch(query, e.getMessage());
+            viewService.tablesComCatch(e.getMessage());
         }
     }
 }

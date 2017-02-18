@@ -1,4 +1,4 @@
-package ua.com.juja.sqlcmd.control.comands;
+package ua.com.juja.sqlcmd.control.commands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
@@ -41,34 +41,34 @@ public class Create implements Command {
         try {
             manager.createWithoutPK(tableName, settings);
             viewService.createComTry(tableName, command);
-        } catch (SQLException | NullPointerException e) {
-            viewService.createComCatch(tableName, command, e.getMessage());
-        }
 
-        String key = keyAction();
-        if (key.equalsIgnoreCase("y")) {
+            String key = keyAction();
+            if (key.equalsIgnoreCase("y")) {
 
-            String columnName = nameAction();
-
-            try {
-                manager.createCreatePK(tableName, columnName);
-                viewService.createPKComTry(tableName, columnName);
-            } catch (SQLException | NullPointerException e) {
-                viewService.createPKComCatch(tableName, columnName, e.getMessage());
-            }
-
-            String seq = seqAction();
-            if(seq.equalsIgnoreCase("y")){
-
-                Long startWith = startWith();
+                String columnName = nameAction();
 
                 try {
-                    manager.createSequencePK(tableName, startWith);
-                    viewService.createSeqComTry(tableName, columnName);
+                    manager.createCreatePK(tableName, columnName);
+                    viewService.createPKComTry(tableName, columnName);
                 } catch (SQLException | NullPointerException e) {
-                    viewService.createSeqComCatch(tableName, columnName, e.getMessage());
+                    viewService.createPKComCatch(tableName, columnName, e.getMessage());
+                }
+
+                String seq = seqAction();
+                if(seq.equalsIgnoreCase("y")){
+
+                    Long startWith = startWith();
+
+                    try {
+                        manager.createSequencePK(tableName, startWith);
+                        viewService.createSeqComTry(tableName, columnName);
+                    } catch (SQLException | NullPointerException e) {
+                        viewService.createSeqComCatch(tableName, columnName, e.getMessage());
+                    }
                 }
             }
+        } catch (SQLException | NullPointerException e) {
+            viewService.createComCatch(tableName, command, e.getMessage());
         }
     }
 

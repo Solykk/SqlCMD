@@ -1,4 +1,4 @@
-package ua.com.juja.sqlcmd.control.comands;
+package ua.com.juja.sqlcmd.control.commands;
 
 import ua.com.juja.sqlcmd.service.HelpList;
 import ua.com.juja.sqlcmd.view.View;

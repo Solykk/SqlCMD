@@ -1,4 +1,4 @@
-package ua.com.juja.sqlcmd.control.comands;
+package ua.com.juja.sqlcmd.control.commands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
@@ -10,7 +10,7 @@ import ua.com.juja.sqlcmd.view.View;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class Delete implements Command {
+public class Update implements Command {
 
     private DatabaseManager manager;
     private Correctly correctly;
@@ -18,7 +18,7 @@ public class Delete implements Command {
     private ViewService viewService;
     private TablePrinter tablePrinter;
 
-    public Delete(DatabaseManager manager, View view) {
+    public Update(DatabaseManager manager, View view) {
         this.manager = manager;
         this.correctly = new Correctly();
         this.settingsHelper = new SettingsHelper();
@@ -28,24 +28,27 @@ public class Delete implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("delete|");
+        return command.startsWith("update|");
     }
 
     @Override
     public void process(String command) {
 
-        String[] data = correctly.expectedMinEven(command, 4);
+        String[] data = correctly.expectedMinEven(command, 6);
 
         String tableName = data[1];
-        ArrayList<String[]> settings = settingsHelper.getSettings(data);
+        ArrayList<String[]> forUpdate = new ArrayList<>();
+        ArrayList<String[]> howUpdate = new ArrayList<>();
+
+        settingsHelper.getSetUpdate(data, forUpdate, howUpdate);
 
         try {
-            manager.delete(tableName,settings);
+            manager.update(tableName, forUpdate, howUpdate);
             tablePrinter.printTable(manager.read(tableName));
 
-            viewService.deleteComTry(tableName);
+            viewService.updateComTry(tableName, command);
         } catch (SQLException | NullPointerException e) {
-            viewService.deleteComCatch(tableName, e.getMessage());
+            viewService.updateComCatch(tableName, command, e.getMessage());
         }
     }
 }

@@ -1,4 +1,4 @@
-package ua.com.juja.sqlcmd.control.comands;
+package ua.com.juja.sqlcmd.control.commands;
 
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
@@ -7,13 +7,13 @@ import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
 
-public class Connect implements Command {
+public class Drop implements Command {
 
     private DatabaseManager manager;
     private Correctly correctly;
     private ViewService viewService;
 
-    public Connect(DatabaseManager manager, View view) {
+    public Drop(DatabaseManager manager, View view) {
         this.manager = manager;
         this.correctly = new Correctly();
         this.viewService = new ViewService(view);
@@ -21,22 +21,20 @@ public class Connect implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("connect|");
+        return command.startsWith("drop|");
+
     }
 
     @Override
     public void process(String command) {
 
-        String[] data = correctly.expectedThree(command);
-
-        String userName = data[1];
-        String password = data[2];
+        String tableName = correctly.expectedTwo(command);
 
         try {
-            manager.connect(userName, password);
-            viewService.connectComTry();
-        } catch (SQLException e) {
-            viewService.connectComCatch(e.getMessage());
+            manager.drop(tableName);
+            viewService.dropComTry(tableName);
+        } catch (SQLException | NullPointerException e) {
+            viewService.dropComCatch(tableName, e.getMessage());
         }
     }
 }
