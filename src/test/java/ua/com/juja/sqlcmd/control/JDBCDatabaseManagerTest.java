@@ -28,8 +28,6 @@ public class JDBCDatabaseManagerTest {
     public void purgeRecyclebin() throws SQLException {
         if(manager.isConnected()) {
             manager.cudQuery("PURGE RECYCLEBIN");
-        } else {
-            // do nothing
         }
     }
 

@@ -68,11 +68,7 @@ public class Create implements Command {
                 } catch (SQLException | NullPointerException e) {
                     viewService.createSeqComCatch(tableName, columnName, e.getMessage());
                 }
-            } else {
-                return;
             }
-        } else {
-            return;
         }
     }
 
