@@ -82,6 +82,14 @@ public class ViewService {
                 + message, "\tНеудача " + message);
     }
 
-
+    public void findTypeComTry(String tableName){
+        view.addHistory("Вывод содержимого таблицы: " + tableName + " find");
+        view.writeAndHistory("", "\tУспех");
+    }
+    public void findTypComCatch(String tableName, String message){
+        view.addHistory("Вывод содержимого таблицы: " + tableName + " find");
+        view.writeAndHistory("Ошибка. Не удалось вывести таблицу ( " + tableName + " ) " + message,
+                "\tНеудача " + message);
+    }
 
 }
