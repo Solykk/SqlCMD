@@ -74,7 +74,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     @Override
     public Table getAllTypeColumns(String tableName) throws SQLException, NullPointerException{
 
-        ArrayList<ColumnDate> columnDates = query.columnDates();
+        ArrayList<ColumnDate> columnDates = query.columnData();
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query.getAllTypCloQuery(tableName)))
@@ -87,7 +87,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     @Override
     public Table getTypeColumn(String tableName, String columnName) throws SQLException, NullPointerException {
 
-        ArrayList<ColumnDate> columnDates = query.columnDates();
+        ArrayList<ColumnDate> columnDates = query.columnData();
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query.getTypCloQuery(tableName, columnName)))

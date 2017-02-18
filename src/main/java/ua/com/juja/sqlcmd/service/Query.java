@@ -124,7 +124,7 @@ public class Query {
                 + "'" + tableName+ "' AND COLUMN_NAME = " + "'" + columnName + "'";
     }
 
-    public ArrayList<ColumnDate> columnDates() {
+    public ArrayList<ColumnDate> columnData() {
         ArrayList<ColumnDate> columnDates = new ArrayList<>();
         columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<>()));
         columnDates.add(new ColumnDate("DATA_TYPE", new ArrayList<>()));
