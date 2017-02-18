@@ -72,6 +72,16 @@ public class ViewService {
                 + message, "\tНеудача" + message);
     }
 
+    public void dropTypeComTry(String tableName){
+        view.addHistory("Попытка удалить таблицу: " + tableName + " drop");
+        view.writeAndHistory("Успех! Таблица удалена", "\tУспех");
+    }
+    public void dropTypComCatch(String tableName, String message){
+        view.addHistory("Попытка удалить таблицу: " + tableName + " drop");
+        view.writeAndHistory("Ошибка. Не удалось удалить таблицу: ( " + tableName + " ) "
+                + message, "\tНеудача " + message);
+    }
+
 
 
 }
