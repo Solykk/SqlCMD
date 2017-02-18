@@ -131,4 +131,15 @@ public class ViewService {
         view.writeAndHistory("Ошибка. Не могу осуществить вывод всех таблиц " + message,
                 "\tНеудача " + message);
     }
+
+    public void tablesTypeComTry(String tableName){
+        view.addHistory("Определение типа данных содержащийся в таблице: " + tableName + " tabletype");
+        view.writeAndHistory("", "\tУспех");
+    }
+    public void tablesTypeComCatch(String tableName, String message){
+        view.addHistory("Определение типа данных содержащийся в таблице: " + tableName + " tabletype");
+        view.writeAndHistory("Ошибка. Не удалось определить тип данных колонок в таблице ( " + tableName + " ) "
+                + message, "\tНеудача " + message);
+    }
+
 }
