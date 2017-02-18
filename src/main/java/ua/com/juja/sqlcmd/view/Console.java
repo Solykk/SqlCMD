@@ -1,7 +1,5 @@
 package ua.com.juja.sqlcmd.view;
 
-import ua.com.juja.sqlcmd.model.Table;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,7 +47,7 @@ public class Console implements View {
     private String getDate(){
         long millis = System.currentTimeMillis();
         Date date = new Date(millis);
-        return new SimpleDateFormat("yyyy,MM,dd_(HH:mm:ss)").format(date);
+        return new SimpleDateFormat("HH:mm:ss").format(date);
     }
 
 }
