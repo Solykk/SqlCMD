@@ -119,18 +119,18 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void connection(){
+    public void test_connection(){
         connectUserPass();
         Assert.assertTrue(manager.isConnected());
         }
 
     @Test
-    public void connection_null(){
+    public void test_connectionNull(){
         Assert.assertFalse(manager.isConnected());
     }
 
     @Test
-    public void connection_fail() {
+    public void test_connectionFail() {
         try {
             manager.connect("ewe", "werer");
         } catch (SQLException e) {
@@ -140,7 +140,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void getAllTableNames() throws SQLException {
+    public void test_etAllTableNames() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTable1col();
         manager.createWithoutPK(getTableName(), settings);
@@ -161,7 +161,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void getAllTableNames_empty() throws SQLException {
+    public void test_getAllTableNamesEmpty() throws SQLException {
 
         connectUserPass();
 
@@ -179,7 +179,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void getAllColumnNamesFromTable_wrongInput() throws SQLException {
+    public void test_getAllColumnNamesFromTableWrongInput() throws SQLException {
         connectUserPass();
 
         Table  table = manager.getColumnNames("CCC");
@@ -196,7 +196,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void getAllColumnNamesFromTable() throws SQLException {
+    public void test_getAllColumnNamesFromTable() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTable1col();
         manager.createWithoutPK(getTableName(), settings);
@@ -219,7 +219,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void getDataTypeAllColumnsFromTable() throws SQLException {
+    public void test_getDataTypeAllColumnsFromTable() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTAble5col();
         manager.createWithoutPK(getTableName(), settings);
@@ -243,7 +243,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void getDataTypeAllColumnsFromTable_wrongInput() throws SQLException {
+    public void test_getDataTypeAllColumnsFromTableWrongInput() throws SQLException {
         connectUserPass();
 
         Table  table = manager.getAllTypeColumns("CCC");
@@ -260,7 +260,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void getDataTypeColumnFromTable() throws SQLException {
+    public void test_getDataTypeColumnFromTable() throws SQLException {
 
         connectUserPass();
         ArrayList<String> settings = getNewTAble5col();
@@ -283,7 +283,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void getDataTypeColumnFromTable_wrongInput() throws SQLException {
+    public void test_getDataTypeColumnFromTableWrongInput() throws SQLException {
         connectUserPass();
 
         Table table = manager.getTypeColumn("CCC", "TAT");
@@ -301,7 +301,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void createTableWithoutPK() {
+    public void test_createTableWithoutPK() {
         connectUserPass();
         try {
             ArrayList<String> settings = getNewTable1col();
@@ -315,7 +315,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void createTableWithoutPK_wrongInput() {
+    public void test_createTableWithoutPKWrongInput() {
         connectUserPass();
         try {
             manager.createWithoutPK("hs69", new ArrayList<String>());
@@ -326,7 +326,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void createTableCreatePK() {
+    public void test_createTableCreatePK() {
         connectUserPass();
         try {
             ArrayList<String> settings = getNewTable2col();
@@ -341,7 +341,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void createTableCreatePK_wrongInput() {
+    public void test_createTableCreatePKWrongInput() {
         connectUserPass();
         try {
             ArrayList<String> settings = getNewTable2col();
@@ -356,7 +356,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void createTableSequenceForPK() {
+    public void test_createTableSequenceForPK() {
         connectUserPass();
         try {
             ArrayList<String> settings = getNewTable3col();
@@ -372,7 +372,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void createTableSequenceForPK_wrongInput() {
+    public void test_createTableSequenceForPKWrongInput() {
         connectUserPass();
         try {
             ArrayList<String> settings = getNewTable3col();
@@ -389,14 +389,14 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void connection_disconnect(){
+    public void test_connectionDisconnect(){
         connectUserPass();
         manager.disconnect();
         assertFalse(manager.isConnected());
     }
 
     @Test
-    public void clear() throws SQLException {
+    public void test_clear() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTable3col();
         ArrayList<String[]> insert = getInsertFor3Col();
@@ -417,7 +417,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void clear_PK() throws SQLException {
+    public void test_clearPK() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTable3col();
         ArrayList<String[]> insert = getInsertFor3Col();
@@ -441,7 +441,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void drop() throws SQLException {
+    public void test_drop() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTable3col();
         manager.createWithoutPK(getTableName(), settings);
@@ -462,7 +462,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void drop_wrongImport() throws SQLException {
+    public void test_dropWrongImport() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTable3col();
         manager.createWithoutPK(getTableName(), settings);
@@ -477,7 +477,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void read_insert() throws SQLException {
+    public void test_readInsert() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
@@ -503,7 +503,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void reed_wrongImport() {
+    public void test_readWrongImport() {
         connectUserPass();
         Table table = null;
         try {
@@ -514,7 +514,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void readSettings() throws SQLException {
+    public void test_readSettings() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
@@ -541,7 +541,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void reedSettings_wrongImport() throws SQLException {
+    public void test_reedSettingsWrongImport() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
@@ -567,7 +567,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void delete() throws SQLException {
+    public void test_delete() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
@@ -595,7 +595,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void delete_wrongImport() throws SQLException {
+    public void test_deleteWrongImport() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
@@ -628,7 +628,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void update() throws SQLException {
+    public void test_update() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
@@ -659,7 +659,7 @@ public class JDBCDatabaseManagerTest {
     }
 
     @Test
-    public void update_wrongImport() throws SQLException {
+    public void test_updateWrongImport() throws SQLException {
         connectUserPass();
         ArrayList<String> settings = getNewTAble5col();
         ArrayList<String[]> insert = getInsertFor5Col();
@@ -688,6 +688,4 @@ public class JDBCDatabaseManagerTest {
         assertEquals(actualResult, result);
 
     }
-
-
 }

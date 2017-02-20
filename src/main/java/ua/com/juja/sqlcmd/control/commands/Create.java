@@ -42,33 +42,40 @@ public class Create implements Command {
             manager.createWithoutPK(tableName, settings);
             viewService.createComTry(tableName, command);
 
-            String key = keyAction();
-            if (key.equalsIgnoreCase("y")) {
-
-                String columnName = nameAction();
-
-                try {
-                    manager.createCreatePK(tableName, columnName);
-                    viewService.createPKComTry(tableName, columnName);
-
-                    String seq = seqAction();
-                    if(seq.equalsIgnoreCase("y")){
-
-                        Long startWith = startWith();
-
-                        try {
-                            manager.createSequencePK(tableName, startWith);
-                            viewService.createSeqComTry(tableName, columnName);
-                        } catch (SQLException | NumberFormatException | NullPointerException e) {
-                            viewService.createSeqComCatch(tableName, columnName, e.getMessage());
-                        }
-                    }
-                } catch (SQLException | NumberFormatException | NullPointerException e) {
-                    viewService.createPKComCatch(tableName, columnName, e.getMessage());
-                }
-            }
+            pkCreator(tableName);
         } catch (SQLException | NullPointerException e) {
             viewService.createComCatch(tableName, command, e.getMessage());
+        }
+    }
+
+    private void pkCreator(String tableName) {
+        String key = keyAction();
+        if (key.equalsIgnoreCase("y")) {
+
+            String columnName = nameAction();
+            try {
+                manager.createCreatePK(tableName, columnName);
+                viewService.createPKComTry(tableName, columnName);
+
+                sequenceCreator(tableName, columnName);
+            } catch (SQLException | NumberFormatException | NullPointerException e) {
+                viewService.createPKComCatch(tableName, columnName, e.getMessage());
+            }
+        }
+    }
+
+    private void sequenceCreator(String tableName, String columnName) {
+        String seq = seqAction();
+        if(seq.equalsIgnoreCase("y")){
+
+            Long startWith = startWith();
+
+            try {
+                manager.createSequencePK(tableName, startWith);
+                viewService.createSeqComTry(tableName, columnName);
+            } catch (SQLException | NumberFormatException | NullPointerException e) {
+                viewService.createSeqComCatch(tableName, columnName, e.getMessage());
+            }
         }
     }
 

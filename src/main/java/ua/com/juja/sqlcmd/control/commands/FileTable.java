@@ -41,25 +41,30 @@ public class FileTable implements Command{
             Table request = manager.read(tableName);
             String dataTable = tablePrinter.printTable(request);
 
-            String response = saveAction();
-            if (response.equalsIgnoreCase("y")){
-
-                String reName = nameAction();
-                if (reName.equalsIgnoreCase("y")){
-                    saveFile(tableName, dataTable);
-                } else {
-                    reNameWriter(dataTable);
-                }
-            } else {
-                viewService.fileTabComTryAbort(tableName);
-            }
+            saveConsent(tableName, dataTable);
         } catch (Exception e) {
             viewService.fileTabComCatch(tableName, e.getMessage());
         }
     }
 
+    private void saveConsent(String tableName, String dataTable) throws IOException {
+        String response = saveAction();
+        if (response.equalsIgnoreCase("y")){
+
+            String reName = nameAction();
+            if (reName.equalsIgnoreCase("y")){
+
+                saveFile(tableName, dataTable);
+            } else {
+                reNameWriter(dataTable);
+            }
+        } else {
+            viewService.fileTabComTryAbort(tableName);
+        }
+    }
+
     private void saveFile(String tableName, String dataTable) throws IOException {
-        File file = new File("src/main/resources", tableName + ".txt");
+        File file = new File(tableName + ".txt");
         fileExistChecker(dataTable, tableName, file);
     }
 
@@ -102,9 +107,10 @@ public class FileTable implements Command{
 
     private void fileExistChecker(String dataTable, String name, File file) throws IOException {
         if(file.exists()){
-            String read = existAction(name);
 
+            String read = existAction(name);
             if(read.equalsIgnoreCase("y")){
+
                 nameOkWriter(name, dataTable, file);
             } else {
                 reNameWriter(dataTable);
@@ -128,7 +134,7 @@ public class FileTable implements Command{
     private void fileInput(String dataTable, String name, File file) throws IOException {
 
         if(file.createNewFile()) {
-            try (FileWriter writer = new FileWriter("src/main/resources/" + name + ".txt")) {
+            try (FileWriter writer = new FileWriter(name + ".txt")) {
                 writer.write(dataTable);
                 writer.flush();
             }

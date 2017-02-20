@@ -762,11 +762,11 @@ public class IntegrationTest {
                                         "Введи команду (или help для помощи):\r\n" +
                                         "До встречи!\r\n";
 
-        File file = new File("src/main/resources", "FIRST" + ".txt");
+        File file = new File("FIRST" + ".txt");
         if(file.exists()){
             assertTrue(true);
-            boolean del = file.delete();
-            if(del){
+
+            if(file.delete()){
                 assertTrue(true);
             } else {
                 assertTrue(false);

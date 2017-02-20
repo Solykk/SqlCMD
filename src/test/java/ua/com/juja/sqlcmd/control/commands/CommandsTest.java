@@ -54,6 +54,19 @@ public class CommandsTest {
 
     }
 
+    @After
+    public void end(){
+        purgeDrop();
+    }
+
+    private void purgeDrop() {
+        try {
+            manager.cudQuery("PURGE RECYCLEBIN");
+        } catch (Exception e){
+            //do nothing
+        }
+    }
+
     @Test
     public void test_clearProcessFail(){
         clear.process("clear|FIRST");
