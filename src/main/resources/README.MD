@@ -1,3 +1,5 @@
+Приложение работае с базой данных Oracle 10g
+
 Для корректной работы тестов нужно увеличить количество параллельных подключений .
 1. Создать для БД нового пользователя 'user' и паролем 'pass'
 2. Создать Connection с такими параметрами:
@@ -319,10 +321,4 @@
 
 [После логического завершения любой операции] я вижу поле для ввода команды + комаду для предоставления помощи
                                                                         -> значит могу понять, как дальше действовать.
-
-select * from v$resource_limit where resource_name = 'processes';
-cmd>sqlplus / as sysdba
-sqlplus>alter system set processes=300 scope=spfile;
-sqlplus>shut immediate;
-sqlplus>startup
 
