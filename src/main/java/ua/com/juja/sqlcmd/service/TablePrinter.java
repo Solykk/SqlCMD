@@ -15,32 +15,122 @@ public class TablePrinter {
 
     public  String  printTable(Table table){
 
-        if(table == null){
-            return "";
+        if(table == null) { return ""; }
+
+        StringBuilder tableString = new StringBuilder();
+        ArrayList<Integer> maxLength = new ArrayList<>();
+        int lengthSum = calculatesLength(table, maxLength);
+
+        char[] line = lineCreator(lengthSum);
+
+        char [] containerTN = new char[lengthSum - 1];
+        char [] reBuildTN = table.getTableName().toCharArray();
+        reBuilder(containerTN, reBuildTN);
+
+        printLine(tableString, line);
+
+        printTableName(tableString, containerTN);
+
+        printLine(tableString, line);
+
+        printColumnName(table, tableString, maxLength);
+
+        printLine(tableString, line);
+
+        printValue(table, tableString, maxLength);
+
+        printLine(tableString, line);
+
+        return tableString.toString();
+    }
+
+    private void printTableName(StringBuilder tableString, char[] containerTN) {
+        view.write('|' + new String(containerTN) + '|');
+        tableString.append('|' + new String(containerTN) + '|' + "\n");
+        sleeper(5);
+    }
+
+    private void printColumnName(Table table, StringBuilder tableString, ArrayList<Integer> maxLength) {
+        for (int i = 0; i < table.getTableDate().size(); i++){
+
+            String columnName = table.getTableDate().get(i).columnName();
+
+            char [] containerCN = new char[maxLength.get(i) + 2];
+            char [] reBuildCN = columnName.toCharArray();
+
+            reBuilder(containerCN, reBuildCN);
+
+            printData(table, tableString, i, containerCN);
+            sleeper(5);
         }
-        StringBuilder stringInString = new StringBuilder();
-        ArrayList<Integer> maxLengthCharsOfColumn = new ArrayList<>();
-        int sumOfLength = 0;
+
+        lineBreak(tableString);
+    }
+
+    private void printValue(Table table, StringBuilder tableString, ArrayList<Integer> maxLength) {
+        for (int i = 0; i < table.getTableDate().get(0).getValue().size(); i++){
+
+            for (int j = 0; j < table.getTableDate().size(); j++) {
+
+                String dataValue = table.getTableDate().get(j).getValue().get(i);
+                dataValue = nullable(dataValue);
+
+                char [] containerDV = new char[maxLength.get(j) + 2];
+                char [] reBuildDV = dataValue.toCharArray();
+
+                reBuilder(containerDV, reBuildDV);
+
+                printData(table, tableString, j, containerDV);
+                sleeper(5);
+
+            }
+
+            lineBreak(tableString);
+        }
+    }
+
+    private void printLine(StringBuilder tableString, char[] line) {
+        view.write(new String(line));
+        tableString.append(new String(line) + "\n");
+    }
+
+    private void printData(Table table, StringBuilder tableString, int index, char[] container) {
+        if(index == table.getTableDate().size() - 1){
+            System.out.print('|' + new String(container) + '|');
+            tableString.append('|' + new String(container) + '|');
+        } else {
+            System.out.print('|' + new String(container));
+            tableString.append('|' + new String(container));
+        }
+    }
+
+    private void lineBreak(StringBuilder tableString) {
+        view.write("");
+        tableString.append("\n");
+    }
+
+    private int calculatesLength(Table table, ArrayList<Integer> maxLength) {
+
+        int lengthSum = 0;
 
         for (int j = 0; j < table.getTableDate().size(); j++) {
+
             String tempDataObject;
             if(table.getTableDate().get(j).getValue().size() == 0){
                 tempDataObject = "";
             } else {
+
                 tempDataObject = table.getTableDate().get(j).getValue().get(0);
-                if (tempDataObject == null){
-                    tempDataObject = "null";
-                }
+                tempDataObject = nullable(tempDataObject);
             }
 
             Integer dataLength = tempDataObject.length();
             Integer columnNameLength = table.getTableDate().get(j).columnName().length();
 
             for (int i = 0; i < table.getTableDate().get(j).getValue().size(); i++) {
+
                 String tempObj = table.getTableDate().get(j).getValue().get(i);
-                if (tempObj == null){
-                    tempObj = "null";
-                }
+                tempObj = nullable(tempObj);
 
                 Integer tempIns = tempObj.length();
                 if (dataLength < tempIns) {
@@ -52,113 +142,37 @@ public class TablePrinter {
                 dataLength = columnNameLength;
             }
 
-            maxLengthCharsOfColumn.add(dataLength);
-            sumOfLength += dataLength + 3;
+            maxLength.add(dataLength);
+            lengthSum += dataLength + 3;
         }
+        return lengthSum;
+    }
 
-        char [] line = new char[sumOfLength + 1];
+    private char[] lineCreator(int lengthSum) {
+        char [] line = new char[lengthSum + 1];
         for (int q = 0; q < line.length; q++) {
             line[q] = '-';
         }
+        return line;
+    }
 
-        char [] containerForReBuildTableName = new char[sumOfLength - 1];//without 1
-        char [] reBuildingTableName = table.getTableName().toCharArray();
-
-        for (int k = 0; k < containerForReBuildTableName.length; k++) {//with -1
-            containerForReBuildTableName [k] = ' ';
+    private void reBuilder(char[] container, char[] reBuild) {
+        for (int i = 0; i < container.length; i++) {
+            container [i] = ' ';
         }
 
-        int fromToName = (containerForReBuildTableName.length - reBuildingTableName.length)/2;
+        int fromTo = (container.length - reBuild.length)/2;
 
-        for (int j = fromToName, m = 0; m < reBuildingTableName.length; j++, m++) {
-            containerForReBuildTableName[j] = reBuildingTableName[m];
+        for (int i = fromTo, j = 0; j < reBuild.length; i++, j++) {
+            container[i] = reBuild[j];
         }
+    }
 
-        view.write(new String(line));
-        stringInString.append(new String(line) + "\n");
-        view.write('|' + new String(containerForReBuildTableName) + '|');
-        stringInString.append('|' + new String(containerForReBuildTableName) + '|' + "\n");
-        view.write(new String(line));
-        stringInString.append(new String(line) + "\n");
-
-        sleeper(5);
-
-        for (int i = 0; i < table.getTableDate().size(); i++){
-
-            String columnName = table.getTableDate().get(i).columnName();
-            char [] containerForReBuildColName = new char[maxLengthCharsOfColumn.get(i) + 2];
-            char [] reBuildingColName = columnName.toCharArray();
-
-            for (int k = 0; k < containerForReBuildColName.length; k++) {
-                containerForReBuildColName [k] = ' ';
-            }
-
-            int subStrFromTo = (containerForReBuildColName.length - reBuildingColName.length)/2;
-
-            for (int j = subStrFromTo, m = 0; m < reBuildingColName.length; j++, m++) {
-                containerForReBuildColName[j] = reBuildingColName[m];
-            }
-
-            if(i == table.getTableDate().size() - 1){
-                System.out.print('|' + new String(containerForReBuildColName) + '|');
-                stringInString.append('|' + new String(containerForReBuildColName) + '|');
-            } else {
-                System.out.print('|' + new String(containerForReBuildColName));
-                stringInString.append('|' + new String(containerForReBuildColName));
-            }
-
-            sleeper(5);
-
+    private String nullable(String string) {
+        if (string == null){
+            string = "null";
         }
-
-        view.write("");
-        stringInString.append("\n");
-        view.write(new String(line));
-        stringInString.append(new String(line) + "\n");
-
-        for (int i = 0; i < table.getTableDate().get(0).getValue().size(); i++){
-
-            for (int j = 0; j < table.getTableDate().size(); j++) {
-
-                String dataValue = table.getTableDate().get(j).getValue().get(i);
-
-                if(dataValue == null){
-                    dataValue = "null";
-                }
-
-                char [] containerForReBuildDataValue = new char[maxLengthCharsOfColumn.get(j) + 2];
-                char [] reBuildingDataValue = dataValue.toCharArray();
-
-                for (int k = 0; k < containerForReBuildDataValue.length; k++) {
-                    containerForReBuildDataValue [k] = ' ';
-                }
-
-                int fromTo = (containerForReBuildDataValue.length - reBuildingDataValue.length)/2;
-
-                for (int f = fromTo, m = 0; m < reBuildingDataValue.length; f++, m++) {
-                    containerForReBuildDataValue[f] = reBuildingDataValue[m];
-                }
-
-                if(j == table.getTableDate().size() - 1){
-                    System.out.print('|' + new String(containerForReBuildDataValue) + '|');
-                    stringInString.append('|' + new String(containerForReBuildDataValue) + '|');
-                } else{
-                    System.out.print('|' + new String(containerForReBuildDataValue));
-                    stringInString.append('|' + new String(containerForReBuildDataValue));
-                }
-
-                sleeper(5);
-
-            }
-
-            view.write("");
-            stringInString.append("\n");
-        }
-
-        view.write(new String(line));
-        stringInString.append(new String(line) + "\n");
-
-        return stringInString.toString();
+        return string;
     }
 
     private void sleeper(int time) {
