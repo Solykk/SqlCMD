@@ -1,6 +1,6 @@
 package ua.com.juja.sqlcmd.integration;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,13 +15,13 @@ import static org.junit.Assert.assertTrue;
 
 public class IntegrationTest {
 
-    private  DatabaseManager databaseManager;
+    private  DatabaseManager manager;
     private  ByteArrayOutputStream out;
     private  ConfigurableInputStream in;
 
     @Before
     public void setup() {
-        databaseManager = new JDBCDatabaseManager();
+        manager = new JDBCDatabaseManager();
         out = new ByteArrayOutputStream();
         in = new ConfigurableInputStream();
 
@@ -29,23 +29,22 @@ public class IntegrationTest {
         System.setOut(new PrintStream(out));
     }
 
-    @After
-    public void end() {
-        purgeDrop();
+    @AfterClass
+    public static  void end() {
+        DatabaseManager purge = new JDBCDatabaseManager();
+        try {
+            purge.connect("test", "pass");
+            purge.cudQuery("PURGE RECYCLEBIN");
+            purge.disconnect();
+        } catch (Exception e){
+            //do nothing
+        }
     }
 
     public String getData() {
             String result = new String(out.toByteArray());
             out.reset();
             return result;
-    }
-
-    private void purgeDrop() {
-        try {
-            databaseManager.cudQuery("PURGE RECYCLEBIN");
-        } catch (Exception e){
-            //do nothing
-        }
     }
 
     private String createTable(){
@@ -723,7 +722,6 @@ public class IntegrationTest {
         in.add("y");
         in.add("y");
         in.add("drop|FIRST");
-        purgeDrop();
         in.add("exit");
         Main.main(new String[0]);
         String actualResult =

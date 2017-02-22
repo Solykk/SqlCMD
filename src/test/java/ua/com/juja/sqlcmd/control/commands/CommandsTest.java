@@ -1,6 +1,6 @@
 package ua.com.juja.sqlcmd.control.commands;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
@@ -14,13 +14,14 @@ import static org.junit.Assert.assertFalse;
 
 public class CommandsTest {
 
+    private DatabaseManager manager;
+
     private Clear clear;
     private Columns columns;
     private ColumnType columnType;
     private Delete delete;
     private Drop drop;
     private ViewImpl viewImpl;
-    private DatabaseManager manager;
     private Find find;
     private FindSettings findSettings;
     private History history;
@@ -54,14 +55,13 @@ public class CommandsTest {
 
     }
 
-    @After
-    public void end(){
-        purgeDrop();
-    }
-
-    private void purgeDrop() {
+    @AfterClass
+    public static  void end() {
+        DatabaseManager purge = new JDBCDatabaseManager();
         try {
-            manager.cudQuery("PURGE RECYCLEBIN");
+            purge.connect("test", "pass");
+            purge.cudQuery("PURGE RECYCLEBIN");
+            purge.disconnect();
         } catch (Exception e){
             //do nothing
         }

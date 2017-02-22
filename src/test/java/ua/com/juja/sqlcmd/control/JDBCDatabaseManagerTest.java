@@ -27,10 +27,15 @@ public class JDBCDatabaseManagerTest {
             tablePrinter = new TablePrinter(view);
         }
 
-    @After
-    public void purgeRecyclebin() throws SQLException {
-        if(manager.isConnected()) {
-            manager.cudQuery("PURGE RECYCLEBIN");
+    @AfterClass
+    public static  void end() {
+        DatabaseManager purge = new JDBCDatabaseManager();
+        try {
+            purge.connect("test", "pass");
+            purge.cudQuery("PURGE RECYCLEBIN");
+            purge.disconnect();
+        } catch (Exception e){
+            //do nothing
         }
     }
 
