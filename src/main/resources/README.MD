@@ -3,8 +3,8 @@
 Для корректной работы тестов нужно увеличить количество параллельных подключений.
 1. Создать для БД нового пользователя 'user' и паролем 'pass'
 2. Создать Connection с такими параметрами:
-    ConnectionName  [user]
-    UserName        [user]
+    ConnectionName  [test]
+    UserName        [test]
     Password        [pass]
     Hostname        [localhost]
     Port            [1521]

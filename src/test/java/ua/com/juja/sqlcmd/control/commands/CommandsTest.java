@@ -50,7 +50,7 @@ public class CommandsTest {
         update = new Update(manager, viewImpl);
         create = new Create(manager, viewImpl);
 
-        manager.connect("user","pass");
+        manager.connect("test","pass");
 
     }
 

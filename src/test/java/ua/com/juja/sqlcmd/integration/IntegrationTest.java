@@ -223,7 +223,7 @@ public class IntegrationTest {
     @Test
     public void test_Connect() {
 
-        in.add("connect|user|pass");
+        in.add("connect|test|pass");
         in.add("exit");
 
         Main.main(new String[0]);
@@ -242,7 +242,7 @@ public class IntegrationTest {
     @Test
     public void test_ConnectWrongInput(){
 
-        in.add("connect|user|dssdas");
+        in.add("connect|test|dssdas");
         in.add("exit");
         Main.main(new String[0]);
         String actualResult =
@@ -277,7 +277,7 @@ public class IntegrationTest {
     @Test
     public void test_NotExist(){
 
-        in.add("connect|user|pass");
+        in.add("connect|test|pass");
         in.add("kfjllks");
         in.add("exit");
         Main.main(new String[0]);
@@ -297,7 +297,7 @@ public class IntegrationTest {
     @Test
     public void test_IllegalArguments(){
 
-        in.add("connect|user|pass|llls");
+        in.add("connect|test|pass|llls");
         in.add("exit");
         Main.main(new String[0]);
         String actualResult =
@@ -316,7 +316,7 @@ public class IntegrationTest {
     @Test
     public void test_tables(){
 
-        in.add("connect|user|pass");
+        in.add("connect|test|pass");
         in.add("tables");
         in.add("exit");
         Main.main(new String[0]);
@@ -340,7 +340,7 @@ public class IntegrationTest {
 
     @Test
     public void test_creteTableWithoutPK(){
-        in.add("connect|user|pass");
+        in.add("connect|test|pass");
         in.add("create|" + createTable());
         in.add("n");
         in.add("drop|FIRST");
@@ -364,7 +364,7 @@ public class IntegrationTest {
 
     @Test
     public void test_creteTableWithPK(){
-        in.add("connect|user|pass");
+        in.add("connect|test|pass");
         in.add("create|" + createTable());
         in.add("y");
         in.add("TEST4");
@@ -394,7 +394,7 @@ public class IntegrationTest {
 
     @Test
     public void test_creteTableWithPKWithSeq(){
-        in.add("connect|user|pass");
+        in.add("connect|test|pass");
         in.add("create|" + createTable());
         in.add("y");
         in.add("TEST4");
@@ -430,7 +430,7 @@ public class IntegrationTest {
 
     @Test
     public void test_columnsFindWrongQuery() {
-        in.add("connect|user|pass");
+        in.add("connect|test|pass");
         in.add("create|" + createTable());
         in.add("n");
         in.add("columns|FIRST");
@@ -470,7 +470,7 @@ public class IntegrationTest {
 
     @Test
     public void test_tableTypeReadQuery() {
-        in.add("connect|user|pass");
+        in.add("connect|test|pass");
         in.add("create|" + createTable());
         in.add("n");
         in.add("tabletype|FIRST");
@@ -514,7 +514,7 @@ public class IntegrationTest {
 
     @Test
     public void test_columnTypeInsert() {
-        in.add("connect|user|pass");
+        in.add("connect|test|pass");
         in.add("create|" + createTable());
         in.add("n");
         in.add("columntype|FIRST|TEST");
@@ -560,7 +560,7 @@ public class IntegrationTest {
 
     @Test
     public void test_deleteClear() {
-        in.add("connect|user|pass");
+        in.add("connect|test|pass");
         in.add("create|" + createTable());
         in.add("n");
         in.add("columntype|FIRST|TEST");
@@ -640,7 +640,7 @@ public class IntegrationTest {
 
     @Test
     public void test_updateFindSettings() {
-        in.add("connect|user|pass");
+        in.add("connect|test|pass");
         in.add("create|" + createTable());
         in.add("n");
         in.add("insert|FIRST|TEST|'Hello'|TEST1|12|TEST2|'World'|TEST3|to_date('19990321','YYYYMMDD')|TEST4|155");
@@ -710,7 +710,7 @@ public class IntegrationTest {
 
     @Test
     public void test_fileTable() {
-        in.add("connect|user|pass");
+        in.add("connect|test|pass");
         in.add("create|" + createTable());
         in.add("n");
         in.add("insert|FIRST|TEST|'Hello'|TEST1|12|TEST2|'World'|TEST3|to_date('19990321','YYYYMMDD')|TEST4|155");
@@ -777,7 +777,7 @@ public class IntegrationTest {
 
     @Test
     public void test_consolePrintHistory(){
-        in.add("connect|user|pass");
+        in.add("connect|test|pass");
         in.add("history");
         in.add("exit");
 
