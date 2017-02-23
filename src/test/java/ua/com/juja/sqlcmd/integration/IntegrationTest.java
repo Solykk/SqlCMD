@@ -2,11 +2,14 @@ package ua.com.juja.sqlcmd.integration;
 
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ua.com.juja.sqlcmd.Main;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.control.JDBCDatabaseManager;
+import ua.com.juja.sqlcmd.service.DropAllHelper;
+
 import java.io.*;
 
 import static org.junit.Assert.assertEquals;
@@ -18,6 +21,11 @@ public class IntegrationTest {
     private  DatabaseManager manager;
     private  ByteArrayOutputStream out;
     private  ConfigurableInputStream in;
+
+    @BeforeClass
+    public static void dropAll(){
+        DropAllHelper.dropAll();
+    }
 
     @Before
     public void setup() {

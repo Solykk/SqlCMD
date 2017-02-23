@@ -2,9 +2,11 @@ package ua.com.juja.sqlcmd.control.commands;
 
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import ua.com.juja.sqlcmd.control.DatabaseManager;
 import ua.com.juja.sqlcmd.control.JDBCDatabaseManager;
+import ua.com.juja.sqlcmd.service.DropAllHelper;
 import ua.com.juja.sqlcmd.service.ViewImpl;
 
 import java.sql.SQLException;
@@ -53,6 +55,11 @@ public class CommandsTest {
 
         manager.connect("test","pass");
 
+    }
+
+    @BeforeClass
+    public static void dropAll(){
+        DropAllHelper.dropAll();
     }
 
     @AfterClass
