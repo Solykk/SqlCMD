@@ -37,6 +37,9 @@ mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.
 Если тесты не часть тестов не проходит и вылетает ошибка:  ORA-12519: TNS:no appropriate service handler found tips
 смотреть пункты 3 и 4 для Oracle Database 10g Express Edition.
 
+Предупреждение!!!
+БД test после прохождения тестов будет полностью ОЧИЩЕНА!!!
+
 Для Oracle Database 10g Express Edition:
 Для корректной работы тестов нужно увеличить количество параллельных подключений.
 1. Создать для БД нового пользователя 'test' и паролем 'pass'
@@ -58,6 +61,10 @@ mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.
     SQL>startup ->
 Команда для проверки параметров:
     SQL>select * from v$resource_limit where resource_name = 'processes'; ->
+
+Предупреждение!!!
+БД test после прохождения тестов будет полностью ОЧИЩЕНА!!!
+
 
 Проверка данных на существующей базе входящей в состав установленной БД oracle - это база данных HR.
 По умолчанию это БД заблокирована. Чтобы ее разблокировать нужно:
