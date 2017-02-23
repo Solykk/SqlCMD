@@ -7,7 +7,7 @@
             <version>10.2.0.5.0</version>
         </dependency>
 нужно пройти по пути: oraclexe(путь установки БД)\app\oracle\product\10.2.0(ваша версия продукта)\server\jdbc\lib
-скопировать ojdbc6.jar(или один из существующих драйвер без приставок _g) и вставить его в директорию, в которой
+скопировать ojdbc6.jar(или один из существующих драйвер кроме ojdbc7 и без приставок _g) и вставить его в директорию, в которой
 открыватся cmd.exe -> открыть cmd.exe и вставить следующую строку:
 
 mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.2.0.5.0 -Dpackaging=jar -Dfile=ojdbc6.jar -DgeneratePom=true
