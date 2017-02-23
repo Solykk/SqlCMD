@@ -34,6 +34,16 @@ public class CommandsTest {
     private Update update;
     private Create create;
 
+    @BeforeClass
+    public static void dropAll(){
+        DropAllHelper.dropAll();
+    }
+
+    @AfterClass
+    public static  void purge() {
+        DropAllHelper.purgeRecycle();
+    }
+
     @Before
     public void start() throws SQLException {
         manager = new JDBCDatabaseManager();
@@ -55,23 +65,6 @@ public class CommandsTest {
 
         manager.connect("test","pass");
 
-    }
-
-    @BeforeClass
-    public static void dropAll(){
-        DropAllHelper.dropAll();
-    }
-
-    @AfterClass
-    public static  void end() {
-        DatabaseManager purge = new JDBCDatabaseManager();
-        try {
-            purge.connect("test", "pass");
-            purge.cudQuery("PURGE RECYCLEBIN");
-            purge.disconnect();
-        } catch (Exception e){
-            //do nothing
-        }
     }
 
     @Test

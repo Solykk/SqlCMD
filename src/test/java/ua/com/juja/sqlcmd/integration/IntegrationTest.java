@@ -27,6 +27,11 @@ public class IntegrationTest {
         DropAllHelper.dropAll();
     }
 
+    @AfterClass
+    public static  void purge() {
+        DropAllHelper.purgeRecycle();
+    }
+
     @Before
     public void setup() {
         manager = new JDBCDatabaseManager();
@@ -35,18 +40,6 @@ public class IntegrationTest {
 
         System.setIn(in);
         System.setOut(new PrintStream(out));
-    }
-
-    @AfterClass
-    public static  void end() {
-        DatabaseManager purge = new JDBCDatabaseManager();
-        try {
-            purge.connect("test", "pass");
-            purge.cudQuery("PURGE RECYCLEBIN");
-            purge.disconnect();
-        } catch (Exception e){
-            //do nothing
-        }
     }
 
     public String getData() {

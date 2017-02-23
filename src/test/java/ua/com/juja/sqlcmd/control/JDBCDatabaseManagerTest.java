@@ -26,24 +26,17 @@ public class JDBCDatabaseManagerTest {
         DropAllHelper.dropAll();
     }
 
+    @AfterClass
+    public static  void purge() {
+        DropAllHelper.purgeRecycle();
+    }
+
     @Before
     public void start(){
             manager = new JDBCDatabaseManager();
             view = new Console();
             tablePrinter = new TablePrinter(view);
         }
-
-    @AfterClass
-    public static  void end() {
-        DatabaseManager purge = new JDBCDatabaseManager();
-        try {
-            purge.connect("test", "pass");
-            purge.cudQuery("PURGE RECYCLEBIN");
-            purge.disconnect();
-        } catch (Exception e){
-            //do nothing
-        }
-    }
 
     private void connectTestPass() {
         try {
