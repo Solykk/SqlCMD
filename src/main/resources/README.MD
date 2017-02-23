@@ -34,6 +34,8 @@ mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.
     Port            [1521]
     SID             [xe]
 
+Если тесты не часть тестов не проходит и вылетает ошибка:  ORA-12519: TNS:no appropriate service handler found tips
+смотреть пункты 3 и 4 для Oracle Database 10g Express Edition.
 
 Для Oracle Database 10g Express Edition:
 Для корректной работы тестов нужно увеличить количество параллельных подключений.
