@@ -1,5 +1,41 @@
 Приложение работае с базой данных Oracle Express Edition
 
+Если возникла проблема автоматической загрузки дрйвера ojdbc:
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc14</artifactId>
+            <version>10.2.0.5.0</version>
+        </dependency>
+нужно пройти по пути: oraclexe(путь установки БД)\app\oracle\product\10.2.0(ваша версия продукта)\server\jdbc\lib
+скопировать ojdbc6.jar(или один из существующих драйвер без приставок _g) и вставить его в директорию, в которой
+открыватся cmd.exe -> открыть cmd.exe и вставить следующую строку:
+
+mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.2.0.5.0 -Dpackaging=jar -Dfile=ojdbc6.jar -DgeneratePom=true
+где:
+    -DartifactId=ojdbc14(Имя артефакта, может совпадать с именем jar файла)
+    -Dversion=10.2.0.5.0(Ваша версия драйвера(указана в фале MANIFEST внутри jar файла))
+    -Dfile=ojdbc6.jar(Имя вашего jar файла)
+
+И изменить
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc14(Имя артефакта, может совпадать с именем jar файла)</artifactId>
+            <version>10.2.0.5.0(Ваша версия драйвера)</version>
+        </dependency>
+
+Для Oracle Database 11g Express Edition:
+Для корректной работы тестов нужно увеличить количество параллельных подключений.
+1. Создать для БД нового пользователя 'test' и паролем 'pass'
+2. Создать Connection с такими параметрами:
+    ConnectionName  [test]
+    UserName        [test]
+    Password        [pass]
+    Hostname        [localhost]
+    Port            [1521]
+    SID             [xe]
+
+
+Для Oracle Database 10g Express Edition:
 Для корректной работы тестов нужно увеличить количество параллельных подключений.
 1. Создать для БД нового пользователя 'test' и паролем 'pass'
 2. Создать Connection с такими параметрами:
@@ -20,6 +56,26 @@
     SQL>startup ->
 Команда для проверки параметров:
     SQL>select * from v$resource_limit where resource_name = 'processes'; ->
+
+Проверка данных на существующей базе входящей в состав установленной БД oracle - это база данных HR.
+По умолчанию это БД заблокирована. Чтобы ее разблокировать нужно:
+
+1.Загрузить Run SQL Command Line
+2.Установить количество параллельных подключений:
+    SQL> connect ->
+    Enter user-name: sys as sysdba -> (где sys - имя администратора БД)
+    Enter password: ваш пароль ->
+    SQL> ALTER USER hr ACCOUNT UNLOCK; -> (по умолчанию пароль для пользователя hr будет password)
+    SQL> exit ->
+3. Создать Connection с такими параметрами:
+    ConnectionName  [hr]
+    UserName        [hr]
+    Password        [password]
+    Hostname        [localhost]
+    Port            [1521]
+    SID             [xe]
+
+И можно пользоваться готовой БД.
 
 												User Stories
 
