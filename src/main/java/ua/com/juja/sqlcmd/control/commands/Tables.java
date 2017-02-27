@@ -21,7 +21,7 @@ public class Tables implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.equals("tables");
+        return command.equalsIgnoreCase("tables");
     }
 
     @Override

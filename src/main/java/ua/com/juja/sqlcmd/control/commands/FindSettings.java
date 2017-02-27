@@ -28,7 +28,7 @@ public class FindSettings implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("findsettings|");
+        return command.toLowerCase().startsWith("findsettings|");
     }
 
     @Override

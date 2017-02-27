@@ -28,7 +28,7 @@ public class Delete implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("delete|");
+        return command.toLowerCase().startsWith("delete|");
     }
 
     @Override

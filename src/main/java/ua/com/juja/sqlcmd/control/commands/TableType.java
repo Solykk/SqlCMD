@@ -24,7 +24,7 @@ public class TableType implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("tabletype|");
+        return command.toLowerCase().startsWith("tabletype|");
     }
 
     @Override

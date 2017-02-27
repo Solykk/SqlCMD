@@ -24,7 +24,7 @@ public class Columns implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("columns|");
+        return command.toLowerCase().startsWith("columns|");
     }
 
     @Override

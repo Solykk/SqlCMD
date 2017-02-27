@@ -21,7 +21,7 @@ public class CudQuery implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("cudQuery|");
+        return command.toLowerCase().startsWith("cudquery|");
     }
 
     @Override

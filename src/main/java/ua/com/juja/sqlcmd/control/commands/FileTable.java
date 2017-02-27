@@ -29,7 +29,7 @@ public class FileTable implements Command{
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("filetable|");
+        return command.toLowerCase().startsWith("filetable|");
     }
 
     @Override

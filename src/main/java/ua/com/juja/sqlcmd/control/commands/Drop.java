@@ -21,7 +21,7 @@ public class Drop implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("drop|");
+        return command.toLowerCase().startsWith("drop|");
 
     }
 

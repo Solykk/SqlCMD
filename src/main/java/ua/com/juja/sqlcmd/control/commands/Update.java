@@ -28,7 +28,7 @@ public class Update implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("update|");
+        return command.toLowerCase().startsWith("update|");
     }
 
     @Override

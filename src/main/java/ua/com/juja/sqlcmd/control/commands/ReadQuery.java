@@ -24,7 +24,7 @@ public class ReadQuery implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("readQuery|");
+        return command.toLowerCase().startsWith("readquery|");
     }
 
     @Override

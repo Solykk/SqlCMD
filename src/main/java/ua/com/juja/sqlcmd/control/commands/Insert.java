@@ -27,7 +27,7 @@ public class Insert implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("insert|");
+        return command.toLowerCase().startsWith("insert|");
     }
 
     @Override

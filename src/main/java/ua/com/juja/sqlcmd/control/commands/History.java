@@ -12,7 +12,7 @@ public class History implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return  command.equals("history");
+        return  command.equalsIgnoreCase("history");
     }
 
     @Override

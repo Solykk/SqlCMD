@@ -27,7 +27,7 @@ public class Create implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("create|");
+        return command.toLowerCase().startsWith("create|");
     }
 
     @Override

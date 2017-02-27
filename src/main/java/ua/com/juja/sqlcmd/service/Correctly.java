@@ -8,7 +8,7 @@ public class Correctly {
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
                     "ожидается 2, но есть: " + data.length);
         }
-        return data[1];
+        return data[1].toUpperCase();
     }
 
     public String[] expectedThree(String command) {
@@ -16,6 +16,10 @@ public class Correctly {
         if (data.length != 3) {
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
                     "ожидается 3, но есть: " + data.length);
+        }
+
+        for (int index = 1; index < data.length; index++) {
+            data[index] = data[index].toUpperCase();
         }
         return data;
     }
@@ -29,11 +33,11 @@ public class Correctly {
         return data;
     }
 
-    public String[] expectedMinEven(String command, int parametrs) {
+    public String[] expectedMinEven(String command, int parameters) {
         String [] data = command.split("\\|");
-        if(data.length < parametrs){
+        if(data.length < parameters){
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается минимум " + parametrs + ", но есть: " + data.length);
+                    "ожидается минимум " + parameters + ", но есть: " + data.length);
         } else if(data.length%2 != 0){
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
                     "ожидается четное количество аргументов, но есть: " + data.length);

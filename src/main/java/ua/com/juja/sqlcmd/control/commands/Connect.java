@@ -21,7 +21,7 @@ public class Connect implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("connect|");
+        return command.toLowerCase().startsWith("connect|");
     }
 
     @Override

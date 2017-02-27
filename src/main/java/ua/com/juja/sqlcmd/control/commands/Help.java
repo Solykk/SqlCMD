@@ -15,7 +15,7 @@ public class Help implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return  command.equals("help");
+        return  command.equalsIgnoreCase("help");
     }
 
     @Override

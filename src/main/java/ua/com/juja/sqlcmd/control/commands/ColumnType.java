@@ -24,7 +24,7 @@ public class ColumnType implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("columntype|");
+        return command.toLowerCase().startsWith("columntype|");
     }
 
     @Override

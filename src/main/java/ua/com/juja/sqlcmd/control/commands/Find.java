@@ -24,7 +24,7 @@ public class Find implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("find|");
+        return command.toLowerCase().startsWith("find|");
     }
 
     @Override

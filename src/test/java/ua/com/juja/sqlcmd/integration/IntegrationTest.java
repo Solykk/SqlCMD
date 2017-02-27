@@ -459,7 +459,7 @@ public class IntegrationTest {
                         "|    TEST4    |\r\n" +
                         "---------------\r\n" +
                         "Введи команду (или help для помощи):\r\n" +
-                        "Ошибка. Не удалось выполнить ваш запрос ( jdjjidijisj ) ORA-00900: invalid SQL statement\n" +
+                        "Ошибка. Не удалось выполнить ваш запрос ( JDJJIDIJISJ ) ORA-00900: invalid SQL statement\n" +
                         "\r\n" +
                         "Введи команду (или help для помощи):\r\n" +
                         "Успех! Таблица удалена\r\n" +

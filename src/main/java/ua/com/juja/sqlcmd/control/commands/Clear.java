@@ -20,7 +20,7 @@ public class Clear implements Command {
 
     @Override
     public boolean isProcessed(String command) {
-        return command.startsWith("clear|");
+        return command.toLowerCase().startsWith("clear|");
     }
 
     @Override
