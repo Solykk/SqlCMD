@@ -70,6 +70,14 @@ public class CorrectlyTest {
     }
 
     @Test
+    public void test_expectedMinEvenTen(){
+        String[] actual = new String[]{"find", "FIRST", "TEST", "'Hello'", "TEST2", "'World'", "TEST3", "111", "TEST4"
+                , "'Java'", "TEST5", "'Tardis'"};
+        assertEquals(Arrays.toString(actual), Arrays.toString(correctly.expectedMinEven("find|first|test|'Hello'|tEst2|" +
+                "'World'|Test3|111|TeSt4|'Java'|TesT5|'Tardis'", 4)));
+    }
+
+    @Test
     public void test_expectedMinEvenWrongInput(){
         try {
             correctly.expectedMinEven("find|FIRST", 4);

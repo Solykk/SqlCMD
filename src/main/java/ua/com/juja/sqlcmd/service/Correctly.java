@@ -40,6 +40,15 @@ public class Correctly {
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
                     "ожидается четное количество аргументов, но есть: " + data.length);
         }
+
+        for (int index = 1; index < 3; index++) {
+            data[index] = data[index].toUpperCase();
+        }
+
+        for (int index = 4; index < data.length; index += 2) {
+            data[index] = data[index].toUpperCase();
+        }
+
         return data;
     }
 
