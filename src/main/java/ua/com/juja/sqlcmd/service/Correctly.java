@@ -31,7 +31,7 @@ public class Correctly {
 
     public String[] expectedMinEven(String command, int parametrs) {
         String [] data = command.split("\\|");
-        if(data.length < 4){
+        if(data.length < parametrs){
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
                     "ожидается минимум " + parametrs + ", но есть: " + data.length);
         } else if(data.length%2 != 0){

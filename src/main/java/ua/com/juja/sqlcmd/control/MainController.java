@@ -17,28 +17,7 @@ public class MainController {
         this.view = view;
         this.viewService = new ViewService(view);
         this.whileCTRL = new WhileCTRL();
-        this.commands = new ArrayList<>();
-        commands.add(new Connect(manager, view));
-        commands.add(new Help(view));
-        commands.add(new Exit(view, whileCTRL));
-        commands.add(new IsConnect(manager, view));
-        commands.add(new Tables(manager, view));
-        commands.add(new Columns(manager, view));
-        commands.add(new TableType(manager, view));
-        commands.add(new ColumnType(manager, view));
-        commands.add(new Find(manager, view));
-        commands.add(new FileTable(manager, view));
-        commands.add(new FindSettings(manager, view));
-        commands.add(new Clear(manager, view));
-        commands.add(new Create(manager, view));
-        commands.add(new Delete(manager, view));
-        commands.add(new Drop(manager, view));
-        commands.add(new Insert(manager, view));
-        commands.add(new Update(manager, view));
-        commands.add(new ReadQuery(manager, view));
-        commands.add(new CudQuery(manager, view));
-        commands.add(new History(view));
-        commands.add(new Unsupported(view));
+        this.commands = new CommandsList(view, manager, whileCTRL).getCommands();
     }
 
     public void run() {
