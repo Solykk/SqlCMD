@@ -5,19 +5,19 @@ import java.util.ArrayList;
 public class Table {
 
     private String tableName;
-    private ArrayList<ColumnData> tableDate ;
+    private ArrayList<ColumnData> tableData;
 
-    public  Table (String tableName, ArrayList<ColumnData> tableDate){
+    public  Table (String tableName, ArrayList<ColumnData> tableData){
         this.tableName = tableName;
-        this.tableDate = tableDate;
+        this.tableData = tableData;
     }
 
     public String getTableName() {
         return tableName;
     }
 
-    public ArrayList<ColumnData> getTableDate() {
-        return tableDate;
+    public ArrayList<ColumnData> getTableData() {
+        return tableData;
     }
 
 }

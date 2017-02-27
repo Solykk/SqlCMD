@@ -229,7 +229,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
     private ArrayList<ColumnData> getColumnData(String tableName) throws SQLException, NullPointerException {
 
-        ArrayList<String> columnNames = getColumnNames(tableName).getTableDate().get(0).getValue();
+        ArrayList<String> columnNames = getColumnNames(tableName).getTableData().get(0).getValue();
         ArrayList<ColumnData> columnDatas = new ArrayList<>();
         for (int i = 0; i < columnNames.size(); i++) {
             ColumnData temp = new ColumnData(columnNames.get(i), new ArrayList<>());
@@ -242,8 +242,8 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         ArrayList<String> temp = new ArrayList<>();
 
         Table contains = getTableNames();
-        for (int index = 0; index < contains.getTableDate().get(0).getValue().size(); index++) {
-            temp.add(contains.getTableDate().get(0).getValue().get(index));
+        for (int index = 0; index < contains.getTableData().get(0).getValue().size(); index++) {
+            temp.add(contains.getTableData().get(0).getValue().get(index));
         }
         return temp;
     }

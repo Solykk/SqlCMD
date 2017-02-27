@@ -51,9 +51,9 @@ public class TablePrinter {
     }
 
     private void printColumnName(Table table, StringBuilder tableString, ArrayList<Integer> maxLength) {
-        for (int i = 0; i < table.getTableDate().size(); i++){
+        for (int i = 0; i < table.getTableData().size(); i++){
 
-            String columnName = table.getTableDate().get(i).columnName();
+            String columnName = table.getTableData().get(i).columnName();
 
             char [] containerCN = new char[maxLength.get(i) + 2];
             char [] reBuildCN = columnName.toCharArray();
@@ -68,11 +68,11 @@ public class TablePrinter {
     }
 
     private void printValue(Table table, StringBuilder tableString, ArrayList<Integer> maxLength) {
-        for (int i = 0; i < table.getTableDate().get(0).getValue().size(); i++){
+        for (int i = 0; i < table.getTableData().get(0).getValue().size(); i++){
 
-            for (int j = 0; j < table.getTableDate().size(); j++) {
+            for (int j = 0; j < table.getTableData().size(); j++) {
 
-                String dataValue = table.getTableDate().get(j).getValue().get(i);
+                String dataValue = table.getTableData().get(j).getValue().get(i);
                 dataValue = nullable(dataValue);
 
                 char [] containerDV = new char[maxLength.get(j) + 2];
@@ -95,7 +95,7 @@ public class TablePrinter {
     }
 
     private void printData(Table table, StringBuilder tableString, int index, char[] container) {
-        if(index == table.getTableDate().size() - 1){
+        if(index == table.getTableData().size() - 1){
             System.out.print('|' + new String(container) + '|');
             tableString.append('|' + new String(container) + '|');
         } else {
@@ -113,23 +113,23 @@ public class TablePrinter {
 
         int lengthSum = 0;
 
-        for (int j = 0; j < table.getTableDate().size(); j++) {
+        for (int j = 0; j < table.getTableData().size(); j++) {
 
             String tempDataObject;
-            if(table.getTableDate().get(j).getValue().size() == 0){
+            if(table.getTableData().get(j).getValue().size() == 0){
                 tempDataObject = "";
             } else {
 
-                tempDataObject = table.getTableDate().get(j).getValue().get(0);
+                tempDataObject = table.getTableData().get(j).getValue().get(0);
                 tempDataObject = nullable(tempDataObject);
             }
 
             Integer dataLength = tempDataObject.length();
-            Integer columnNameLength = table.getTableDate().get(j).columnName().length();
+            Integer columnNameLength = table.getTableData().get(j).columnName().length();
 
-            for (int i = 0; i < table.getTableDate().get(j).getValue().size(); i++) {
+            for (int i = 0; i < table.getTableData().get(j).getValue().size(); i++) {
 
-                String tempObj = table.getTableDate().get(j).getValue().get(i);
+                String tempObj = table.getTableData().get(j).getValue().get(i);
                 tempObj = nullable(tempObj);
 
                 Integer tempIns = tempObj.length();
