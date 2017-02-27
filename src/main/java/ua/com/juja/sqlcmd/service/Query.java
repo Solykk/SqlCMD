@@ -1,6 +1,6 @@
 package ua.com.juja.sqlcmd.service;
 
-import ua.com.juja.sqlcmd.model.ColumnDate;
+import ua.com.juja.sqlcmd.model.ColumnData;
 
 import java.util.ArrayList;
 
@@ -124,12 +124,12 @@ public class Query {
                 + "'" + tableName+ "' AND COLUMN_NAME = " + "'" + columnName + "'";
     }
 
-    public ArrayList<ColumnDate> columnData() {
-        ArrayList<ColumnDate> columnDates = new ArrayList<>();
-        columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<>()));
-        columnDates.add(new ColumnDate("DATA_TYPE", new ArrayList<>()));
-        columnDates.add(new ColumnDate("NULLABLE", new ArrayList<>()));
-        return columnDates;
+    public ArrayList<ColumnData> columnData() {
+        ArrayList<ColumnData> columnDatas = new ArrayList<>();
+        columnDatas.add(new ColumnData("COLUMN_NAME", new ArrayList<>()));
+        columnDatas.add(new ColumnData("DATA_TYPE", new ArrayList<>()));
+        columnDatas.add(new ColumnData("NULLABLE", new ArrayList<>()));
+        return columnDatas;
     }
 
     public String getAllTypCloQuery(String tableName){
@@ -141,9 +141,9 @@ public class Query {
         return "SELECT TABLE_NAME FROM user_tables";
     }
 
-    public ArrayList<ColumnDate> tableNameRes() {
-        ArrayList<ColumnDate> columnData = new ArrayList<>();
-        columnData.add(new ColumnDate("TABLE_NAME", new ArrayList<>()));
+    public ArrayList<ColumnData> tableNameRes() {
+        ArrayList<ColumnData> columnData = new ArrayList<>();
+        columnData.add(new ColumnData("TABLE_NAME", new ArrayList<>()));
         return columnData;
     }
 
@@ -151,10 +151,10 @@ public class Query {
         return "SELECT COLUMN_NAME FROM USER_TAB_COLUMNS WHERE TABLE_NAME = " + "'" + tableName + "'";
     }
 
-    public ArrayList<ColumnDate> columnNameRes() {
-        ArrayList<ColumnDate> columnDates = new ArrayList<>();
-        columnDates.add(new ColumnDate("COLUMN_NAME", new ArrayList<>()));
-        return columnDates;
+    public ArrayList<ColumnData> columnNameRes() {
+        ArrayList<ColumnData> columnDatas = new ArrayList<>();
+        columnDatas.add(new ColumnData("COLUMN_NAME", new ArrayList<>()));
+        return columnDatas;
     }
 
     public String selectAll(String tableName){

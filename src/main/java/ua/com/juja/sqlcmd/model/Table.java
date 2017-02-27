@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class Table {
 
     private String tableName;
-    private ArrayList<ColumnDate> tableDate ;
+    private ArrayList<ColumnData> tableDate ;
 
-    public  Table (String tableName, ArrayList<ColumnDate> tableDate){
+    public  Table (String tableName, ArrayList<ColumnData> tableDate){
         this.tableName = tableName;
         this.tableDate = tableDate;
     }
@@ -16,7 +16,7 @@ public class Table {
         return tableName;
     }
 
-    public ArrayList<ColumnDate> getTableDate() {
+    public ArrayList<ColumnData> getTableDate() {
         return tableDate;
     }
 

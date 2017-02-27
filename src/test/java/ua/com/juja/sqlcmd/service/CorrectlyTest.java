@@ -49,8 +49,8 @@ public class CorrectlyTest {
 
     @Test
     public void test_expectedThreeMin(){
-        String[] actual = new String[]{"find", "FIRST", "TEST", "'Hello'"};
-        assertEquals(Arrays.toString(actual), Arrays.toString(correctly.expectedThreeMin("find|FIRST|TEST|'Hello'")));
+        String[] actual = new String[]{"create", "FIRST", "TEST", "TEST2"};
+        assertEquals(Arrays.toString(actual), Arrays.toString(correctly.expectedThreeMin("create|FIRST|TEST|TEST2")));
     }
 
     @Test

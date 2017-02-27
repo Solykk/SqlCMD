@@ -18,10 +18,7 @@ public class Correctly {
                     "ожидается 3, но есть: " + data.length);
         }
 
-        for (int index = 1; index < data.length; index++) {
-            data[index] = data[index].toUpperCase();
-        }
-        return data;
+        return serveData(data);
     }
 
     public String[] expectedThreeMin(String command) {
@@ -30,7 +27,8 @@ public class Correctly {
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
                     "ожидается минимум 3, но есть: " + data.length);
         }
-        return data;
+
+        return serveData(data);
     }
 
     public String[] expectedMinEven(String command, int parameters) {
@@ -41,6 +39,13 @@ public class Correctly {
         } else if(data.length%2 != 0){
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
                     "ожидается четное количество аргументов, но есть: " + data.length);
+        }
+        return data;
+    }
+
+    private String[] serveData(String[] data) {
+        for (int index = 1; index < data.length; index++) {
+            data[index] = data[index].toUpperCase();
         }
         return data;
     }

@@ -1,6 +1,6 @@
 package ua.com.juja.sqlcmd.control;
 
-import ua.com.juja.sqlcmd.model.ColumnDate;
+import ua.com.juja.sqlcmd.model.ColumnData;
 import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.service.Query;
 
@@ -40,7 +40,7 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     @Override
     public Table getTableNames() throws SQLException, NullPointerException{
 
-        ArrayList<ColumnDate> columnData = query.tableNameRes();
+        ArrayList<ColumnData> columnData = query.tableNameRes();
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query.tableNQuery()))
@@ -57,43 +57,43 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     @Override
     public Table getColumnNames(String tableName) throws SQLException, NullPointerException {
 
-        ArrayList<ColumnDate> columnDates = query.columnNameRes();
+        ArrayList<ColumnData> columnDatas = query.columnNameRes();
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query.getColNQuery(tableName)))
         {
             while (resultSet.next()){
                 String data = resultSet.getString("COLUMN_NAME");
-                columnDates.get(0).getValue().add(data);
+                columnDatas.get(0).getValue().add(data);
             }
 
-            return new Table(tableName, columnDates);
+            return new Table(tableName, columnDatas);
         }
     }
 
     @Override
     public Table getAllTypeColumns(String tableName) throws SQLException, NullPointerException{
 
-        ArrayList<ColumnDate> columnDates = query.columnData();
+        ArrayList<ColumnData> columnDatas = query.columnData();
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query.getAllTypCloQuery(tableName)))
         {
-            resultSetGetHelper(columnDates, resultSet);
-            return new Table(tableName, columnDates) ;
+            resultSetGetHelper(columnDatas, resultSet);
+            return new Table(tableName, columnDatas) ;
         }
     }
 
     @Override
     public Table getTypeColumn(String tableName, String columnName) throws SQLException, NullPointerException {
 
-        ArrayList<ColumnDate> columnDates = query.columnData();
+        ArrayList<ColumnData> columnDatas = query.columnData();
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query.getTypCloQuery(tableName, columnName)))
         {
-            resultSetGetHelper(columnDates, resultSet);
-            return new Table(tableName, columnDates);
+            resultSetGetHelper(columnDatas, resultSet);
+            return new Table(tableName, columnDatas);
         }
     }
 
@@ -186,56 +186,56 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         }
     }
 
-    private void sortHelper(ArrayList<ColumnDate> columnDates, ResultSet resultSet) throws SQLException, NullPointerException {
+    private void sortHelper(ArrayList<ColumnData> columnDatas, ResultSet resultSet) throws SQLException, NullPointerException {
 
         while (resultSet.next()){
-            for(int index = 0; index < columnDates.size(); index++){
-                String columnName = columnDates.get(index).columnName();
+            for(int index = 0; index < columnDatas.size(); index++){
+                String columnName = columnDatas.get(index).columnName();
                 String temp = resultSet.getString(columnName);
 
-                columnDates.get(index).getValue().add(temp);
+                columnDatas.get(index).getValue().add(temp);
             }
         }
     }
 
-    private void resultSetGetHelper(ArrayList<ColumnDate> columnDates, ResultSet resultSet) throws SQLException, NullPointerException {
+    private void resultSetGetHelper(ArrayList<ColumnData> columnDatas, ResultSet resultSet) throws SQLException, NullPointerException {
 
         while (resultSet.next()){
 
             String stringName = resultSet.getString("COLUMN_NAME");
-            columnDates.get(0).getValue().add(stringName);
+            columnDatas.get(0).getValue().add(stringName);
 
             String stringType = resultSet.getString("DATA_TYPE");
             String stringLength = resultSet.getString("DATA_LENGTH");
 
             String concat = stringType + "(" + stringLength + ")";
-            columnDates.get(1).getValue().add(concat);
+            columnDatas.get(1).getValue().add(concat);
 
             String stringNullable = resultSet.getString("NULLABLE");
-            columnDates.get(2).getValue().add(stringNullable);
+            columnDatas.get(2).getValue().add(stringNullable);
 
         }
     }
 
-    private Table getTableHelper(String tableName, ArrayList<ColumnDate> columnDates, String query) throws SQLException, NullPointerException{
+    private Table getTableHelper(String tableName, ArrayList<ColumnData> columnDatas, String query) throws SQLException, NullPointerException{
 
         try(Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query))
         {
-            sortHelper(columnDates, resultSet);
-            return new Table(tableName, columnDates);
+            sortHelper(columnDatas, resultSet);
+            return new Table(tableName, columnDatas);
         }
     }
 
-    private ArrayList<ColumnDate> getColumnData(String tableName) throws SQLException, NullPointerException {
+    private ArrayList<ColumnData> getColumnData(String tableName) throws SQLException, NullPointerException {
 
         ArrayList<String> columnNames = getColumnNames(tableName).getTableDate().get(0).getValue();
-        ArrayList<ColumnDate> columnDates = new ArrayList<>();
+        ArrayList<ColumnData> columnDatas = new ArrayList<>();
         for (int i = 0; i < columnNames.size(); i++) {
-            ColumnDate temp = new ColumnDate(columnNames.get(i), new ArrayList<>());
-            columnDates.add(temp);
+            ColumnData temp = new ColumnData(columnNames.get(i), new ArrayList<>());
+            columnDatas.add(temp);
         }
-        return columnDates;
+        return columnDatas;
     }
 
     private ArrayList<String> getContent() throws SQLException, NullPointerException {
@@ -248,12 +248,12 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         return temp;
     }
 
-    private ArrayList<ColumnDate> getDataRead(ResultSet resultSet, ResultSetMetaData rsMetaData, int lengthOfCol) throws SQLException {
-        ArrayList<ColumnDate> columnData = new ArrayList<>();
+    private ArrayList<ColumnData> getDataRead(ResultSet resultSet, ResultSetMetaData rsMetaData, int lengthOfCol) throws SQLException {
+        ArrayList<ColumnData> columnData = new ArrayList<>();
 
         for (int i = 0; i < lengthOfCol; i++) {
             String columnName = rsMetaData.getColumnName(i + 1);
-            columnData.add(new ColumnDate(columnName, new ArrayList<>()));
+            columnData.add(new ColumnData(columnName, new ArrayList<>()));
         }
 
         sortHelper(columnData, resultSet);
