@@ -24,7 +24,6 @@ mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.
         </dependency>
 
 Для Oracle Database 11g Express Edition:
-Для корректной работы тестов нужно увеличить количество параллельных подключений.
 1. Создать для БД нового пользователя 'test' и паролем 'pass'
 2. Создать Connection с такими параметрами:
     ConnectionName  [test]
@@ -34,7 +33,7 @@ mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.
     Port            [1521]
     SID             [xe]
 
-Если тесты не часть тестов не проходит и вылетает ошибка:  ORA-12519: TNS:no appropriate service handler found tips
+Если часть тестов не проходит и вылетает ошибка:  ORA-12519: TNS:no appropriate service handler found tips
 смотреть пункты 3 и 4 для Oracle Database 10g Express Edition.
 
 Предупреждение!!!
@@ -70,13 +69,12 @@ mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.
 По умолчанию это БД заблокирована. Чтобы ее разблокировать нужно:
 
 1.Загрузить Run SQL Command Line
-2.Установить количество параллельных подключений:
     SQL> connect ->
     Enter user-name: sys as sysdba -> (где sys - имя администратора БД)
     Enter password: ваш пароль ->
     SQL> ALTER USER hr ACCOUNT UNLOCK; -> (по умолчанию пароль для пользователя hr будет password)
     SQL> exit ->
-3. Создать Connection с такими параметрами:
+2. Создать Connection с такими параметрами:
     ConnectionName  [hr]
     UserName        [hr]
     Password        [password]
