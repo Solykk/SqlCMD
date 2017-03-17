@@ -50,5 +50,4 @@ public class MainController {
         view.write("Введи команду (или help для помощи):");
         return view.read();
     }
-
 }
