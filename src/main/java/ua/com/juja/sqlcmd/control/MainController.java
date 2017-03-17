@@ -20,7 +20,7 @@ public class MainController {
         this.view = view;
         this.services.setView(view);
         this.viewService = services.getViewService();
-        this.commands = new CommandsList(view, manager, whileCTRL, services.getViewService()).getCommands();
+        this.commands = new CommandsList(view, manager, whileCTRL, services).getCommands();
     }
 
     public void run() {

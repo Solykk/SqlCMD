@@ -33,10 +33,7 @@ public class CommandsTest {
     private Update update;
     private Create create;
 
-    private ViewService viewService = new ViewService();
-    private Correctly correctly = new Correctly();
-    private TablePrinter tablePrinter;
-    private SettingsHelper settingsHelper;
+    private Services services = new Services();
 
 
     @BeforeClass
@@ -53,25 +50,22 @@ public class CommandsTest {
     public void start() throws SQLException {
         manager = new JDBCDatabaseManager();
         viewImpl = new ViewImpl();
-        viewService.setView(viewImpl);
-        tablePrinter = new TablePrinter();
-        tablePrinter.setView(viewImpl);
-        settingsHelper = new SettingsHelper();
+        services.setView(viewImpl);
 
-        clear = new Clear(manager, viewService, correctly);
-        columns = new Columns(manager, viewService, correctly, tablePrinter);
-        columnType = new ColumnType(manager, viewService, correctly, tablePrinter);
-        delete = new Delete(manager, viewService, correctly, tablePrinter, settingsHelper);
-        drop = new Drop(manager, viewService, correctly);
-        find = new Find(manager, viewService, correctly, tablePrinter);
-        findSettings = new FindSettings(manager, viewService, correctly, tablePrinter, settingsHelper);
+        clear = new Clear(manager, services);
+        columns = new Columns(manager, services);
+        columnType = new ColumnType(manager, services);
+        delete = new Delete(manager, services);
+        drop = new Drop(manager, services);
+        find = new Find(manager, services);
+        findSettings = new FindSettings(manager, services);
         history = new History(viewImpl);
-        insert = new Insert(manager, viewImpl, viewService, correctly, settingsHelper);
-        readQuery = new ReadQuery(manager, viewService, correctly, tablePrinter);
-        tables = new Tables(manager, viewService, tablePrinter);
-        tableType = new TableType(manager, viewService, correctly, tablePrinter);
-        update = new Update(manager, viewService, correctly, tablePrinter, settingsHelper);
-        create = new Create(manager, viewImpl, viewService, correctly, settingsHelper);
+        insert = new Insert(manager, viewImpl, services);
+        readQuery = new ReadQuery(manager, services);
+        tables = new Tables(manager, services);
+        tableType = new TableType(manager, services);
+        update = new Update(manager, services);
+        create = new Create(manager, viewImpl, services);
 
         manager.connect("test","pass");
 

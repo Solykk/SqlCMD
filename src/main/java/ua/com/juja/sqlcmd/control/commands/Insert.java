@@ -2,6 +2,7 @@ package ua.com.juja.sqlcmd.control.commands;
 
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.Services;
 import ua.com.juja.sqlcmd.service.SettingsHelper;
 import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
@@ -13,16 +14,16 @@ public class Insert implements Command {
 
     private DatabaseManager manager;
     private View view;
+    private ViewService viewService;
     private Correctly correctly;
     private SettingsHelper settingsHelper;
-    private ViewService viewService;
 
-    public Insert(DatabaseManager manager, View view, ViewService viewService, Correctly correctly, SettingsHelper settingsHelper) {
+    public Insert(DatabaseManager manager, View view, Services services) {
         this.manager = manager;
         this.view = view;
-        this.viewService = viewService;
-        this.correctly = correctly;
-        this.settingsHelper = settingsHelper;
+        this.viewService = services.getViewService();
+        this.correctly = services.getCorrectly();
+        this.settingsHelper = services.getSettingsHelper();
     }
 
     @Override

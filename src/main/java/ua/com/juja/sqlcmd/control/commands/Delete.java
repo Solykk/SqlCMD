@@ -1,10 +1,7 @@
 package ua.com.juja.sqlcmd.control.commands;
 
 import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.service.Correctly;
-import ua.com.juja.sqlcmd.service.SettingsHelper;
-import ua.com.juja.sqlcmd.service.TablePrinter;
-import ua.com.juja.sqlcmd.service.ViewService;
+import ua.com.juja.sqlcmd.service.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,17 +9,17 @@ import java.util.ArrayList;
 public class Delete implements Command {
 
     private DatabaseManager manager;
-    private Correctly correctly;
-    private SettingsHelper settingsHelper;
     private ViewService viewService;
+    private Correctly correctly;
     private TablePrinter tablePrinter;
+    private SettingsHelper settingsHelper;
 
-    public Delete(DatabaseManager manager, ViewService viewService, Correctly correctly, TablePrinter tablePrinter, SettingsHelper settingsHelper) {
+    public Delete(DatabaseManager manager, Services services){
         this.manager = manager;
-        this.viewService = viewService;
-        this.correctly = correctly;
-        this.tablePrinter = tablePrinter;
-        this.settingsHelper = settingsHelper;
+        this.viewService = services.getViewService();
+        this.correctly = services.getCorrectly();
+        this.tablePrinter = services.getTablePrinter();
+        this.settingsHelper = services.getSettingsHelper();
     }
 
     @Override

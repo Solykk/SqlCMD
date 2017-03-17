@@ -3,6 +3,7 @@ package ua.com.juja.sqlcmd.control.commands;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.Services;
 import ua.com.juja.sqlcmd.service.TablePrinter;
 import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
@@ -15,16 +16,16 @@ public class FileTable implements Command{
 
     private DatabaseManager manager;
     private View view;
-    private Correctly correctly;
     private ViewService viewService;
+    private Correctly correctly;
     private TablePrinter tablePrinter;
 
-    public FileTable(DatabaseManager manager, View view, ViewService viewService, Correctly correctly, TablePrinter tablePrinter) {
+    public FileTable(DatabaseManager manager, View view, Services services) {
         this.manager = manager;
         this.view = view;
-        this.viewService = viewService;
-        this.correctly = correctly;
-        this.tablePrinter = tablePrinter;
+        this.viewService = services.getViewService();
+        this.correctly = services.getCorrectly();
+        this.tablePrinter = services.getTablePrinter();
     }
 
     @Override

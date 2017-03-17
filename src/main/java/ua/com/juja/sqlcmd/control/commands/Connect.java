@@ -2,6 +2,7 @@ package ua.com.juja.sqlcmd.control.commands;
 
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
+import ua.com.juja.sqlcmd.service.Services;
 import ua.com.juja.sqlcmd.service.ViewService;
 
 import java.sql.SQLException;
@@ -9,13 +10,13 @@ import java.sql.SQLException;
 public class Connect implements Command {
 
     private DatabaseManager manager;
-    private Correctly correctly;
     private ViewService viewService;
+    private Correctly correctly;
 
-    public Connect(DatabaseManager manager, ViewService viewService, Correctly correctly) {
+    public Connect(DatabaseManager manager, Services services) {
         this.manager = manager;
-        this.viewService = viewService;
-        this.correctly = correctly;
+        this.viewService = services.getViewService();
+        this.correctly = services.getCorrectly();
     }
 
     @Override
