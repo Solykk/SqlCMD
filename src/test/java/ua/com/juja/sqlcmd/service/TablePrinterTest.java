@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ua.com.juja.sqlcmd.view.Console;
-import ua.com.juja.sqlcmd.view.View;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -14,7 +13,8 @@ public class TablePrinterTest {
 
     @Before
     public void start(){
-        tablePrinter = new TablePrinter(new Console());
+        tablePrinter = new TablePrinter();
+        tablePrinter.setView(new Console());
     }
 
     @Test

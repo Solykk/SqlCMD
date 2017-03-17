@@ -1,11 +1,10 @@
 package ua.com.juja.sqlcmd.control.commands;
 
-import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.service.SettingsHelper;
 import ua.com.juja.sqlcmd.service.TablePrinter;
 import ua.com.juja.sqlcmd.service.ViewService;
-import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,12 +17,12 @@ public class Update implements Command {
     private ViewService viewService;
     private TablePrinter tablePrinter;
 
-    public Update(DatabaseManager manager, View view) {
+    public Update(DatabaseManager manager, ViewService viewService, Correctly correctly, TablePrinter tablePrinter, SettingsHelper settingsHelper) {
         this.manager = manager;
-        this.correctly = new Correctly();
-        this.settingsHelper = new SettingsHelper();
-        this.viewService = new ViewService(view);
-        this.tablePrinter = new TablePrinter(view);
+        this.viewService = viewService;
+        this.correctly = correctly;
+        this.tablePrinter = tablePrinter;
+        this.settingsHelper = settingsHelper;
     }
 
     @Override

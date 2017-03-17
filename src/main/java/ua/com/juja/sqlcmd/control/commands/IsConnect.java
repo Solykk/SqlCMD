@@ -1,6 +1,6 @@
 package ua.com.juja.sqlcmd.control.commands;
 
-import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
 public class IsConnect implements Command {

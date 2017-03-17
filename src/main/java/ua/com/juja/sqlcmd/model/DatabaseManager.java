@@ -1,4 +1,4 @@
-package ua.com.juja.sqlcmd.control;
+package ua.com.juja.sqlcmd.model;
 
 import ua.com.juja.sqlcmd.model.Table;
 

@@ -1,6 +1,6 @@
 package ua.com.juja.sqlcmd.control.commands;
 
-import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.service.SettingsHelper;
 import ua.com.juja.sqlcmd.service.ViewService;
@@ -17,12 +17,12 @@ public class Create implements Command {
     private SettingsHelper settingsHelper;
     private ViewService viewService;
 
-    public Create(DatabaseManager manager, View view) {
+    public Create(DatabaseManager manager, View view, ViewService viewService, Correctly correctly, SettingsHelper settingsHelper) {
         this.manager = manager;
         this.view = view;
-        this.correctly = new Correctly();
-        this.settingsHelper = new SettingsHelper();
-        this.viewService = new ViewService(view);
+        this.viewService = viewService;
+        this.correctly = correctly;
+        this.settingsHelper = settingsHelper;
     }
 
     @Override

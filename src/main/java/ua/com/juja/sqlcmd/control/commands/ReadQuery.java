@@ -1,10 +1,9 @@
 package ua.com.juja.sqlcmd.control.commands;
 
-import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.service.TablePrinter;
 import ua.com.juja.sqlcmd.service.ViewService;
-import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
 
@@ -15,11 +14,11 @@ public class ReadQuery implements Command {
     private ViewService viewService;
     private TablePrinter tablePrinter;
 
-    public ReadQuery(DatabaseManager manager, View view) {
+    public ReadQuery(DatabaseManager manager, ViewService viewService, Correctly correctly, TablePrinter tablePrinter) {
         this.manager = manager;
-        this.correctly = new Correctly();
-        this.viewService = new ViewService(view);
-        this.tablePrinter = new TablePrinter(view);
+        this.viewService = viewService;
+        this.correctly = correctly;
+        this.tablePrinter = tablePrinter;
     }
 
     @Override

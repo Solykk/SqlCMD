@@ -4,10 +4,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ua.com.juja.sqlcmd.control.DatabaseManager;
-import ua.com.juja.sqlcmd.control.JDBCDatabaseManager;
-import ua.com.juja.sqlcmd.service.DropAllHelper;
-import ua.com.juja.sqlcmd.service.ViewImpl;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
+import ua.com.juja.sqlcmd.service.*;
 
 import java.sql.SQLException;
 
@@ -34,6 +33,12 @@ public class CommandsTest {
     private Update update;
     private Create create;
 
+    private ViewService viewService = new ViewService();
+    private Correctly correctly = new Correctly();
+    private TablePrinter tablePrinter;
+    private SettingsHelper settingsHelper;
+
+
     @BeforeClass
     public static void dropAll(){
         DropAllHelper.dropAll();
@@ -48,20 +53,25 @@ public class CommandsTest {
     public void start() throws SQLException {
         manager = new JDBCDatabaseManager();
         viewImpl = new ViewImpl();
-        clear = new Clear(manager, viewImpl);
-        columns = new Columns(manager, viewImpl);
-        columnType = new ColumnType(manager, viewImpl);
-        delete = new Delete(manager, viewImpl);
-        drop = new Drop(manager, viewImpl);
-        find = new Find(manager, viewImpl);
-        findSettings = new FindSettings(manager, viewImpl);
+        viewService.setView(viewImpl);
+        tablePrinter = new TablePrinter();
+        tablePrinter.setView(viewImpl);
+        settingsHelper = new SettingsHelper();
+
+        clear = new Clear(manager, viewService, correctly);
+        columns = new Columns(manager, viewService, correctly, tablePrinter);
+        columnType = new ColumnType(manager, viewService, correctly, tablePrinter);
+        delete = new Delete(manager, viewService, correctly, tablePrinter, settingsHelper);
+        drop = new Drop(manager, viewService, correctly);
+        find = new Find(manager, viewService, correctly, tablePrinter);
+        findSettings = new FindSettings(manager, viewService, correctly, tablePrinter, settingsHelper);
         history = new History(viewImpl);
-        insert = new Insert(manager, viewImpl);
-        readQuery = new ReadQuery(manager, viewImpl);
-        tables = new Tables(manager, viewImpl);
-        tableType = new TableType(manager, viewImpl);
-        update = new Update(manager, viewImpl);
-        create = new Create(manager, viewImpl);
+        insert = new Insert(manager, viewImpl, viewService, correctly, settingsHelper);
+        readQuery = new ReadQuery(manager, viewService, correctly, tablePrinter);
+        tables = new Tables(manager, viewService, tablePrinter);
+        tableType = new TableType(manager, viewService, correctly, tablePrinter);
+        update = new Update(manager, viewService, correctly, tablePrinter, settingsHelper);
+        create = new Create(manager, viewImpl, viewService, correctly, settingsHelper);
 
         manager.connect("test","pass");
 

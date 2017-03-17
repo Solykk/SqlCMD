@@ -6,11 +6,10 @@ import ua.com.juja.sqlcmd.view.View;
 public class Help implements Command {
 
     private View view;
-    private HelpList helpList;
+    private final HelpList helpList = new HelpList();
 
     public Help(View view){
         this.view = view;
-        this.helpList = new HelpList();
     }
 
     @Override

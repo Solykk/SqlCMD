@@ -9,7 +9,7 @@ public class TablePrinter {
 
     private View view;
 
-    public TablePrinter(View view){
+    public void setView(View view) {
         this.view = view;
     }
 

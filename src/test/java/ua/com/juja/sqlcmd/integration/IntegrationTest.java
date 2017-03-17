@@ -6,8 +6,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ua.com.juja.sqlcmd.Main;
-import ua.com.juja.sqlcmd.control.DatabaseManager;
-import ua.com.juja.sqlcmd.control.JDBCDatabaseManager;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.sqlcmd.service.DropAllHelper;
 
 import java.io.*;

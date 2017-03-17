@@ -1,7 +1,5 @@
-package ua.com.juja.sqlcmd.control;
+package ua.com.juja.sqlcmd.model;
 
-import ua.com.juja.sqlcmd.model.ColumnData;
-import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.service.Query;
 
 import java.sql.*;

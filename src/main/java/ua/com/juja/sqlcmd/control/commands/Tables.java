@@ -1,9 +1,8 @@
 package ua.com.juja.sqlcmd.control.commands;
 
-import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.TablePrinter;
 import ua.com.juja.sqlcmd.service.ViewService;
-import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
 
@@ -13,10 +12,10 @@ public class Tables implements Command {
     private ViewService viewService;
     private TablePrinter tablePrinter;
 
-    public Tables(DatabaseManager manager, View view) {
+    public Tables(DatabaseManager manager, ViewService viewService, TablePrinter tablePrinter) {
         this.manager = manager;
-        this.viewService = new ViewService(view);
-        this.tablePrinter = new TablePrinter(view);
+        this.viewService = viewService;
+        this.tablePrinter = tablePrinter;
     }
 
     @Override

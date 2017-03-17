@@ -8,12 +8,12 @@ import static org.junit.Assert.assertEquals;
 public class ViewServiceTest {
 
     private ViewImpl viewImpl;
-    private ViewService viewService;
+    private ViewService viewService = new ViewService();
 
     @Before
     public void start(){
         viewImpl = new ViewImpl();
-        viewService = new ViewService(viewImpl);
+        viewService.setView(viewImpl);
     }
 
     @Test

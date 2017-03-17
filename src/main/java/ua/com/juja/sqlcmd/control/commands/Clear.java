@@ -1,9 +1,9 @@
 package ua.com.juja.sqlcmd.control.commands;
 
-import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.service.ViewService;
-import ua.com.juja.sqlcmd.view.View;
+
 import java.sql.SQLException;
 
 public class Clear implements Command {
@@ -12,10 +12,10 @@ public class Clear implements Command {
     private Correctly correctly;
     private ViewService viewService;
 
-    public Clear(DatabaseManager manager, View view) {
+    public Clear(DatabaseManager manager, ViewService viewService, Correctly correctly) {
         this.manager = manager;
-        this.correctly = new Correctly();
-        this.viewService = new ViewService(view);
+        this.correctly = correctly;
+        this.viewService = viewService;
     }
 
     @Override

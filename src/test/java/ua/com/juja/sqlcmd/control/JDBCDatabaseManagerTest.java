@@ -2,6 +2,8 @@ package ua.com.juja.sqlcmd.control;
 
 import org.junit.*;
 
+import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.service.DropAllHelper;
 import ua.com.juja.sqlcmd.service.TablePrinter;
@@ -19,7 +21,7 @@ public class JDBCDatabaseManagerTest {
 
     private DatabaseManager manager;
     private View view;
-    private TablePrinter tablePrinter;
+    private TablePrinter tablePrinter = new TablePrinter();
 
     @BeforeClass
     public static void dropAll(){
@@ -35,7 +37,7 @@ public class JDBCDatabaseManagerTest {
     public void start(){
             manager = new JDBCDatabaseManager();
             view = new Console();
-            tablePrinter = new TablePrinter(view);
+            tablePrinter.setView(view);
         }
 
     private void connectTestPass() {

@@ -1,25 +1,22 @@
 package ua.com.juja.sqlcmd.control.commands;
 
-import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.service.TablePrinter;
 import ua.com.juja.sqlcmd.service.ViewService;
-import ua.com.juja.sqlcmd.view.View;
 
 public class Find implements Command {
 
     private DatabaseManager manager;
-    private View view;
     private Correctly correctly;
     private ViewService viewService;
     private TablePrinter tablePrinter;
 
-    public Find(DatabaseManager manager, View view) {
+    public Find(DatabaseManager manager, ViewService viewService, Correctly correctly, TablePrinter tablePrinter) {
         this.manager = manager;
-        this.view = view;
-        this.correctly = new Correctly();
-        this.viewService = new ViewService(view);
-        this.tablePrinter = new TablePrinter(view);
+        this.correctly = correctly;
+        this.viewService = viewService;
+        this.tablePrinter = tablePrinter;
     }
 
     @Override

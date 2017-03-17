@@ -1,9 +1,8 @@
 package ua.com.juja.sqlcmd.control.commands;
 
-import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.service.ViewService;
-import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
 
@@ -13,16 +12,15 @@ public class Drop implements Command {
     private Correctly correctly;
     private ViewService viewService;
 
-    public Drop(DatabaseManager manager, View view) {
+    public Drop(DatabaseManager manager, ViewService viewService, Correctly correctly) {
         this.manager = manager;
-        this.correctly = new Correctly();
-        this.viewService = new ViewService(view);
+        this.viewService = viewService;
+        this.correctly = correctly;
     }
 
     @Override
     public boolean isProcessed(String command) {
         return command.toLowerCase().startsWith("drop|");
-
     }
 
     @Override

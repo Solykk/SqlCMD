@@ -1,9 +1,8 @@
 package ua.com.juja.sqlcmd.control.commands;
 
-import ua.com.juja.sqlcmd.control.DatabaseManager;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.service.ViewService;
-import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
 
@@ -13,10 +12,10 @@ public class CudQuery implements Command {
     private Correctly correctly;
     private ViewService viewService;
 
-    public CudQuery(DatabaseManager manager, View view) {
+    public CudQuery(DatabaseManager manager, ViewService viewService, Correctly correctly) {
         this.manager = manager;
-        this.correctly = new Correctly();
-        this.viewService = new ViewService(view);
+        this.viewService = viewService;
+        this.correctly = correctly;
     }
 
     @Override

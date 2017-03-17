@@ -1,7 +1,7 @@
 package ua.com.juja.sqlcmd.service;
 
-import ua.com.juja.sqlcmd.control.DatabaseManager;
-import ua.com.juja.sqlcmd.control.JDBCDatabaseManager;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
 
 public class DropAllHelper {
 
