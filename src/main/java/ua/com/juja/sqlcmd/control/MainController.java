@@ -2,6 +2,7 @@ package ua.com.juja.sqlcmd.control;
 
 import ua.com.juja.sqlcmd.control.commands.*;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.service.Services;
 import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 
@@ -11,13 +12,15 @@ public class MainController {
 
     private View view;
     private ArrayList<Command> commands;
+    private ViewService viewService;
     private final WhileCTRL whileCTRL = new WhileCTRL();
-    private final ViewService viewService = new ViewService();
+    private final Services services = new Services();
 
     public MainController(View view, DatabaseManager manager) {
         this.view = view;
-        this.viewService.setView(view);
-        this.commands = new CommandsList(view, manager, whileCTRL, this.viewService).getCommands();
+        this.services.setView(view);
+        this.viewService = services.getViewService();
+        this.commands = new CommandsList(view, manager, whileCTRL, services.getViewService()).getCommands();
     }
 
     public void run() {

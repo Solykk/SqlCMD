@@ -10,13 +10,12 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
     private Connection connection;
     private final String url;
-    private Query query;
+    private final Query query = new Query();
 
     public JDBCDatabaseManager(){
         Locale.setDefault(Locale.ENGLISH);
+        url = "jdbc:oracle:thin:/@localhost:1521:XE";
         this.connection = null;
-        this.url = "jdbc:oracle:thin:/@localhost:1521:XE";
-        this.query = new Query();
     }
 
     @Override
