@@ -13,6 +13,7 @@ public class Delete implements Command {
     private Correctly correctly;
     private TablePrinter tablePrinter;
     private SettingsHelper settingsHelper;
+    private final int parametersCount = 4;
 
     public Delete(DatabaseManager manager, Services services){
         this.manager = manager;
@@ -30,7 +31,7 @@ public class Delete implements Command {
     @Override
     public void process(String command) {
 
-        String[] data = correctly.expectedMinEven(command, 4);
+        String[] data = correctly.expectedMinEven(command, parametersCount);
 
         String tableName = data[1];
         ArrayList<String[]> settings = settingsHelper.getSettings(data);

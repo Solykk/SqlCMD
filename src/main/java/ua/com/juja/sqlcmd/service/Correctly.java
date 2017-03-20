@@ -50,11 +50,11 @@ public class Correctly {
         return serveData(data);
     }
 
-    public String[] expectedMinEven(String command, int parameters) {
+    public String[] expectedMinEven(String command, int parametersCount) {
         String [] data = command.split("\\|");
-        if(data.length < parameters){
+        if(data.length < parametersCount){
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
-                    "ожидается минимум " + parameters + ", но есть: " + data.length);
+                    "ожидается минимум " + parametersCount + ", но есть: " + data.length);
         } else if(data.length%2 != 0){
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
                     "ожидается четное количество аргументов, но есть: " + data.length);

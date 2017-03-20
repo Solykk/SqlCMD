@@ -17,6 +17,7 @@ public class Insert implements Command {
     private ViewService viewService;
     private Correctly correctly;
     private SettingsHelper settingsHelper;
+    private final int parametersCount = 4;
 
     public Insert(DatabaseManager manager, View view, Services services) {
         this.manager = manager;
@@ -34,7 +35,7 @@ public class Insert implements Command {
     @Override
     public void process(String command) {
 
-        String[] data = correctly.expectedMinEven(command, 4);
+        String[] data = correctly.expectedMinEven(command, parametersCount);
 
         String tableName = data[1];
         boolean isKey = getKeySet();

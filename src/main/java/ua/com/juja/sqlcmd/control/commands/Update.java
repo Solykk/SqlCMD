@@ -13,6 +13,7 @@ public class Update implements Command {
     private Correctly correctly;
     private TablePrinter tablePrinter;
     private SettingsHelper settingsHelper;
+    private final int parametersCount = 6;
 
     public Update(DatabaseManager manager, Services services) {
         this.manager = manager;
@@ -30,7 +31,7 @@ public class Update implements Command {
     @Override
     public void process(String command) {
 
-        String[] data = correctly.expectedMinEven(command, 6);
+        String[] data = correctly.expectedMinEven(command, parametersCount);
 
         String tableName = data[1];
         ArrayList<String[]> forUpdate = new ArrayList<>();
