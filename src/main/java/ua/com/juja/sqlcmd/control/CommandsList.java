@@ -10,10 +10,8 @@ import java.util.ArrayList;
 public class CommandsList {
 
     private ArrayList<Command> commands;
-    private Services services = new Services();
 
     public CommandsList(View view, DatabaseManager manager, WhileCTRL whileCTRL, Services services){
-        this.services.setView(view);
         this.commands = new ArrayList<>();
         commands.add(new Connect(manager, services));
         commands.add(new Help(view));
