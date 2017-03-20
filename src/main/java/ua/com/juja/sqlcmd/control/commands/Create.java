@@ -53,7 +53,7 @@ public class Create implements Command {
         String key = keyAction();
         if (key.equalsIgnoreCase("y")) {
 
-            String columnName = nameAction();
+            String columnName = nameAction().toUpperCase();
             try {
                 manager.createCreatePK(tableName, columnName);
                 viewService.createPKComTry(tableName, columnName);
