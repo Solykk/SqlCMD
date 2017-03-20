@@ -4,10 +4,10 @@ import ua.com.juja.sqlcmd.view.View;
 
 public class Services {
 
-    private final ViewService viewService = new ViewService();
-    private final Correctly correctly = new Correctly();
-    private final TablePrinter tablePrinter = new TablePrinter();
-    private final SettingsHelper settingsHelper = new SettingsHelper();
+    private ViewService viewService = new ViewService();
+    private Correctly correctly = new Correctly();
+    private TablePrinter tablePrinter = new TablePrinter();
+    private SettingsHelper settingsHelper = new SettingsHelper();
 
     public void setView(View view) {
         this.viewService.setView(view);

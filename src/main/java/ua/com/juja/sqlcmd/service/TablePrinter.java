@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class TablePrinter {
 
     private View view;
+    private final int sleepTime = 5;
 
     public void setView(View view) {
         this.view = view;
@@ -47,7 +48,7 @@ public class TablePrinter {
     private void printTableName(StringBuilder tableString, char[] containerTN) {
         view.write('|' + new String(containerTN) + '|');
         tableString.append('|' + new String(containerTN) + '|' + "\n");
-        sleeper(5);
+        sleeper(sleepTime);
     }
 
     private void printColumnName(Table table, StringBuilder tableString, ArrayList<Integer> maxLength) {
@@ -61,7 +62,7 @@ public class TablePrinter {
             reBuilder(containerCN, reBuildCN);
 
             printData(table, tableString, i, containerCN);
-            sleeper(5);
+            sleeper(sleepTime);
         }
 
         lineBreak(tableString);
@@ -81,7 +82,7 @@ public class TablePrinter {
                 reBuilder(containerDV, reBuildDV);
 
                 printData(table, tableString, j, containerDV);
-                sleeper(5);
+                sleeper(sleepTime);
 
             }
 
@@ -112,6 +113,7 @@ public class TablePrinter {
     private int calculatesLength(Table table, ArrayList<Integer> maxLength) {
 
         int lengthSum = 0;
+        Integer tableNameLength = table.getTableName().length();
 
         for (int j = 0; j < table.getTableData().size(); j++) {
 
@@ -141,10 +143,22 @@ public class TablePrinter {
             if(columnNameLength > dataLength){
                 dataLength = columnNameLength;
             }
-
             maxLength.add(dataLength);
             lengthSum += dataLength + 3;
         }
+
+        int opportunityBag = 0;
+
+        for (int c = 0; c < maxLength.size(); c++){
+            opportunityBag += maxLength.get(c);
+        }
+
+        if(tableNameLength > opportunityBag){
+            lengthSum = tableNameLength + 3;
+            maxLength.clear();
+            maxLength.add(tableNameLength);
+        }
+
         return lengthSum;
     }
 

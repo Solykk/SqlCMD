@@ -30,7 +30,7 @@ public class ReadQuery implements Command {
     @Override
     public void process(String command) {
 
-        String query = correctly.expectedTwo(command);
+        String query = correctly.expectedTwoCRUD(command);
 
         try {
             tablePrinter.printTable(manager.readQuery(query));

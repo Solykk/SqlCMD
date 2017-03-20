@@ -27,7 +27,7 @@ public class CudQuery implements Command {
     @Override
     public void process(String command) {
 
-        String query = correctly.expectedTwo(command);
+        String query = correctly.expectedTwoCRUD(command);
 
         try {
             manager.cudQuery(query);

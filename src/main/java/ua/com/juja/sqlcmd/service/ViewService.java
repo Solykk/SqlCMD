@@ -10,7 +10,6 @@ public class ViewService {
         this.view = view;
     }
 
-
     public void greeting(){
         view.write("\tВас приветствует приложение SqlCMD\n" +
                 "Пожалуйста, введите данные для подключения к базе данных в формате: connect|username|password");

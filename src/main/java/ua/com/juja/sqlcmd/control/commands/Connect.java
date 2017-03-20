@@ -27,7 +27,7 @@ public class Connect implements Command {
     @Override
     public void process(String command) {
 
-        String[] data = correctly.expectedThree(command);
+        String[] data = correctly.expectedThreeConnect(command);
 
         String userName = data[1];
         String password = data[2];

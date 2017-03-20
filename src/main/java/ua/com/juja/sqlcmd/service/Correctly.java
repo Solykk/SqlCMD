@@ -11,6 +11,15 @@ public class Correctly {
         return data[1].toUpperCase();
     }
 
+    public String expectedTwoCRUD(String command) {
+        String [] data = command.split("\\|");
+        if(data.length != 2){
+            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
+                    "ожидается 2, но есть: " + data.length);
+        }
+        return data[1];
+    }
+
     public String[] expectedThree(String command) {
         String[] data = command.split("\\|");
         if (data.length != 3) {
@@ -19,6 +28,16 @@ public class Correctly {
         }
 
         return serveData(data);
+    }
+
+    public String[] expectedThreeConnect(String command) {
+        String[] data = command.split("\\|");
+        if (data.length != 3) {
+            throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
+                    "ожидается 3, но есть: " + data.length);
+        }
+
+        return data;
     }
 
     public String[] expectedThreeMin(String command) {

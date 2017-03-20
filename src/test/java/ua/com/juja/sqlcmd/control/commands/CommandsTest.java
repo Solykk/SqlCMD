@@ -151,7 +151,7 @@ public class CommandsTest {
     public void test_readQueryProcessFail(){
         readQuery.process("readQuery|SELECT , kODJF");
 
-        assertEquals("Ошибка. Не удалось выполнить ваш запрос ( SELECT , KODJF ) ORA-00936: missing expression\n\n",
+        assertEquals("Ошибка. Не удалось выполнить ваш запрос ( SELECT , kODJF ) ORA-00936: missing expression\n\n",
                 viewImpl.getOut());
     }
 
