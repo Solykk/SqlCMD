@@ -1,3 +1,5 @@
+Обзор проекта https://www.youtube.com/watch?v=NdXGxfwwfI0
+
 Приложение работае с базой данных Oracle Express Edition
 
 Если возникла проблема автоматической загрузки дрйвера ojdbc:
