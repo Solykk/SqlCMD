@@ -47,7 +47,18 @@ public class SettingsHelper {
 
     public ArrayList<String[]> addSettings(String[] data, ArrayList<String[]> settings) {
         int index = 2;
+        String temp = "";
+        if(settings.size() == 1){
+            temp += settings.get(0)[0];
+        }
+
         while (index != data.length) {
+            if(!temp.equals("")){
+                if(temp.equals(data[index])){
+                    index += 2;
+                    continue;
+                }
+            }
             toSettings(data, settings, index);
             index += 2;
         }
