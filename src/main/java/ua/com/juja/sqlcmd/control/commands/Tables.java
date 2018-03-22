@@ -26,7 +26,6 @@ public class Tables implements Command {
 
     @Override
     public void process(String command) {
-
         try {
             tablePrinter.printTable(manager.getTableNames());
             viewService.tablesComTry();

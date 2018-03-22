@@ -206,5 +206,4 @@ public class CommandsTest {
                         "Ошибка. Не удалось создать первичный ключ ( FIRST ) ORA-00904: \"Y\": invalid identifier\n\n",
                 viewImpl.getOut());
     }
-
 }

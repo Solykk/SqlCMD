@@ -4,6 +4,7 @@ import ua.com.juja.sqlcmd.service.Query;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class  JDBCDatabaseManager implements DatabaseManager{
@@ -14,14 +15,14 @@ public class  JDBCDatabaseManager implements DatabaseManager{
 
     public JDBCDatabaseManager(){
         Locale.setDefault(Locale.ENGLISH);
-        url = "jdbc:oracle:thin:/@localhost:1521:XE";
+        url = "jdbc:postgresql://localhost:5432/payment_gateway_test";
         this.connection = null;
     }
 
     @Override
-    public void connect(String userName, String dbPassword) throws SQLException{
+    public void connect(String userName, String dbPassword) throws SQLException {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Please add jdbc jar to project.", e);
         }
@@ -35,16 +36,15 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public Table getTableNames() throws SQLException, NullPointerException{
+    public Table getTableNames() throws SQLException {
 
-        ArrayList<ColumnData> columnData = query.tableNameRes();
+        List<ColumnData> columnData = query.tableNameRes();
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query.tableNQuery()))
         {
             while (resultSet.next()){
-                String data = resultSet.getString("TABLE_NAME");
-                columnData.get(0).getValue().add(data);
+                columnData.get(0).getValue().add(resultSet.getString("TABLE_NAME"));
             }
 
             return new Table("ALL_TABLES", columnData);
@@ -52,117 +52,114 @@ public class  JDBCDatabaseManager implements DatabaseManager{
     }
 
     @Override
-    public Table getColumnNames(String tableName) throws SQLException, NullPointerException {
+    public Table getColumnNames(String tableName) throws SQLException {
 
-        ArrayList<ColumnData> columnDatas = query.columnNameRes();
+        List<ColumnData> columnData = query.columnNameRes();
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query.getColNQuery(tableName)))
         {
             while (resultSet.next()){
-                String data = resultSet.getString("COLUMN_NAME");
-                columnDatas.get(0).getValue().add(data);
+                columnData.get(0).getValue().add(resultSet.getString("COLUMN_NAME"));
             }
 
-            return new Table(tableName, columnDatas);
+            return new Table(tableName, columnData);
         }
     }
 
     @Override
-    public Table getAllTypeColumns(String tableName) throws SQLException, NullPointerException{
+    public Table getAllTypeColumns(String tableName) throws SQLException {
 
-        ArrayList<ColumnData> columnDatas = query.columnData();
+        List<ColumnData> columnData = query.columnData();
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query.getAllTypCloQuery(tableName)))
         {
-            resultSetGetHelper(columnDatas, resultSet);
-            return new Table(tableName, columnDatas) ;
+            resultSetGetHelper(columnData, resultSet);
+            return new Table(tableName, columnData) ;
         }
     }
 
     @Override
-    public Table getTypeColumn(String tableName, String columnName) throws SQLException, NullPointerException {
+    public Table getTypeColumn(String tableName, String columnName) throws SQLException {
 
-        ArrayList<ColumnData> columnDatas = query.columnData();
+        List<ColumnData> columnData = query.columnData();
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query.getTypCloQuery(tableName, columnName)))
         {
-            resultSetGetHelper(columnDatas, resultSet);
-            return new Table(tableName, columnDatas);
+            resultSetGetHelper(columnData, resultSet);
+            return new Table(tableName, columnData);
         }
     }
 
     @Override
-    public void createWithoutPK(String tableName, ArrayList<String> settings) throws SQLException, NullPointerException{
+    public void createWithoutPK(String tableName, List<String> settings) throws SQLException {
         statExecUpdate(query.createWPKQuery(tableName, settings));
     }
 
     @Override
-    public void createCreatePK(String tableName, String columnNamePK) throws SQLException, NullPointerException, NumberFormatException {
+    public void createCreatePK(String tableName, String columnNamePK) throws SQLException {
         statExecUpdate(query.createPKQuery(tableName, columnNamePK));
     }
 
     @Override
-    public void createSequencePK(String tableName, Long startWith) throws SQLException, NullPointerException, NumberFormatException{
+    public void createSequencePK(String tableName, Long startWith) throws SQLException {
         statExecUpdate(query.createSPKQuery(tableName, startWith));
     }
 
     @Override
-    public void insert(String tableName, ArrayList<String[]> nameDate, boolean idKey) throws SQLException, NullPointerException{
+    public void insert(String tableName, List<String[]> nameDate, boolean idKey) throws SQLException {
         statExecUpdate(query.insertQuery(tableName, nameDate, idKey));
     }
 
     @Override
-    public Table read(String tableName) throws SQLException, NullPointerException {
-        if (getContent().contains(tableName)){
-            return getTableHelper(tableName, getColumnData(tableName), query.selectAll(tableName));
-        } else {
-            throw new SQLException("ORA-00942: table or view does not exist");
-        }
+    public Table read(String tableName) throws SQLException {
+        return getContent().contains(tableName)
+                ? getTableHelper(tableName, getColumnData(tableName), query.selectAll(tableName))
+                : throwSQLException("ORA-00942: table or view does not exist");
+    }
+
+    private Table throwSQLException(String message) throws SQLException {
+        throw new SQLException(message);
     }
 
     @Override
-    public Table readSet(String tableName, ArrayList<String[]> settings) throws SQLException, NullPointerException {
+    public Table readSet(String tableName, List<String[]> settings) throws SQLException {
         return getTableHelper(tableName, getColumnData(tableName), query.readSetQuery(tableName, settings));
     }
 
     @Override
-    public void update(String tableName, ArrayList<String[]> howUpdate, ArrayList<String[]> forUpdate)throws SQLException, NullPointerException {
+    public void update(String tableName, List<String[]> howUpdate, List<String[]> forUpdate)throws SQLException {
         statExecUpdate(query.updateQuery(tableName, howUpdate, forUpdate));
     }
 
     @Override
-    public void drop(String tableName) throws SQLException, NullPointerException{
+    public void drop(String tableName) throws SQLException {
         statExecUpdate("DROP TABLE " + tableName);
     }
 
     @Override
-    public void delete(String tableName, ArrayList<String[]> settings)  throws SQLException, NullPointerException{
+    public void delete(String tableName, List<String[]> settings)  throws SQLException {
         statExecUpdate(query.deleteQuery(tableName, settings));
     }
 
     @Override
-    public void clear(String tableName) throws SQLException, NullPointerException {
+    public void clear(String tableName) throws SQLException {
         statExecUpdate("DELETE " + tableName);
     }
 
     @Override
-    public void cudQuery(String query) throws SQLException, NullPointerException{
+    public void cudQuery(String query) throws SQLException {
         statExecUpdate(query);
     }
 
     @Override
-    public Table readQuery(String query) throws SQLException, NullPointerException {
-
+    public Table readQuery(String query) throws SQLException {
         try (Statement statement =  connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query))
         {
-            ResultSetMetaData rsMetaData = resultSet.getMetaData();
-            int lengthOfCol = rsMetaData.getColumnCount();
-
-            return new Table( "Your Query", getDataRead(resultSet, rsMetaData, lengthOfCol));
+            return new Table( "Your Query", getDataRead(resultSet, resultSet.getMetaData(), resultSet.getMetaData().getColumnCount()));
         }
     }
 
@@ -176,68 +173,49 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         connection = null;
     }
 
-    private void statExecUpdate(String query) throws SQLException, NullPointerException{
+    private void statExecUpdate(String query) throws SQLException {
         try (Statement statement =  connection.createStatement())
         {
             statement.executeUpdate(query);
         }
     }
 
-    private void sortHelper(ArrayList<ColumnData> columnDatas, ResultSet resultSet) throws SQLException, NullPointerException {
-
+    private void sortHelper(List<ColumnData> columnDatas, ResultSet resultSet) throws SQLException {
         while (resultSet.next()){
-            for(int index = 0; index < columnDatas.size(); index++){
-                String columnName = columnDatas.get(index).columnName();
-                String temp = resultSet.getString(columnName);
-
-                columnDatas.get(index).getValue().add(temp);
+            for (ColumnData columnData : columnDatas) {
+                columnData.getValue().add(resultSet.getString(columnData.columnName()));
             }
         }
     }
 
-    private void resultSetGetHelper(ArrayList<ColumnData> columnDatas, ResultSet resultSet) throws SQLException, NullPointerException {
-
+    private void resultSetGetHelper(List<ColumnData> columnData, ResultSet resultSet) throws SQLException {
         while (resultSet.next()){
-
-            String stringName = resultSet.getString("COLUMN_NAME");
-            columnDatas.get(0).getValue().add(stringName);
-
-            String stringType = resultSet.getString("DATA_TYPE");
-            String stringLength = resultSet.getString("DATA_LENGTH");
-
-            String concat = stringType + "(" + stringLength + ")";
-            columnDatas.get(1).getValue().add(concat);
-
-            String stringNullable = resultSet.getString("NULLABLE");
-            columnDatas.get(2).getValue().add(stringNullable);
-
+            columnData.get(0).getValue().add(resultSet.getString("COLUMN_NAME"));
+            columnData.get(1).getValue().add(resultSet.getString("DATA_TYPE") + "(" + resultSet.getString("DATA_LENGTH") + ")");
+            columnData.get(2).getValue().add(resultSet.getString("NULLABLE"));
         }
     }
 
-    private Table getTableHelper(String tableName, ArrayList<ColumnData> columnDatas, String query) throws SQLException, NullPointerException{
-
+    private Table getTableHelper(String tableName, List<ColumnData> columnData, String query) throws SQLException {
         try(Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query))
         {
-            sortHelper(columnDatas, resultSet);
-            return new Table(tableName, columnDatas);
+            sortHelper(columnData, resultSet);
+            return new Table(tableName, columnData);
         }
     }
 
-    private ArrayList<ColumnData> getColumnData(String tableName) throws SQLException, NullPointerException {
-
-        ArrayList<String> columnNames = getColumnNames(tableName).getTableData().get(0).getValue();
-        ArrayList<ColumnData> columnDatas = new ArrayList<>();
-        for (int i = 0; i < columnNames.size(); i++) {
-            ColumnData temp = new ColumnData(columnNames.get(i), new ArrayList<>());
-            columnDatas.add(temp);
+    private List<ColumnData> getColumnData(String tableName) throws SQLException {
+        List<String> columnNames = getColumnNames(tableName).getTableData().get(0).getValue();
+        List<ColumnData> columnData = new ArrayList<>();
+        for (String columnName : columnNames) {
+            columnData.add(new ColumnData(columnName, new ArrayList<>()));
         }
-        return columnDatas;
+        return columnData;
     }
 
-    private ArrayList<String> getContent() throws SQLException, NullPointerException {
-        ArrayList<String> temp = new ArrayList<>();
-
+    private List<String> getContent() throws SQLException {
+        List<String> temp = new ArrayList<>();
         Table contains = getTableNames();
         for (int index = 0; index < contains.getTableData().get(0).getValue().size(); index++) {
             temp.add(contains.getTableData().get(0).getValue().get(index));
@@ -245,16 +223,14 @@ public class  JDBCDatabaseManager implements DatabaseManager{
         return temp;
     }
 
-    private ArrayList<ColumnData> getDataRead(ResultSet resultSet, ResultSetMetaData rsMetaData, int lengthOfCol) throws SQLException {
-        ArrayList<ColumnData> columnData = new ArrayList<>();
+    private List<ColumnData> getDataRead(ResultSet resultSet, ResultSetMetaData rsMetaData, int lengthOfCol) throws SQLException {
+        List<ColumnData> columnData = new ArrayList<>();
 
         for (int i = 0; i < lengthOfCol; i++) {
-            String columnName = rsMetaData.getColumnName(i + 1);
-            columnData.add(new ColumnData(columnName, new ArrayList<>()));
+            columnData.add(new ColumnData(rsMetaData.getColumnName(i + 1), new ArrayList<>()));
         }
 
         sortHelper(columnData, resultSet);
         return columnData;
     }
 }
-

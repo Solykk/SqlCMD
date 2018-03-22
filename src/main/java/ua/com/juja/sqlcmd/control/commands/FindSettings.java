@@ -5,6 +5,7 @@ import ua.com.juja.sqlcmd.service.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FindSettings implements Command {
 
@@ -34,7 +35,7 @@ public class FindSettings implements Command {
         String[] data = correctly.expectedMinEven(command, parametersCount);
 
         String tableName = data[1];
-        ArrayList<String[]> settings = settingsHelper.getSettings(data);
+        List<String[]> settings = settingsHelper.getSettings(data);
 
         try {
             tablePrinter.printTable(manager.readSet(tableName, settings));

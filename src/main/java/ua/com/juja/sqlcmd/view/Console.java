@@ -3,11 +3,12 @@ package ua.com.juja.sqlcmd.view;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class Console implements View {
 
-    private ArrayList<String> history;
+    private List<String> history;
 
     public Console(){
         this.history = new ArrayList<>();
@@ -26,9 +27,7 @@ public class Console implements View {
 
     @Override
     public void printHistory() {
-        for (String result: history) {
-            write(result);
-        }
+        history.forEach(this::write);
     }
 
     @Override
@@ -45,9 +44,6 @@ public class Console implements View {
     }
 
     private String getDate(){
-        long millis = System.currentTimeMillis();
-        Date date = new Date(millis);
-        return new SimpleDateFormat("HH:mm:ss").format(date);
+        return new SimpleDateFormat("HH:mm:ss").format(new Date(System.currentTimeMillis()));
     }
-
 }

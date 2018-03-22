@@ -5,6 +5,7 @@ import ua.com.juja.sqlcmd.service.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Delete implements Command {
 
@@ -13,7 +14,7 @@ public class Delete implements Command {
     private Correctly correctly;
     private TablePrinter tablePrinter;
     private SettingsHelper settingsHelper;
-    private final int parametersCount = 4;
+    private final static int PARAMETERS_COUNT = 4;
 
     public Delete(DatabaseManager manager, Services services){
         this.manager = manager;
@@ -31,13 +32,13 @@ public class Delete implements Command {
     @Override
     public void process(String command) {
 
-        String[] data = correctly.expectedMinEven(command, parametersCount);
+        String[] data = correctly.expectedMinEven(command, PARAMETERS_COUNT);
 
         String tableName = data[1];
-        ArrayList<String[]> settings = settingsHelper.getSettings(data);
+        List<String[]> settings = settingsHelper.getSettings(data);
 
         try {
-            manager.delete(tableName,settings);
+            manager.delete(tableName, settings);
             tablePrinter.printTable(manager.read(tableName));
 
             viewService.deleteComTry(tableName);

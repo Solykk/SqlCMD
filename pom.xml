@@ -11,14 +11,14 @@
     <properties>
         <junit.version>4.8.2</junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mavent.test.skip>true</mavent.test.skip>
     </properties>
 
     <dependencies>
-
         <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc14</artifactId>
-            <version>10.2.0.5.0</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.0.0</version>
         </dependency>
 
         <dependency>
@@ -41,12 +41,10 @@
             <version>2.7.6</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -106,7 +104,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 </project>

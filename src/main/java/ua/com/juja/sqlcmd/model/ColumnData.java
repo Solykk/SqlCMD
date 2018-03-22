@@ -1,13 +1,13 @@
 package ua.com.juja.sqlcmd.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ColumnData {
 
     private String columnName;
-    private ArrayList<String> value;
+    private List<String> value;
 
-    public ColumnData(String columnName, ArrayList<String> value){
+    public ColumnData(String columnName, List<String> value){
         this.columnName = columnName;
         this.value = value;
     }
@@ -16,7 +16,7 @@ public class ColumnData {
         return columnName;
     }
 
-    public ArrayList<String> getValue(){
+    public List<String> getValue(){
         return value;
     }
 }

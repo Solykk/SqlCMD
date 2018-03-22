@@ -3,27 +3,27 @@ package ua.com.juja.sqlcmd.service;
 import ua.com.juja.sqlcmd.model.ColumnData;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Query {
 
-    public String insertQuery(String tableName, ArrayList<String[]> nameDate, boolean idKey){
-        String columnNames = getName(nameDate);
-        String values = getValue(tableName, nameDate, idKey);
-
-        return  "INSERT INTO " + tableName + "( " + columnNames + ") VALUES ( " + values + " )";
+    public String insertQuery(String tableName, List<String[]> nameDate, boolean idKey){
+        return  "INSERT INTO " + tableName + "( " + getName(nameDate) + ") VALUES ( " + getValue(tableName, nameDate, idKey) + " )";
     }
 
-    private String getValue(String tableName, ArrayList<String[]> nameDate, boolean idKey) {
-        String values = "";
+    private String getValue(String tableName, List<String[]> nameDate, boolean idKey) {
+        StringBuilder values = new StringBuilder();
         if(idKey) {
             for (int index = 0; index < nameDate.size(); index++) {
                 if (index == 0) {
-                    values += tableName + "_SEQ.nextval, ";
+                    values.append(tableName).append("_SEQ.nextval, ");
                 } else {
-                    values += nameDate.get(index)[1];
+                    values.append(nameDate.get(index)[1]);
 
                     if (index != nameDate.size() - 1) {
-                        values += ", ";
+                        values.append(", ");
                     }
 
                 }
@@ -32,26 +32,26 @@ public class Query {
 
             int startFrom = 0;
             for (int j = startFrom; j < nameDate.size(); j++) {
-                values += nameDate.get(j)[1];
+                values.append(nameDate.get(j)[1]);
 
                 if (j != nameDate.size() - 1) {
-                    values += ", ";
+                    values.append(", ");
                 }
             }
         }
-        return values;
+        return values.toString();
     }
 
-    private String getName(ArrayList<String[]> nameDate) {
-        String columnNames = "";
+    private String getName(List<String[]> nameDate) {
+        StringBuilder columnNames = new StringBuilder();
         for (int index = 0; index < nameDate.size(); index++){
 
-            columnNames += nameDate.get(index)[0];
+            columnNames.append(nameDate.get(index)[0]);
             if(index != nameDate.size() - 1){
-                columnNames += ", ";
+                columnNames.append(", ");
             }
         }
-        return columnNames;
+        return columnNames.toString();
     }
 
     public String createSPKQuery(String tableName, Long startWith){
@@ -62,61 +62,56 @@ public class Query {
         return "ALTER TABLE " + tableName + " ADD (CONSTRAINT " +  tableName + "_PK PRIMARY KEY (" + columnNamePK + "))";
     }
 
-    public String createWPKQuery(String tableName, ArrayList<String> settings){
-        String postQuery = "";
+    public String createWPKQuery(String tableName, List<String> settings){
+        StringBuilder postQuery = new StringBuilder();
         for (int i = 0; i < settings.size() ; i++) {
             if(i == settings.size() - 1) {
-                postQuery += settings.get(i);
+                postQuery.append(settings.get(i));
             } else {
-                postQuery += settings.get(i) + ", ";
+                postQuery.append(settings.get(i)).append(", ");
             }
         }
         return  "CREATE TABLE " + tableName + " (" + postQuery + " )";
     }
 
-    public String updateQuery(String tableName, ArrayList<String[]> howUpdate, ArrayList<String[]> forUpdate){
-        String perQuery = generateQueryComaString(howUpdate);
-        String postQuery = generateQueryAndString(forUpdate);
-
-        return  "UPDATE " + tableName +  " SET " + perQuery + " WHERE " + postQuery;
+    public String updateQuery(String tableName, List<String[]> howUpdate, List<String[]> forUpdate){
+        return  "UPDATE " + tableName +  " SET " + generateQueryComaString(howUpdate) + " WHERE " + generateQueryAndString(forUpdate);
     }
 
-    private String generateQueryComaString(ArrayList<String[]> settings) {
+    private String generateQueryComaString(List<String[]> settings) {
 
-        String query = "";
+        StringBuilder query = new StringBuilder();
 
         for (int i = 0; i < settings.size() ; i++) {
-            query += settings.get(i)[0] + " = " + settings.get(i)[1];
+            query.append(settings.get(i)[0]).append(" = ").append(settings.get(i)[1]);
 
             if (i < settings.size() - 1){
-                query += ", ";
+                query.append(", ");
             }
         }
-        return query;
+        return query.toString();
     }
 
-    private String generateQueryAndString(ArrayList<String[]> settings) {
+    private String generateQueryAndString(List<String[]> settings) {
 
-        String query = "";
+        StringBuilder query = new StringBuilder();
 
         for (int i = 0; i < settings.size() ; i++) {
-            query += settings.get(i)[0] + " = " + settings.get(i)[1];
+            query.append(settings.get(i)[0]).append(" = ").append(settings.get(i)[1]);
 
             if (i < settings.size() - 1){
-                query += " AND ";
+                query.append(" AND ");
             }
         }
-        return query;
+        return query.toString();
     }
 
-    public String deleteQuery(String tableName, ArrayList<String[]> settings){
-        String postQuery = generateQueryAndString(settings);
-        return "DELETE FROM " +  tableName + " WHERE " + postQuery;
+    public String deleteQuery(String tableName, List<String[]> settings){
+        return "DELETE FROM " +  tableName + " WHERE " + generateQueryAndString(settings);
     }
 
-    public String readSetQuery(String tableName, ArrayList<String[]> settings){
-        String postQuery = generateQueryAndString(settings);
-        return  "SELECT * FROM " + tableName +  " WHERE " + postQuery;
+    public String readSetQuery(String tableName, List<String[]> settings){
+        return  "SELECT * FROM " + tableName +  " WHERE " + generateQueryAndString(settings);
     }
 
     public String getTypCloQuery(String tableName, String columnName){
@@ -124,12 +119,14 @@ public class Query {
                 + "'" + tableName+ "' AND COLUMN_NAME = " + "'" + columnName + "'";
     }
 
-    public ArrayList<ColumnData> columnData() {
-        ArrayList<ColumnData> columnDatas = new ArrayList<>();
-        columnDatas.add(new ColumnData("COLUMN_NAME", new ArrayList<>()));
-        columnDatas.add(new ColumnData("DATA_TYPE", new ArrayList<>()));
-        columnDatas.add(new ColumnData("NULLABLE", new ArrayList<>()));
-        return columnDatas;
+    public List<ColumnData> columnData() {
+        return Stream.builder()
+                .add(new ColumnData("COLUMN_NAME", new ArrayList<>()))
+                .add(new ColumnData("DATA_TYPE", new ArrayList<>()))
+                .add(new ColumnData("NULLABLE", new ArrayList<>()))
+                .build()
+                .map(o -> (ColumnData)o)
+                .collect(Collectors.toList());
     }
 
     public String getAllTypCloQuery(String tableName){
@@ -141,20 +138,24 @@ public class Query {
         return "SELECT TABLE_NAME FROM user_tables";
     }
 
-    public ArrayList<ColumnData> tableNameRes() {
-        ArrayList<ColumnData> columnData = new ArrayList<>();
-        columnData.add(new ColumnData("TABLE_NAME", new ArrayList<>()));
-        return columnData;
+    public List<ColumnData> tableNameRes() {
+        return Stream.builder()
+                .add(new ColumnData("TABLE_NAME", new ArrayList<>()))
+                .build()
+                .map(o -> (ColumnData)o)
+                .collect(Collectors.toList());
     }
 
     public String getColNQuery(String tableName){
         return "SELECT COLUMN_NAME FROM USER_TAB_COLUMNS WHERE TABLE_NAME = " + "'" + tableName + "'";
     }
 
-    public ArrayList<ColumnData> columnNameRes() {
-        ArrayList<ColumnData> columnDatas = new ArrayList<>();
-        columnDatas.add(new ColumnData("COLUMN_NAME", new ArrayList<>()));
-        return columnDatas;
+    public List<ColumnData> columnNameRes() {
+        return Stream.builder()
+                .add(new ColumnData("COLUMN_NAME", new ArrayList<>()))
+                .build()
+                .map(o -> (ColumnData)o)
+                .collect(Collectors.toList());
     }
 
     public String selectAll(String tableName){

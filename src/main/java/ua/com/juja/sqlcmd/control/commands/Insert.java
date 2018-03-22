@@ -9,6 +9,7 @@ import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Insert implements Command {
 
@@ -17,7 +18,7 @@ public class Insert implements Command {
     private ViewService viewService;
     private Correctly correctly;
     private SettingsHelper settingsHelper;
-    private final int parametersCount = 4;
+    private final static int PARAMETERS_COUNT = 4;
 
     public Insert(DatabaseManager manager, View view, Services services) {
         this.manager = manager;
@@ -35,11 +36,11 @@ public class Insert implements Command {
     @Override
     public void process(String command) {
 
-        String[] data = correctly.expectedMinEven(command, parametersCount);
+        String[] data = correctly.expectedMinEven(command, PARAMETERS_COUNT);
 
         String tableName = data[1];
         boolean isKey = getKeySet();
-        ArrayList<String[]> settings = getSettings(data, isKey);
+        List<String[]> settings = getSettings(data, isKey);
 
         try {
             manager.insert(tableName, settings, isKey);
@@ -64,11 +65,10 @@ public class Insert implements Command {
         return view.read();
     }
 
-    private ArrayList<String[]> getSettings(String[] data, boolean isKey) {
-        ArrayList<String[]> settings = new ArrayList<>();
+    private List<String[]> getSettings(String[] data, boolean isKey) {
+        List<String[]> settings = new ArrayList<>();
         if(isKey){
-            String seqName = seqAction();
-            settings.add(new String[]{seqName, ""});
+            settings.add(new String[]{seqAction(), ""});
         }
         settingsHelper.addSettings(data, settings);
         return settings;

@@ -433,5 +433,4 @@ public class ViewServiceTest {
                         "\tНеудача Exception\n\n",
                 viewImpl.getHistory());
     }
-
 }

@@ -36,7 +36,6 @@ public class ViewImpl implements View {
     @Override
     public String read() {
         if(counter >= 1){
-
             return "y";
         }
         counter++;

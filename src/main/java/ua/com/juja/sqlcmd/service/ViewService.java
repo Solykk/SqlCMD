@@ -205,5 +205,4 @@ public class ViewService {
         view.writeAndHistory("Ошибка. Не удалось создать Sequence генератор ( " + tableName + " ) "
                 + message, "\tНеудача " + message);
     }
-
 }

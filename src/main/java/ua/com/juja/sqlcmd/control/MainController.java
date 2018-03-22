@@ -7,18 +7,19 @@ import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainController {
 
     private View view;
-    private ArrayList<Command> commands;
+    private List<Command> commands;
     private ViewService viewService;
     private final WhileCTRL whileCTRL = new WhileCTRL();
-    private final Services services = new Services();
 
     public MainController(View view, DatabaseManager manager) {
         this.view = view;
-        this.services.setView(view);
+        Services services = new Services();
+        services.setView(view);
         this.viewService = services.getViewService();
         this.commands = new CommandsList(view, manager, whileCTRL, services).getCommands();
     }

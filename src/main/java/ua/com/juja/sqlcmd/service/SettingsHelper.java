@@ -1,18 +1,19 @@
 package ua.com.juja.sqlcmd.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SettingsHelper {
 
-    private void toSettings(String[] data, ArrayList<String[]> settings, int index) {
+    private void toSettings(String[] data, List<String[]> settings, int index) {
         String[] tmp = new String[2];
         tmp[0] = data[index];
         tmp[1] = data[index + 1];
         settings.add(tmp);
     }
 
-    public ArrayList<String[]> getSettings(String[] data) {
-        ArrayList<String[]> settings = new ArrayList<>();
+    public List<String[]> getSettings(String[] data) {
+        List<String[]> settings = new ArrayList<>();
         int index = 2;
         while (index != data.length) {
             toSettings(data, settings, index);
@@ -21,7 +22,7 @@ public class SettingsHelper {
         return settings;
     }
 
-    public void getSetUpdate(String[] data, ArrayList<String[]> forUpdate, ArrayList<String[]> howUpdate) {
+    public void getSetUpdate(String[] data, List<String[]> forUpdate, List<String[]> howUpdate) {
         int indexFor = 2;
         int indexHow = data.length - (data.length - 2)/2;
 
@@ -35,8 +36,8 @@ public class SettingsHelper {
         }
     }
 
-    public ArrayList<String> getSetCreate(String[] data) {
-        ArrayList<String> settings = new ArrayList<>();
+    public List<String> getSetCreate(String[] data) {
+        List<String> settings = new ArrayList<>();
         int index = 2;
         while (index  != data.length){
             settings.add(data[index]);
@@ -45,7 +46,7 @@ public class SettingsHelper {
         return settings;
     }
 
-    public ArrayList<String[]> addSettings(String[] data, ArrayList<String[]> settings) {
+    public List<String[]> addSettings(String[] data, List<String[]> settings) {
         int index = 2;
         String temp = "";
         if(settings.size() == 1){

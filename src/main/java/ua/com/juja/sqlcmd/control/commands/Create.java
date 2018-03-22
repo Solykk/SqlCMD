@@ -8,7 +8,7 @@ import ua.com.juja.sqlcmd.service.ViewService;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Create implements Command {
 
@@ -37,7 +37,7 @@ public class Create implements Command {
         String[] data = correctly.expectedThreeMin(command);
 
         String tableName = data[1];
-        ArrayList<String> settings = settingsHelper.getSetCreate(data);
+        List<String> settings = settingsHelper.getSetCreate(data);
 
         try {
             manager.createWithoutPK(tableName, settings);
@@ -100,5 +100,4 @@ public class Create implements Command {
         view.write("Присвоить колонке первичный ключ? (Y/N)");
         return view.read();
     }
-
 }

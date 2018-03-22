@@ -2,14 +2,15 @@ package ua.com.juja.sqlcmd.control;
 
 import ua.com.juja.sqlcmd.control.commands.*;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.service.*;
+import ua.com.juja.sqlcmd.service.Services;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CommandsList {
 
-    private ArrayList<Command> commands;
+    private List<Command> commands;
 
     public CommandsList(View view, DatabaseManager manager, WhileCTRL whileCTRL, Services services){
         this.commands = new ArrayList<>();
@@ -36,7 +37,7 @@ public class CommandsList {
         commands.add(new Unsupported(view));
     }
 
-    public ArrayList<Command> getCommands() {
+    public List<Command> getCommands() {
         return commands;
     }
 }

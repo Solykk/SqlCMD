@@ -1,7 +1,6 @@
 package ua.com.juja.sqlcmd.control.commands;
 
 import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.model.Table;
 import ua.com.juja.sqlcmd.service.Correctly;
 import ua.com.juja.sqlcmd.service.Services;
 import ua.com.juja.sqlcmd.service.TablePrinter;
@@ -39,10 +38,7 @@ public class FileTable implements Command{
         String tableName = correctly.expectedTwo(command);
 
         try {
-            Table request = manager.read(tableName);
-            String dataTable = tablePrinter.printTable(request);
-
-            saveConsent(tableName, dataTable);
+            saveConsent(tableName, tablePrinter.printTable(manager.read(tableName)));
         } catch (Exception e) {
             viewService.fileTabComCatch(tableName, e.getMessage());
         }
@@ -133,7 +129,6 @@ public class FileTable implements Command{
     }
 
     private void fileInput(String dataTable, String name, File file) throws IOException {
-
         if(file.createNewFile()) {
             try (FileWriter writer = new FileWriter(name + ".txt")) {
                 writer.write(dataTable);

@@ -5,6 +5,7 @@ import ua.com.juja.sqlcmd.service.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Update implements Command {
 
@@ -13,7 +14,7 @@ public class Update implements Command {
     private Correctly correctly;
     private TablePrinter tablePrinter;
     private SettingsHelper settingsHelper;
-    private final int parametersCount = 6;
+    private final static int PARAMETERS_COUNT = 6;
 
     public Update(DatabaseManager manager, Services services) {
         this.manager = manager;
@@ -31,11 +32,11 @@ public class Update implements Command {
     @Override
     public void process(String command) {
 
-        String[] data = correctly.expectedMinEven(command, parametersCount);
+        String[] data = correctly.expectedMinEven(command, PARAMETERS_COUNT);
 
         String tableName = data[1];
-        ArrayList<String[]> forUpdate = new ArrayList<>();
-        ArrayList<String[]> howUpdate = new ArrayList<>();
+        List<String[]> forUpdate = new ArrayList<>();
+        List<String[]> howUpdate = new ArrayList<>();
 
         settingsHelper.getSetUpdate(data, forUpdate, howUpdate);
 
