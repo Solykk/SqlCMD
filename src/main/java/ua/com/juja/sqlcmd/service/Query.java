@@ -135,7 +135,7 @@ public class Query {
     }
 
     public String tableNQuery(){
-        return "SELECT TABLE_NAME FROM user_tables";
+        return "SELECT table_name FROM information_schema.tables";
     }
 
     public List<ColumnData> tableNameRes() {
@@ -147,7 +147,7 @@ public class Query {
     }
 
     public String getColNQuery(String tableName){
-        return "SELECT COLUMN_NAME FROM USER_TAB_COLUMNS WHERE TABLE_NAME = " + "'" + tableName + "'";
+        return "SELECT column_name FROM information_schema.columns WHERE table_name = " + "'" + tableName + "'";
     }
 
     public List<ColumnData> columnNameRes() {

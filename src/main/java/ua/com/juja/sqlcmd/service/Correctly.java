@@ -8,7 +8,7 @@ public class Correctly {
             throw new IllegalArgumentException("Неверно количество параметров разделенных знаком '|', " +
                     "ожидается 2, но есть: " + data.length);
         }
-        return data[1].toUpperCase();
+        return data[1];
     }
 
     public String expectedTwoCRUD(String command) {
